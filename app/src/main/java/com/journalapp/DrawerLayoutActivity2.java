@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
@@ -34,9 +35,9 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-        HomeFragment2 homeFragment2 = new HomeFragment2();
+        HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame,homeFragment2);
+        fragmentTransaction.add(R.id.frame,homeFragment);
         fragmentTransaction.commit();
 
     }
@@ -51,7 +52,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         }
         else if(menuItem.getItemId() == R.id.nav_home)
         {
-            fragment = new HomeFragment2();
+            fragment = new HomeFragment();
         }
         else if(menuItem.getItemId() == R.id.nav_slideshow)
         {

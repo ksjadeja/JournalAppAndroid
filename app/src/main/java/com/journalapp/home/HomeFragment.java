@@ -8,19 +8,21 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journalapp.R;
+import com.journalapp.utils.MyPagerAdapter;
 import com.journalapp.utils.TabAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
 
     private TabAdapter tabAdapter;
-    private TabLayout timelineTabs;
-
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private Boolean fabExpanded = false;
     private LinearLayout layoutAccEntryFab, layoutEntryFab;
     private FloatingActionButton add_fab;
@@ -29,8 +31,18 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, true);
+        tabLayout= root.findViewById(R.id.timelineTabs);
+        viewPager = root.findViewById(R.id.viewPager);
+        tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
+        tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Calls"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        ViewPager pager = root.findViewById(R.id.viewPager);
+        tabLayout.setOnTabSelectedListener(this);
+        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
+        viewPager.setAdapter(myPagerAdapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         add_fab = root.findViewById(R.id.add_fab);
         layoutEntryFab = root.findViewById(R.id.layoutEntry);
@@ -64,11 +76,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        tabAdapter = new TabAdapter(getChildFragmentManager());
-        pager.setAdapter(tabAdapter);
 
-        timelineTabs = root.findViewById(R.id.timelineTabs);
-        timelineTabs.setupWithViewPager(pager,true);
 
         closeSubMenusFab();
 
@@ -81,7 +89,6 @@ public class HomeFragment extends Fragment {
 //
 //        timelineTabs = root.findViewById(R.id.timelineTabs);
 //        timelineTabs.setupWithViewPager(pager,true);
-        return null;
     }
 
     //closes FAB submenus
@@ -100,4 +107,28 @@ public class HomeFragment extends Fragment {
         add_fab.setImageResource(R.drawable.ic_close_btn);
         fabExpanded = true;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Home");
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+
 }
