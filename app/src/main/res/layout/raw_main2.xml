@@ -10,6 +10,7 @@
         android:id="@+id/frame"
         android:layout_marginTop="?attr/actionBarSize"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/fab" android:src="@drawable/ic_person" android:layout_margin="20dp" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:backgroundTint="#189488"/>
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/fab" android:src="@drawable/ic_person" android:layout_margin="20dp" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:backgroundTint="#189488"/>-->
+    <include layout="@layout/layout_fab_submenu" />
 
 </RelativeLayout>

@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
 
 
-        closeSubMenusFab();
+
 
         tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
         tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
 
 
-
+        closeSubMenusFab();
         return root;
 //        View root = inflater.inflate(R.layout.fragment_home, container, true);
 //
