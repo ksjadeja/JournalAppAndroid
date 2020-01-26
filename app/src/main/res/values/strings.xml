@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Journal App</string>
+    <string name="entry">Entry</string>
+    <string name="account_entry">Account Entry</string>
 </resources>
