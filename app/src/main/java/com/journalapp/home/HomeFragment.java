@@ -21,9 +21,9 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Boolean fabExpanded = false;
-    private LinearLayout layoutAccEntryFab, layoutEntryFab;
-    private FloatingActionButton add_fab;
+//    private Boolean fabExpanded = false;
+//    private LinearLayout layoutAccEntryFab, layoutEntryFab;
+//    private FloatingActionButton add_fab;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,37 +31,37 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         tabLayout= root.findViewById(R.id.timelineTabs);
-        add_fab = root.findViewById(R.id.add_fab);
-        layoutEntryFab = root.findViewById(R.id.layoutEntry);
-        layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
+//        add_fab = root.findViewById(R.id.add_fab);
+//        layoutEntryFab = root.findViewById(R.id.layoutEntry);
+//        layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
         viewPager = root.findViewById(R.id.viewPager);
 
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(fabExpanded){
-                    closeSubMenusFab();
-                }else {
-                    openSubMenusFab();
-                }
-            }
-        });
-
-        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-                //TODO
-            }
-        });
-
-        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
-                //TODO
-            }
-        });
+//        add_fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(fabExpanded){
+//                    closeSubMenusFab();
+//                }else {
+//                    openSubMenusFab();
+//                }
+//            }
+//        });
+//
+//        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(),"You've tapped new Entry",Toast.LENGTH_SHORT).show();
+//                //TODO
+//            }
+//        });
+//
+//        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
+//                //TODO
+//            }
+//        });
 
         tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
         tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
@@ -76,26 +76,26 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
 
 
-        closeSubMenusFab();
+//        closeSubMenusFab();
         return root;
     }
-
-    //closes FAB submenus
-    private void closeSubMenusFab(){
-        layoutEntryFab.setVisibility(View.INVISIBLE);
-        layoutAccEntryFab.setVisibility(View.INVISIBLE);
-        add_fab.setImageResource(R.drawable.ic_plus_btn);
-        fabExpanded = false;
-    }
-
-    //Opens FAB submenus
-    private void openSubMenusFab(){
-        layoutEntryFab.setVisibility(View.VISIBLE);
-        layoutAccEntryFab.setVisibility(View.VISIBLE);
-        //Change settings icon to 'X' icon
-        add_fab.setImageResource(R.drawable.ic_close_btn);
-        fabExpanded = true;
-    }
+//
+//    //closes FAB submenus
+//    private void closeSubMenusFab(){
+//        layoutEntryFab.setVisibility(View.INVISIBLE);
+//        layoutAccEntryFab.setVisibility(View.INVISIBLE);
+//        add_fab.setImageResource(R.drawable.ic_plus_btn);
+//        fabExpanded = false;
+//    }
+//
+//    //Opens FAB submenus
+//    private void openSubMenusFab(){
+//        layoutEntryFab.setVisibility(View.VISIBLE);
+//        layoutAccEntryFab.setVisibility(View.VISIBLE);
+//        //Change settings icon to 'X' icon
+//        add_fab.setImageResource(R.drawable.ic_close_btn);
+//        fabExpanded = true;
+//    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

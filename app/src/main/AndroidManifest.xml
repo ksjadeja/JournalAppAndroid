@@ -24,9 +24,9 @@
             >
 
         </activity>
-        <activity
-            android:name=".DrawerLayoutActivity"
-        ></activity>
+<!--        <activity-->
+<!--            android:name=".DrawerLayoutActivity"-->
+<!--        ></activity>-->
     </application>
 
 </manifest>

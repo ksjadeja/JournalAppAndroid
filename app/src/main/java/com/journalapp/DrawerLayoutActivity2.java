@@ -11,19 +11,57 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
+
+    private Boolean fabExpanded = false;
+    private LinearLayout layoutAccEntryFab, layoutEntryFab;
+    private FloatingActionButton add_fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_layout2);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        add_fab = findViewById(R.id.add_fab);
+        layoutEntryFab = findViewById(R.id.layoutEntry);
+        layoutAccEntryFab = findViewById(R.id.layoutAccEntry);
+        add_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fabExpanded){
+                    closeSubMenusFab();
+                }else {
+                    openSubMenusFab();
+                }
+            }
+        });
+
+        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
+                //TODO
+            }
+        });
+
+        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
+                //TODO
+            }
+        });
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -36,9 +74,25 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.frame,homeFragment);
+        fragmentTransaction.add(R.id.nav_host_fragment,homeFragment);
         fragmentTransaction.commit();
+        closeSubMenusFab();
+    }
+    //closes FAB submenus
+    private void closeSubMenusFab(){
+        layoutEntryFab.setVisibility(View.INVISIBLE);
+        layoutAccEntryFab.setVisibility(View.INVISIBLE);
+        add_fab.setImageResource(R.drawable.ic_plus_btn);
+        fabExpanded = false;
+    }
 
+    //Opens FAB submenus
+    private void openSubMenusFab(){
+        layoutEntryFab.setVisibility(View.VISIBLE);
+        layoutAccEntryFab.setVisibility(View.VISIBLE);
+        //Change settings icon to 'X' icon
+        add_fab.setImageResource(R.drawable.ic_close_btn);
+        fabExpanded = true;
     }
 
     @Override
@@ -59,7 +113,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         }
         if (fragment != null){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.frame,fragment);
+            fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
             fragmentTransaction.commit();
         }
 
