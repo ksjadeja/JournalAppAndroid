@@ -5,26 +5,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        android:id="@+id/toolbar">-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
+
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:id="@+id/timelineTabs"
         app:tabSelectedTextColor="#fff"
-        app:tabIndicatorColor="#fff"
-        ></com.google.android.material.tabs.TabLayout>
+        app:tabIndicatorColor="#fff">
+
+    </com.google.android.material.tabs.TabLayout>
+
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/viewPager"></androidx.viewpager.widget.ViewPager>
+        android:id="@+id/viewPager">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <include layout="@layout/layout_fab_submenu" />
-<!--    <FrameLayout android:layout_height="match_parent" android:layout_width="match_parent" android:layout_marginBottom="?attr/actionBarSize" android:id="@+id/frame1"/>-->
+
 </LinearLayout>
 

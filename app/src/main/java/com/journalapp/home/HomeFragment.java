@@ -15,12 +15,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journalapp.R;
 import com.journalapp.utils.MyPagerAdapter;
-import com.journalapp.utils.TabAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
 
-    private TabAdapter tabAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private Boolean fabExpanded = false;
@@ -65,14 +63,8 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
             }
         });
 
-
-
-
-
-
         tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
         tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Calls"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.setOnTabSelectedListener(this);
@@ -86,14 +78,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
         closeSubMenusFab();
         return root;
-//        View root = inflater.inflate(R.layout.fragment_home, container, true);
-//
-//        ViewPager pager = root.findViewById(R.id.viewPager);
-//        tabAdapter = new TabAdapter(getChildFragmentManager());
-//        pager.setAdapter(tabAdapter);
-//
-//        timelineTabs = root.findViewById(R.id.timelineTabs);
-//        timelineTabs.setupWithViewPager(pager,true);
     }
 
     //closes FAB submenus
