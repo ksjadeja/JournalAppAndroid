@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ public class FeedboxListAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<Feedbox> feedboxArrayList;
+    ListView feedboxListView;
     public FeedboxListAdapter(Context context, ArrayList<Feedbox> feedboxArrayList) {
         this.context=context;
         this.feedboxArrayList =feedboxArrayList;
@@ -39,6 +41,7 @@ public class FeedboxListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
+
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = layoutInflater.inflate(R.layout.feedbox_layout,null);
 
