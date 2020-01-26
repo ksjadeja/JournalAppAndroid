@@ -19,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/menu'] } }
 }
 
 dependencies {
@@ -34,4 +35,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0-alpha1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.cardview:cardview:1.0.0"
+
+//    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0'
+    implementation 'androidx.navigation:navigation-ui:2.0.0'
+    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }

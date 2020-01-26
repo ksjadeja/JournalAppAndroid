@@ -1,35 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/timelineTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:tabRippleColor="@color/black"
-        app:tabTextColor="#000000"
-        tools:visibility="visible">
+        android:background="@color/colorPrimary"
+        android:id="@+id/timelineTabs"
+        app:tabSelectedTextColor="#fff"
+        app:tabIndicatorColor="#fff">
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timelineTabs" />
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <include layout="@layout/layout_fab_submenu" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>
+
