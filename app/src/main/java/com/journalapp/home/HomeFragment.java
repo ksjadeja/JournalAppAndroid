@@ -23,14 +23,14 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_home, container, true);
-
-        ViewPager pager = root.findViewById(R.id.viewPager);
-        tabAdapter = new TabAdapter(getChildFragmentManager());
-        pager.setAdapter(tabAdapter);
-
-        timelineTabs = root.findViewById(R.id.timelineTabs);
-        timelineTabs.setupWithViewPager(pager,true);
-        return root;
+//        View root = inflater.inflate(R.layout.fragment_home, container, true);
+//
+//        ViewPager pager = root.findViewById(R.id.viewPager);
+//        tabAdapter = new TabAdapter(getChildFragmentManager());
+//        pager.setAdapter(tabAdapter);
+//
+//        timelineTabs = root.findViewById(R.id.timelineTabs);
+//        timelineTabs.setupWithViewPager(pager,true);
+        return null;
     }
 }
