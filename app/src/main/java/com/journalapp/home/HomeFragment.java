@@ -30,23 +30,13 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_home, container, true);
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
+
         tabLayout= root.findViewById(R.id.timelineTabs);
-        viewPager = root.findViewById(R.id.viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
-        tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Calls"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        tabLayout.setOnTabSelectedListener(this);
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
-        viewPager.setAdapter(myPagerAdapter);
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
         add_fab = root.findViewById(R.id.add_fab);
         layoutEntryFab = root.findViewById(R.id.layoutEntry);
         layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
+        viewPager = root.findViewById(R.id.viewPager);
 
         add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +69,21 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
 
         closeSubMenusFab();
+
+        tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
+        tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Calls"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        tabLayout.setOnTabSelectedListener(this);
+        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
+        viewPager.setAdapter(myPagerAdapter);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+
+
+
 
         return root;
 //        View root = inflater.inflate(R.layout.fragment_home, container, true);
