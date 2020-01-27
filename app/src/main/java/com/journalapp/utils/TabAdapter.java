@@ -20,8 +20,8 @@ public class TabAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                EntriesTab entriesTab = new EntriesTab();
-                return entriesTab;
+//                EntriesTab entriesTab = new EntriesTab();
+//                return entriesTab;
             case 1:
                 AccEntriesTab accEntriesTab = new AccEntriesTab();
                 return accEntriesTab;
