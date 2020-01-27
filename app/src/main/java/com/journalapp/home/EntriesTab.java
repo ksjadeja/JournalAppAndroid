@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -36,20 +37,25 @@ public class EntriesTab extends Fragment {
         feedboxListView=entriesView.findViewById(R.id.feedboxListView);
 
         feedboxesList = new ArrayList<>();
-        Feedbox Feedbox;
+        Feedbox feedbox;
         for (int i=0;i<5;i++)
         {
-            Feedbox = new Feedbox();
-            Feedbox.setDate("date"+i);
-            Feedbox.setTime("time"+i);
-            Feedbox.setData("Descr"+i);
-
-            feedboxesList.add(Feedbox);
+            feedbox = new Feedbox();
+            feedbox.setDate("date"+i);
+            feedbox.setTime("time"+i);
+            feedbox.setData("Descr"+i);
+            feedboxesList.add(feedbox);
 
         }
 
         FeedboxListAdapter feedboxListAdapter = new FeedboxListAdapter(feedboxListView.getContext(),feedboxesList);
         feedboxListView.setAdapter(feedboxListAdapter);
+        feedboxListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO open with new view pad activity;
+            }
+        });
 
         return entriesView;
     }

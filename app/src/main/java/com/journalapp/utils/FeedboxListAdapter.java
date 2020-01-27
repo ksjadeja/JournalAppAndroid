@@ -54,12 +54,6 @@ public class FeedboxListAdapter extends BaseAdapter {
         timeText.setText(feedboxArrayList.get(i).getTime());
         dataText.setText(feedboxArrayList.get(i).getData());
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Selection is "+ feedboxArrayList.get(i).getDate(), Toast.LENGTH_SHORT).show();
-            }
-        });
         return view;
     }
 }
