@@ -1,6 +1,7 @@
 package com.journalapp.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.journalapp.R;
+import com.journalapp.TimelineViewPad;
 import com.journalapp.models.Feedbox;
 
 import java.util.ArrayList;
@@ -41,16 +43,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EntryHolder holder, final int position) {
-        holder.date.setText(entries.get(position).getDate());
-        holder.timeOfDay.setText(entries.get(position).getTime());
-        holder.contentData.setText(entries.get(position).getData());
+    public void onBindViewHolder(@NonNull final EntryHolder holder, final int position) {
+        holder.dateField.setText(entries.get(position).getDate());
+        holder.timeField.setText(entries.get(position).getTime());
+        holder.dataField.setText(entries.get(position).getData());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                //TODO open with new view pad activity;
+                Intent intent = new Intent(context, TimelineViewPad.class);
+                intent.putExtra("dateField",holder.getDateField().getText());
+                intent.putExtra("time",holder.getTimeField().getText());
+                intent.putExtra("data",holder.getDataField().getText());
+                context.startActivity(intent);
             }
         });
     }
@@ -73,18 +79,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
-                TextView date;
-        TextView timeOfDay;
-        TextView contentData;
+        TextView dateField;
+        TextView timeField;
+        TextView dataField;
+        String id;
 
         public EntryHolder(final View itemView) {
             super(itemView);
             cv =  itemView.findViewById(R.id.card_view);
-            date = itemView.findViewById(R.id.dateField);
-            timeOfDay = itemView.findViewById(R.id.timeField);
-            contentData = itemView.findViewById(R.id.dataField);
+            dateField = itemView.findViewById(R.id.dateField);
+            timeField = itemView.findViewById(R.id.timeField);
+            dataField = itemView.findViewById(R.id.dataField);
+        }
 
+        public TextView getDateField() {
+            return dateField;
+        }
 
+        public TextView getTimeField() {
+            return timeField;
+        }
+
+        public TextView getDataField() {
+            return dataField;
         }
     }
 

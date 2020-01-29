@@ -62,27 +62,9 @@ public class EntriesTab extends Fragment {
         button = entriesView.findViewById(R.id.btn_add_item);
 
         feedboxesList = new ArrayList<>();
-//        Feedbox feedbox;
-//        for (int i=0;i<15;i++)
-//        {
-//            feedbox = new Feedbox();
-//            feedbox.setDate("date"+i);
-//            feedbox.setTime("time"+i);
-//            feedbox.setData("Descr"+i);
-//            feedboxesList.add(feedbox);
-//
-//        }
-//
-//         FeedboxListAdapter feedboxListAdapter = new FeedboxListAdapter(feedboxListView.getContext(),feedboxesList);
-//         feedboxListView.setAdapter(feedboxListAdapter);
-//         feedboxListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//             @Override
-//             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//             }
-//         });
+
         getEntriesFromFirebase();
-                    Toast.makeText(getContext(), "list size"+feedboxesList.size(), Toast.LENGTH_SHORT).show();
+
         return entriesView;
     }
 
