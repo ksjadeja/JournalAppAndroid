@@ -63,6 +63,9 @@ public class EntriesTab extends Fragment {
 
         return entriesView;
     }
+    LayoutInflater layoutInflater = getLayoutInflater();
+    View view = layoutInflater.inflate(R.layout.feedbox_layout,null);
+
 
 
     private void getEntriesFromFirebase(){
