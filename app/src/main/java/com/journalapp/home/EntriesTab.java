@@ -58,51 +58,8 @@ public class EntriesTab extends Fragment {
         entiesDb = FirebaseDatabase.getInstance().getReference("journal_entries/").child("Kiran1901");
 
         feedboxesList = new ArrayList<>();
-//        Feedbox feedbox;
-//        for (int i=0;i<15;i++)
-//        {
-//            feedbox = new Feedbox();
-//            feedbox.setDate("date"+i);
-//            feedbox.setTime("time"+i);
-//            feedbox.setData("Descr"+i);
-//            feedboxesList.add(feedbox);
-//
-//        }
-//
-//         FeedboxListAdapter feedboxListAdapter = new FeedboxListAdapter(feedboxListView.getContext(),feedboxesList);
-//         feedboxListView.setAdapter(feedboxListAdapter);
-//         feedboxListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//             @Override
-//             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//             }
-//         });
+
         getEntriesFromFirebase();
-
-//        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String key;
-//                FeedboxDao feedboxDao;
-//                Feedbox feedbox;
-//                for(DataSnapshot ds: dataSnapshot.getChildren()){
-//                    key = ds.getKey();
-//                    feedboxDao = ds.getValue(FeedboxDao.class);
-//                    feedbox = new Feedbox(feedboxDao,key);
-//                    feedboxesList.add(feedbox);
-//                    Toast.makeText(getContext(),"Data Fetched"+feedbox.hashCode(),Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-
-
 
         return entriesView;
     }
