@@ -21,33 +21,25 @@ public class GalleryFragment2 extends Fragment {
 //    int day,month,year,hour,minute;
     DatePicker datePicker;
     TextView textView;
+//    @RequiresApi(api = Build.VERSION_CODES.O)
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_gallery,container,false);
-//        Calendar calendar = Calendar.getInstance();
-//        day = calendar.get(Calendar.DAY_OF_MONTH);
-//        month= calendar.get(Calendar.MONTH);
-//        year= calendar.get(Calendar.YEAR);
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                Toast.makeText(getContext(), "Date is "+day+"-"+month+1+"-"+year, Toast.LENGTH_SHORT).show();
-//            }
-//        },year,month,day);
-//        datePickerDialog.show();
+
        datePicker = rootView.findViewById(R.id.datePicker);
        textView = rootView.findViewById(R.id.text_gallery);
-        datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker datePicker, int year, int month, int day) {
-                String date="Date is "+day+"-"+month+1+"-"+year;
-                Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
-                textView.setText(date);
-            }
-        });
+    datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+    @Override
+    public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
+        String date="Date is "+i2+"-"+i1+1+"-"+i;
+        Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+        textView.setText(date);
+    }
+});
+
 
 //        minute= calendar.get(Calendar.MINUTE);
 //        hour= calendar.get(Calendar.HOUR_OF_DAY);
