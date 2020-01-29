@@ -57,10 +57,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-    public void newAddeddata(String company_name){
+    public void addNewData(String company_name){
         Feedbox feedbox=new Feedbox();
         feedbox.setData(company_name);
-        persons.add(feedbox);
+        entries.add(feedbox);
         notifyDataSetChanged();
     }
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
@@ -77,5 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             contentData = itemView.findViewById(R.id.content_data);
         }
     }
+
+
 
 }
