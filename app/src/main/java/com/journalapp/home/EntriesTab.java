@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +24,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.journalapp.EntriesMap;
+import com.journalapp.MainActivity;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
+import com.journalapp.models.FeedboxDao;
 import com.journalapp.utils.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -62,25 +66,26 @@ Button button;
             }
         });
         feedboxesList = new ArrayList<>();
-        Feedbox feedbox;
-        for (int i=0;i<15;i++)
-        {
-            feedbox = new Feedbox();
-            feedbox.setDate("date"+i);
-            feedbox.setTime("time"+i);
-            feedbox.setData("Descr"+i);
-            feedboxesList.add(feedbox);
-
-        }
-
-        // FeedboxListAdapter feedboxListAdapter = new FeedboxListAdapter(feedboxListView.getContext(),feedboxesList);
-        // feedboxListView.setAdapter(feedboxListAdapter);
-        // feedboxListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //     @Override
-        //     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //
-        //     }
-        // });
+//        Feedbox feedbox;
+//        for (int i=0;i<15;i++)
+//        {
+//            feedbox = new Feedbox();
+//            feedbox.setDate("date"+i);
+//            feedbox.setTime("time"+i);
+//            feedbox.setData("Descr"+i);
+//            feedboxesList.add(feedbox);
+//
+//        }
+//
+//         FeedboxListAdapter feedboxListAdapter = new FeedboxListAdapter(feedboxListView.getContext(),feedboxesList);
+//         feedboxListView.setAdapter(feedboxListAdapter);
+//         feedboxListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//             @Override
+//             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//             }
+//         });
+        getEntriesFromFirebase();
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(llm);
@@ -95,18 +100,20 @@ Button button;
 //    View view = layoutInflater.inflate(R.layout.feedbox_layout,null);
 
 
+
     private void getEntriesFromFirebase(){
         entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String key;Feedbox feedbox;
+                String key;
+                FeedboxDao feedboxDao;
+                Feedbox feedbox;
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     key = ds.getKey();
-                    feedbox = ds.getValue(Feedbox.class);
-                    EntriesMap.EntriesMap.put(feedbox,key);
-                    View entryCard = LayoutInflater.from(getContext()).inflate(R.layout.feedbox_layout,null);
-                    recyclerView.addView(entryCard,0);
-                    EntriesIndex.put(key,0);
+                    feedboxDao = ds.getValue(FeedboxDao.class);
+                    feedbox = new Feedbox(feedboxDao,key);
+                    feedboxesList.add(feedbox);
+                    Toast.makeText(getContext(),"Data Fetched"+ds.hashCode(),Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -121,11 +128,20 @@ Button button;
         entiesDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key;Feedbox feedbox;
+                TextView date,time,data;
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    String key = ds.getKey();
-                    Feedbox feedbox = ds.getValue(Feedbox.class);
-                    EntriesMap.EntriesMap.put(feedbox,key);
+                    key = ds.getKey();
+                    feedbox = ds.getValue(Feedbox.class);
                     View entryCard = LayoutInflater.from(getContext()).inflate(R.layout.feedbox_layout,null);
+                    date=entryCard.findViewById(R.id.dateField);
+                    time=entryCard.findViewById(R.id.timeField);
+                    data=entryCard.findViewById(R.id.dataField);
+
+                    date.setText(feedbox.getDate());
+                    time.setText(feedbox.getTime());
+                    data.setText(feedbox.getTime());
+
                     recyclerView.addView(entryCard,0);
                     EntriesIndex.put(key,0);
                 }

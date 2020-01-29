@@ -6,8 +6,6 @@ import java.util.HashMap;
 
 public class EntriesMap extends HashMap {
 
-    public static HashMap<Feedbox,String> EntriesMap = new HashMap<>();
-
     public static HashMap<String,Integer> EntriesIndex = new HashMap<>();
 
 }

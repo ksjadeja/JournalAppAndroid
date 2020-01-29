@@ -49,9 +49,9 @@ public class FeedboxListAdapter extends BaseAdapter {
         view = layoutInflater.inflate(R.layout.feedbox_layout,null);
 
 
-        TextView dateText = view.findViewById(R.id.date);
-        TextView timeText = view.findViewById(R.id.time_of_day);
-        TextView dataText = view.findViewById(R.id.content_data);
+        TextView dateText = view.findViewById(R.id.dateField);
+        TextView timeText = view.findViewById(R.id.timeField);
+        TextView dataText = view.findViewById(R.id.dataField);
 
         dateText.setText(feedboxArrayList.get(i).getDate());
         timeText.setText(feedboxArrayList.get(i).getTime());

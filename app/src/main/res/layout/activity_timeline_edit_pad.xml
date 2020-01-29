@@ -37,7 +37,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="4dp"
-            android:text="date is here"
+            android:text="dateField is here"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toTopOf="@+id/timeline_edit_pad_time"
             app:layout_constraintEnd_toEndOf="parent"
