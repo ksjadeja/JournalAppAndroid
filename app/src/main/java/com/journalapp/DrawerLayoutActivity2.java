@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +52,10 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
             @Override
             public void onClick(View v) {
                 Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-                //TODO
+
+                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this,TimelineEditPad.class);
+                startActivity(newEntryIntent);
+
             }
         });
 
