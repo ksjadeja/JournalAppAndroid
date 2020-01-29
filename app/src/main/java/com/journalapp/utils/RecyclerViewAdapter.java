@@ -70,13 +70,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+    
     public void addNewData(String company_name){
         Feedbox feedbox=new Feedbox();
         feedbox.setData(company_name);
         entries.add(feedbox);
         notifyDataSetChanged();
     }
-    
+
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
         TextView dateField;
@@ -91,11 +92,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             timeField = itemView.findViewById(R.id.timeField);
             dataField = itemView.findViewById(R.id.dataField);
         }
-
         public TextView getDateField() {
             return dateField;
         }
-
         public TextView getTimeField() {
             return timeField;
         }

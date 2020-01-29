@@ -44,15 +44,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
 
         return root;
-//        View root = inflater.inflate(R.layout.fragment_home, container, true);
-//
-//        ViewPager pager = root.findViewById(R.id.viewPager);
-//        tabAdapter = new TabAdapter(getChildFragmentManager());
-//        pager.setAdapter(tabAdapter);
-//
-//        timelineTabs = root.findViewById(R.id.timelineTabs);
-//        timelineTabs.setupWithViewPager(pager,true);
-//        return null;
     }
 
     @Override
