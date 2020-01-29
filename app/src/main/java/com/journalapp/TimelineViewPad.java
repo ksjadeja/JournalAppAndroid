@@ -28,7 +28,7 @@ public class TimelineViewPad extends AppCompatActivity {
         dataField = findViewById(R.id.timeline_view_pad_data);
 
         Intent intent = getIntent();
-        date = intent.getStringExtra("date");
+        date = intent.getStringExtra("dateField");
         time = intent.getStringExtra("time");
         data = intent.getStringExtra("data");
         id = intent.getStringExtra("id");

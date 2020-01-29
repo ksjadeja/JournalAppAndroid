@@ -17,14 +17,14 @@ import com.journalapp.models.Feedbox;
 import java.util.ArrayList;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.PersonViewHolder>{
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.EntryHolder>{
         ArrayList<Feedbox> entries;
     Context context;
     @NonNull
     @Override
-    public PersonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.feedbox_layout, parent, false);
-        PersonViewHolder pvh = new PersonViewHolder(v);
+        EntryHolder pvh = new EntryHolder(v);
         return pvh;
     }
 
@@ -34,7 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.PersonViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull EntryHolder holder, final int position) {
         holder.date.setText(entries.get(position).getDate());
         holder.timeOfDay.setText(entries.get(position).getTime());
         holder.contentData.setText(entries.get(position).getData());
@@ -57,18 +57,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-    public static class PersonViewHolder extends RecyclerView.ViewHolder {
+
+
+    public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
                 TextView date;
         TextView timeOfDay;
         TextView contentData;
 
-        PersonViewHolder(final View itemView) {
+        public EntryHolder(final View itemView) {
             super(itemView);
             cv =  itemView.findViewById(R.id.card_view);
-            date = itemView.findViewById(R.id.date);
-            timeOfDay = itemView.findViewById(R.id.time_of_day);
-            contentData = itemView.findViewById(R.id.content_data);
+            date = itemView.findViewById(R.id.dateField);
+            timeOfDay = itemView.findViewById(R.id.timeField);
+            contentData = itemView.findViewById(R.id.dataField);
 
 
         }
