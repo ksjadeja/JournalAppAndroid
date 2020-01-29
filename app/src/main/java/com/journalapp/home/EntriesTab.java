@@ -100,10 +100,8 @@ public class EntriesTab extends Fragment {
             Feedbox = new Feedbox();
             Feedbox.setDate("date"+i);
             Feedbox.setTime("time"+i);
-            Feedbox.setData("Descr"+i);
-
+            Feedbox.setData("Desc"+i);
             feedboxesList.add(Feedbox);
-
         }
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(llm);
@@ -113,5 +111,8 @@ public class EntriesTab extends Fragment {
         recyclerView.setAdapter(adapter);
         return entriesView;
     }
+    LayoutInflater layoutInflater = getLayoutInflater();
+    View view = layoutInflater.inflate(R.layout.feedbox_layout,null);
+
 
 }

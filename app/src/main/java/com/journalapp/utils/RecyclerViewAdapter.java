@@ -36,7 +36,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.date.setText(persons.get(position).getDate());
         holder.timeOfDay.setText(persons.get(position).getTime());
         holder.contentData.setText(persons.get(position).getData());
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +53,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+    public void newAddeddata(String company_name){
+        Feedbox feedbox=new Feedbox();
+        feedbox.setData(company_name);
+        persons.add(feedbox);
+        notifyDataSetChanged();
+    }
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
                 TextView date;
@@ -66,8 +71,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             date = itemView.findViewById(R.id.date);
             timeOfDay = itemView.findViewById(R.id.time_of_day);
             contentData = itemView.findViewById(R.id.content_data);
-
-
         }
     }
 

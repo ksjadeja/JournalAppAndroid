@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
 //
 //        timelineTabs = root.findViewById(R.id.timelineTabs);
 //        timelineTabs.setupWithViewPager(pager,true);
-        return null;
+//        return null;
     }
 
     //closes FAB submenus
