@@ -9,6 +9,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 import com.journalapp.R;
@@ -18,7 +20,8 @@ public class FeedboxListAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<Feedbox> feedboxArrayList;
-    ListView feedboxListView;
+//    ListView feedboxListView;
+    RecyclerView recyclerView;
     public FeedboxListAdapter(Context context, ArrayList<Feedbox> feedboxArrayList) {
         this.context=context;
         this.feedboxArrayList =feedboxArrayList;
@@ -46,9 +49,9 @@ public class FeedboxListAdapter extends BaseAdapter {
         view = layoutInflater.inflate(R.layout.feedbox_layout,null);
 
 
-        TextView dateText = view.findViewById(R.id.dateText);
-        TextView timeText = view.findViewById(R.id.timeText);
-        TextView dataText = view.findViewById(R.id.dataText);
+        TextView dateText = view.findViewById(R.id.date);
+        TextView timeText = view.findViewById(R.id.time_of_day);
+        TextView dataText = view.findViewById(R.id.content_data);
 
         dateText.setText(feedboxArrayList.get(i).getDate());
         timeText.setText(feedboxArrayList.get(i).getTime());
