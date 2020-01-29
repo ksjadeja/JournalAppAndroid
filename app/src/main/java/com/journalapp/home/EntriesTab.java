@@ -3,6 +3,7 @@ package com.journalapp.home;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,11 +79,29 @@ public class EntriesTab extends Fragment {
 //         });
         getEntriesFromFirebase();
 
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(llm);
-        Collections.reverse(feedboxesList);
-        RecyclerViewAdapter adapter= new RecyclerViewAdapter(getContext(), feedboxesList);
-        recyclerView.setAdapter(adapter);
+//        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String key;
+//                FeedboxDao feedboxDao;
+//                Feedbox feedbox;
+//                for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                    key = ds.getKey();
+//                    feedboxDao = ds.getValue(FeedboxDao.class);
+//                    feedbox = new Feedbox(feedboxDao,key);
+//                    feedboxesList.add(feedbox);
+//                    Toast.makeText(getContext(),"Data Fetched"+feedbox.hashCode(),Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
+
 
 
         return entriesView;
@@ -101,8 +120,13 @@ public class EntriesTab extends Fragment {
                     feedboxDao = ds.getValue(FeedboxDao.class);
                     feedbox = new Feedbox(feedboxDao,key);
                     feedboxesList.add(feedbox);
-                    Toast.makeText(getContext(),"Data Fetched"+ds.hashCode(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Data Fetched"+feedbox.hashCode(),Toast.LENGTH_SHORT).show();
                 }
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                Collections.reverse(feedboxesList);
+                Log.i("key",  ""+feedboxesList.size() );
+                RecyclerViewAdapter adapter= new RecyclerViewAdapter(getContext(), feedboxesList);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
