@@ -33,6 +33,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(Context context, ArrayList<Feedbox> persons){
         this.entries = persons;
         this.context=context;
+        if(entries.size()==0)
+        {
+            Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(context, "list is not empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -63,7 +70,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-
+    
+    public void addNewData(String company_name){
+        Feedbox feedbox=new Feedbox();
+        feedbox.setData(company_name);
+        entries.add(feedbox);
+        notifyDataSetChanged();
+    }
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
@@ -92,5 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return dataField;
         }
     }
+
+
 
 }
