@@ -40,7 +40,7 @@ public class EntriesTab extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<Feedbox> feedboxesList;
-Button button;
+    Button button;
     DatabaseReference entiesDb;
     RecyclerViewAdapter adapter;
     public EntriesTab() {
@@ -86,6 +86,17 @@ Button button;
 //             }
 //         });
         getEntriesFromFirebase();
+                    Toast.makeText(getContext(), "list size"+feedboxesList.size(), Toast.LENGTH_SHORT).show();
+//        if(feedboxesList.size()==0)
+//        {
+//            Toast.makeText(getContext(), "list is empty", Toast.LENGTH_SHORT).show();
+//        }
+//        else{
+//            Toast.makeText(getContext(), "list is not empty", Toast.LENGTH_SHORT).show();
+//        }
+
+
+
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(llm);
@@ -102,26 +113,28 @@ Button button;
 
 
     private void getEntriesFromFirebase(){
-        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String key;
-                FeedboxDao feedboxDao;
-                Feedbox feedbox;
-                for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    key = ds.getKey();
-                    feedboxDao = ds.getValue(FeedboxDao.class);
-                    feedbox = new Feedbox(feedboxDao,key);
-                    feedboxesList.add(feedbox);
-                    Toast.makeText(getContext(),"Data Fetched"+ds.hashCode(),Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String key;
+//                FeedboxDao feedboxDao;
+//                Feedbox feedbox;
+//                for(DataSnapshot ds: dataSnapshot.getChildren()){
+//                    key = ds.getKey();
+//                    feedboxDao = ds.getValue(FeedboxDao.class);
+//
+//                    feedbox = new Feedbox(feedboxDao,key);
+//                    Toast.makeText(getContext(), "date"+feedbox.getDate(), Toast.LENGTH_SHORT).show();
+//                    feedboxesList.add(feedbox);
+//                    Toast.makeText(getContext(),"Data Fetched"+feedboxesList.size(),Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     private void updateEntriesFromFirebaseRealtime(){
