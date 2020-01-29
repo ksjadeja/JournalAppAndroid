@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.PersonViewHolder>{
-        ArrayList<Feedbox> persons;
+        ArrayList<Feedbox> entries;
     Context context;
     @NonNull
     @Override
@@ -27,19 +27,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         PersonViewHolder pvh = new PersonViewHolder(v);
         return pvh;
     }
+
     public RecyclerViewAdapter(Context context, ArrayList<Feedbox> persons){
-        this.persons = persons;
+        this.entries = persons;
         this.context=context;
     }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.PersonViewHolder holder, final int position) {
-        holder.date.setText(persons.get(position).getDate());
-        holder.timeOfDay.setText(persons.get(position).getTime());
-        holder.contentData.setText(persons.get(position).getData());
+        holder.date.setText(entries.get(position).getDate());
+        holder.timeOfDay.setText(entries.get(position).getTime());
+        holder.contentData.setText(entries.get(position).getData());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Selection position : "+persons.get(position).getDate(),Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
+                //TODO open with new view pad activity;
             }
         });
     }
@@ -47,7 +51,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return persons.size();
+        return entries.size();
     }
         @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
