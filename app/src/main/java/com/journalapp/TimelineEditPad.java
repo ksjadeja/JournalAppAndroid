@@ -25,7 +25,7 @@ public class TimelineEditPad extends AppCompatActivity {
 
     public static SimpleDateFormat dateFormat, timeFormat;
     TextView dateText,timeText,dataText;
-    String date,time,data;
+    String date,time,data,id;
 
     private boolean update=false;
 
@@ -37,7 +37,7 @@ public class TimelineEditPad extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         user = "Kiran1901";
-        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries/Kiran1901");
+        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child(user);
 
 
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class TimelineEditPad extends AppCompatActivity {
             date = intent.getStringExtra("date");
             time = intent.getStringExtra("time");
             data = intent.getStringExtra("data");
+            id = intent.getStringExtra("id");
             dataText.setText(data);
             update = true;
 
@@ -72,11 +73,17 @@ public class TimelineEditPad extends AppCompatActivity {
         saveFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(update){
-                    updateEntry();
+                if (TextUtils.isEmpty(dataText.getText())){
+                    Toast.makeText(TimelineEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
                 }else{
-                    saveEntry();
+                    data = dataText.getText().toString();
+                    if(update){
+                        updateEntry();
+                    }else{
+                        saveEntry();
+                    }
                 }
+
             }
         });
 
@@ -85,7 +92,8 @@ public class TimelineEditPad extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!TextUtils.isEmpty(dateText.getText())){
+        if (!TextUtils.isEmpty(dataText.getText())){
+            data = dataText.getText().toString();
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(TimelineEditPad.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
@@ -111,7 +119,7 @@ public class TimelineEditPad extends AppCompatActivity {
         FeedboxDao entry = new FeedboxDao();
         entry.setDate(date);
         entry.setTime(time);
-        entry.setData(dataText.getText().toString());
+        entry.setData(data);
 
         String key = entriesDb.push().getKey();
         entriesDb.child(key).setValue(entry);
@@ -120,7 +128,15 @@ public class TimelineEditPad extends AppCompatActivity {
         finish();
     }
 
-    private void updateEntry(){
-        //TODO update entry code
+    private void updateEntry() {
+        FeedboxDao entry = new FeedboxDao();
+        entry.setDate(date);
+        entry.setTime(time);
+        entry.setData(data);
+
+        entriesDb.child(id).setValue(entry);
+
+        Toast.makeText(TimelineEditPad.this, "Entry Updated", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }
