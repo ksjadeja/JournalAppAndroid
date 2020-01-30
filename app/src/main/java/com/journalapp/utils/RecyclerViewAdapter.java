@@ -69,26 +69,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String key;
                 FeedboxDao feedboxDao;
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    key = ds.getKey();
-                    feedboxDao = ds.getValue(FeedboxDao.class);
+                    key = dataSnapshot.getKey();
+                    feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
 
                     int index = EntriesIndex.get(key);
                     entries.set(index,new Feedbox(feedboxDao,key));
                     notifyDataSetChanged();
-                }
+
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 String key;
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    key = ds.getKey();
+                    key = dataSnapshot.getKey();
 
                     int index = EntriesIndex.get(key);
                     entries.remove(index);
                     notifyDataSetChanged();
-                }
             }
 
             @Override
