@@ -18,6 +18,8 @@ import com.journalapp.models.Feedbox;
 
 import java.util.ArrayList;
 
+import static com.journalapp.EntriesMap.EntriesIndex;
+
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.EntryHolder>{
         ArrayList<Feedbox> entries;
@@ -56,6 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("dateField",holder.getDateField().getText());
                 intent.putExtra("time",holder.getTimeField().getText());
                 intent.putExtra("data",holder.getDataField().getText());
+                intent.putExtra("id", entries.get(holder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });

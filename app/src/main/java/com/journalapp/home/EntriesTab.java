@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.journalapp.EntriesMap;
-import com.journalapp.MainActivity;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 import com.journalapp.models.FeedboxDao;
@@ -44,6 +42,8 @@ public class EntriesTab extends Fragment {
     Button button;
     DatabaseReference entiesDb;
     RecyclerViewAdapter adapter;
+
+    ChildEventListener childEventListener;
     public EntriesTab() {
         // Required empty public constructor
     }
@@ -57,13 +57,15 @@ public class EntriesTab extends Fragment {
 
         View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
-        entiesDb = FirebaseDatabase.getInstance().getReference("journal_entries/").child("Kiran1901");
+        entiesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
         button = entriesView.findViewById(R.id.btn_add_item);
 
         feedboxesList = new ArrayList<>();
 
         getEntriesFromFirebase();
+
+        childEventListener = updateEntriesFromFirebaseRealtime();
 
         return entriesView;
     }
@@ -80,11 +82,14 @@ public class EntriesTab extends Fragment {
                     feedboxDao = ds.getValue(FeedboxDao.class);
                     feedbox = new Feedbox(feedboxDao, key);
                     feedboxesList.add(feedbox);
-                    Toast.makeText(getContext(), "Data Fetched" + feedbox.hashCode(), Toast.LENGTH_SHORT).show();
                 }
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 Collections.reverse(feedboxesList);
-                Log.i("key", "" + feedboxesList.size());
+
+                for (int i=0;i<feedboxesList.size();i++){
+                    EntriesIndex.put(feedboxesList.get(i).getId(),i);
+                }
+
                 final RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
                 recyclerView.setAdapter(adapter);
                 button.setOnClickListener(new View.OnClickListener() {
@@ -97,41 +102,56 @@ public class EntriesTab extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }
-            private void updateEntriesFromFirebaseRealtime() {
-                entiesDb.addChildEventListener(new ChildEventListener() {
+
+    private ChildEventListener updateEntriesFromFirebaseRealtime() {
+        return entiesDb.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         String key;
-                        Feedbox feedbox;
-                        TextView date, time, data;
+                        FeedboxDao feedboxDao;
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             key = ds.getKey();
-                            feedbox = ds.getValue(Feedbox.class);
-                            View entryCard = LayoutInflater.from(getContext()).inflate(R.layout.feedbox_layout, null);
-                            date = entryCard.findViewById(R.id.dateField);
-                            time = entryCard.findViewById(R.id.timeField);
-                            data = entryCard.findViewById(R.id.dataField);
+                            feedboxDao = ds.getValue(FeedboxDao.class);
 
-                            date.setText(feedbox.getDate());
-                            time.setText(feedbox.getTime());
-                            data.setText(feedbox.getTime());
+                            Log.i("data",s);
+                            Log.i("data",feedboxDao.getDate());
+                            Log.i("data",feedboxDao.getTime());
+                            Log.i("data",feedboxDao.getData());
 
-                            recyclerView.addView(entryCard, 0);
-                            EntriesIndex.put(key, 0);
+                            feedboxesList.add(0,new Feedbox(feedboxDao,key));
+                            EntriesMap.addFirst(key);
+                            adapter.notifyItemInserted(0);
                         }
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        String key;
+                        FeedboxDao feedboxDao;
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            key = ds.getKey();
+                            feedboxDao = ds.getValue(FeedboxDao.class);
 
+                            int index = EntriesIndex.get(key);
+                            feedboxesList.set(index,new Feedbox(feedboxDao,key));
+                            adapter.notifyItemChanged(index);
+                        }
                     }
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        String key;
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            key = ds.getKey();
 
+                            int index = EntriesIndex.get(key);
+                            feedboxesList.remove(index);
+                            adapter.notifyItemRemoved(index);
+                        }
                     }
 
                     @Override
@@ -141,9 +161,14 @@ public class EntriesTab extends Fragment {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
-            }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        entiesDb.removeEventListener(childEventListener);
+    }
 }
