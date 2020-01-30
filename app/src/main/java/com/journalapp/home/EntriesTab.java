@@ -63,49 +63,52 @@ public class EntriesTab extends Fragment {
 
         feedboxesList = new ArrayList<>();
 
-        getEntriesFromFirebase();
+//        getEntriesFromFirebase();
 
-        childEventListener = updateEntriesFromFirebaseRealtime();
+        adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
+        recyclerView.setAdapter(adapter);
+
+//        childEventListener = updateEntriesFromFirebaseRealtime();
 
         return entriesView;
     }
 
-    private void getEntriesFromFirebase() {
-        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String key;
-                FeedboxDao feedboxDao;
-                Feedbox feedbox;
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    key = ds.getKey();
-                    feedboxDao = ds.getValue(FeedboxDao.class);
-                    feedbox = new Feedbox(feedboxDao, key);
-                    feedboxesList.add(feedbox);
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                Collections.reverse(feedboxesList);
-
-                for (int i=0;i<feedboxesList.size();i++){
-                    EntriesIndex.put(feedboxesList.get(i).getId(),i);
-                }
-
-                final RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
-                recyclerView.setAdapter(adapter);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        adapter.addNewData("This is new data which I added");
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//    private void getEntriesFromFirebase() {
+//        entiesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String key;
+//                FeedboxDao feedboxDao;
+//                Feedbox feedbox;
+//                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    key = ds.getKey();
+//                    feedboxDao = ds.getValue(FeedboxDao.class);
+//                    feedbox = new Feedbox(feedboxDao, key);
+//                    feedboxesList.add(feedbox);
+//                }
+//                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//                Collections.reverse(feedboxesList);
+//
+//                for (int i=0;i<feedboxesList.size();i++){
+//                    EntriesIndex.put(feedboxesList.get(i).getId(),i);
+//                }
+//
+//                final RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
+//                recyclerView.setAdapter(adapter);
+//                button.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        adapter.addNewData("This is new data which I added");
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
     private ChildEventListener updateEntriesFromFirebaseRealtime() {
         return entiesDb.addChildEventListener(new ChildEventListener() {
@@ -115,17 +118,17 @@ public class EntriesTab extends Fragment {
                         FeedboxDao feedboxDao;
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             key = ds.getKey();
-                            feedboxDao = ds.getValue(FeedboxDao.class);
+                            feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
 
-                            Log.i("data",s);
                             Log.i("data",feedboxDao.getDate());
                             Log.i("data",feedboxDao.getTime());
                             Log.i("data",feedboxDao.getData());
 
                             feedboxesList.add(0,new Feedbox(feedboxDao,key));
                             EntriesMap.addFirst(key);
-                            adapter.notifyItemInserted(0);
+                            adapter.notifyDataSetChanged();
                         }
+
                     }
 
                     @Override
