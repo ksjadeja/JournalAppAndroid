@@ -42,7 +42,7 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_account_entry);
         user = "Kiran1901";
         entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-        Calendar c = Calendar.getInstance();
+
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
@@ -56,10 +56,7 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         accountEntryDate = myView.findViewById(R.id.account_entry_date);
         accountEntryTime = myView.findViewById(R.id.account_entry_time);
 
-        date = dateFormat.format(c.getTime());
-        time = timeFormat.format(c.getTime());
-        accountEntryDate.setText(date);
-        accountEntryTime.setText(time);
+
 
 
         addAccountEntry.setOnClickListener(this);
@@ -94,7 +91,11 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                     ((ViewGroup)myView.getParent()).removeView(myView); // <- fix
                 }
                 alertDialog2.setView(myView);
-
+                Calendar c = Calendar.getInstance();
+                date = dateFormat.format(c.getTime());
+                time = timeFormat.format(c.getTime());
+                accountEntryDate.setText(date);
+                accountEntryTime.setText(time);
                 alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -105,7 +106,12 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 
                         AccEntrybox accEntrybox = new AccEntrybox();
                         accEntrybox.setName(edtName.getText().toString());
-                        accEntrybox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
+                        try {
+                            accEntrybox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
+                        }
                         accEntrybox.setDesc(description.getText().toString());
                         accEntrybox.setT_type(t_type);
                         accEntrybox.setDate(date);
