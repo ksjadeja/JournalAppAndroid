@@ -47,12 +47,11 @@ public class TimelineViewPad extends AppCompatActivity {
     }
 
     private void editEntry(){
-        Intent intent = new Intent(getApplicationContext(), TimelineEditPad.class);
-        intent.putExtra("date",date);
+        //TODO edit entry transition code
+        Intent intent = new Intent(getApplicationContext(), TimelineViewPad.class);
+        intent.putExtra("dateField",date);
         intent.putExtra("time",time);
         intent.putExtra("data",data);
-        intent.putExtra("id",id);
         startActivity(intent);
-        finish();
     }
 }

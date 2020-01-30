@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,7 +15,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.journalapp.models.Feedbox;
-import com.journalapp.models.FeedboxDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,9 +23,7 @@ public class TimelineEditPad extends AppCompatActivity {
 
     public static SimpleDateFormat dateFormat, timeFormat;
     TextView dateText,timeText,dataText;
-    String date,time,data,id;
-
-    private boolean update=false;
+    String date,time;
 
     FloatingActionButton saveFab;
 
@@ -37,7 +33,7 @@ public class TimelineEditPad extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         user = "Kiran1901";
-        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child(user);
+        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries/Kiran1901");
 
 
         super.onCreate(savedInstanceState);
@@ -48,42 +44,19 @@ public class TimelineEditPad extends AppCompatActivity {
         timeText = findViewById(R.id.timeline_edit_pad_time);
         dataText = findViewById(R.id.timeline_edit_pad_data);
 
-        Intent intent = getIntent();
-        if(!TextUtils.isEmpty(intent.getStringExtra("date"))){
-            date = intent.getStringExtra("date");
-            time = intent.getStringExtra("time");
-            data = intent.getStringExtra("data");
-            id = intent.getStringExtra("id");
-            dataText.setText(data);
-            update = true;
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
-        }else{
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            timeFormat = new SimpleDateFormat("hh:mm:ss a");
-
-            Calendar c = Calendar.getInstance();
-            date = dateFormat.format(c.getTime());
-            time = timeFormat.format(c.getTime());
-        }
-
-
+        Calendar c = Calendar.getInstance();
+        date = dateFormat.format(c.getTime());
+        time = timeFormat.format(c.getTime());
         dateText.setText(date);
         timeText.setText(time);
 
         saveFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(dataText.getText())){
-                    Toast.makeText(TimelineEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
-                }else{
-                    data = dataText.getText().toString();
-                    if(update){
-                        updateEntry();
-                    }else{
-                        saveEntry();
-                    }
-                }
-
+                saveEntry();
             }
         });
 
@@ -92,8 +65,7 @@ public class TimelineEditPad extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!TextUtils.isEmpty(dataText.getText())){
-            data = dataText.getText().toString();
+        if (!TextUtils.isEmpty(dateText.getText())){
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(TimelineEditPad.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
@@ -116,27 +88,15 @@ public class TimelineEditPad extends AppCompatActivity {
 
     private void saveEntry(){
 
-        FeedboxDao entry = new FeedboxDao();
+        Feedbox entry = new Feedbox();
         entry.setDate(date);
         entry.setTime(time);
-        entry.setData(data);
+        entry.setData(dataText.getText().toString());
 
         String key = entriesDb.push().getKey();
         entriesDb.child(key).setValue(entry);
 
         Toast.makeText(TimelineEditPad.this,"Entry Saved",Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
-    private void updateEntry() {
-        FeedboxDao entry = new FeedboxDao();
-        entry.setDate(date);
-        entry.setTime(time);
-        entry.setData(data);
-
-        entriesDb.child(id).setValue(entry);
-
-        Toast.makeText(TimelineEditPad.this, "Entry Updated", Toast.LENGTH_SHORT).show();
         finish();
     }
 }
