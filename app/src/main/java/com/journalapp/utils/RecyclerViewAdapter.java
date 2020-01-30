@@ -80,12 +80,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                String key;
-                    key = dataSnapshot.getKey();
 
-                    int index = EntriesIndex.get(key);
-                    entries.remove(index);
-                    notifyDataSetChanged();
+//                int index = EntriesIndex.get(dataSnapshot.getKey());
+//                entries.remove(index);
+//                EntriesMap.delete(dataSnapshot.getKey(),index);
+//                notifyDataSetChanged();
+
+                for(Feedbox fb:entries){
+                    if(fb.getId().equals(dataSnapshot.getKey())){
+                        EntriesMap.delete(fb.getId(),entries.indexOf(fb));
+                        entries.remove(fb);
+                        notifyDataSetChanged();
+                        return;
+                    }
+                }
+
             }
 
             @Override
@@ -104,7 +113,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(context, "list is not empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -138,12 +147,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         super.onAttachedToRecyclerView(recyclerView);
     }
     
-    public void addNewData(String company_name){
+    /*public void addNewData(String company_name){
         Feedbox feedbox=new Feedbox();
         feedbox.setData(company_name);
         entries.add(feedbox);
         notifyDataSetChanged();
-    }
+    }*/
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
