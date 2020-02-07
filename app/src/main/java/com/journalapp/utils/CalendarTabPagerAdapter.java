@@ -4,15 +4,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.journalapp.home.AccEntriesTab;
-import com.journalapp.home.EntriesTab;
-import com.journalapp.home.ExpEntriesTab;
+import com.journalapp.calendar.DatewiseAccEntries;
+import com.journalapp.calendar.DatewiseEntries;
+import com.journalapp.calendar.DatewiseExpEntries;
 
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
-
-    int tabCount;
-
-    public MyPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
+public class CalendarTabPagerAdapter extends FragmentStatePagerAdapter {    int tabCount;
+    public CalendarTabPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         this.tabCount=tabCount;
     }
@@ -23,13 +20,13 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         switch (position){
 
             case 0:
-                EntriesTab entriesTab = new EntriesTab();
+                DatewiseEntries entriesTab= new DatewiseEntries();
                 return entriesTab;
             case 1:
-                AccEntriesTab accEntriesTab = new AccEntriesTab();
+                DatewiseAccEntries accEntriesTab = new DatewiseAccEntries();
                 return accEntriesTab;
             case 2:
-                ExpEntriesTab expEntriesTab = new ExpEntriesTab();
+                DatewiseExpEntries expEntriesTab = new DatewiseExpEntries();
                 return expEntriesTab;
         }
         return null;

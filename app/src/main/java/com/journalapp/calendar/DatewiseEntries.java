@@ -1,5 +1,4 @@
-package com.journalapp.home;
-
+package com.journalapp.calendar;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -31,37 +30,33 @@ import java.util.ArrayList;
 
 import static com.journalapp.EntriesMap.EntriesIndex;
 
-
-public class EntriesTab extends Fragment {
+public class DatewiseEntries extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<Feedbox> feedboxesList;
     DatabaseReference entriesDb;
+    RecyclerViewAdapter recyclerViewAdapter;
 
-    RecyclerViewAdapter adapter;
+    String startDate = "08/02/2020";
 
-    public EntriesTab() {
-        // Required empty public constructor
 
+    public DatewiseEntries() {
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
-        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-
+        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901")
+                                    .orderByChild("date").equalTo(startDate).getRef();
         feedboxesList = new ArrayList<>();
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
+        recyclerViewAdapter = new RecyclerViewAdapter(getContext(), feedboxesList);
 
+// db listener
         entriesDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -70,13 +65,13 @@ public class EntriesTab extends Fragment {
                 key = dataSnapshot.getKey();
                 feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
 
-                Log.i("data",feedboxDao.getDate());
-                Log.i("data",feedboxDao.getTime());
-                Log.i("data",feedboxDao.getData());
+                Log.i("data:cal",feedboxDao.getDate());
+                Log.i("data:cal",feedboxDao.getTime());
+                Log.i("data:cal",feedboxDao.getData());
 
                 feedboxesList.add(0,new Feedbox(feedboxDao,key));
-                EntriesMap.addFirst(key);
-                adapter.notifyDataSetChanged();
+//                EntriesMap.addFirst(key);
+                recyclerViewAdapter.notifyDataSetChanged();
 
             }
 
@@ -89,23 +84,18 @@ public class EntriesTab extends Fragment {
 
                 int index = EntriesIndex.get(key);
                 feedboxesList.set(index,new Feedbox(feedboxDao,key));
-                adapter.notifyDataSetChanged();
+                recyclerViewAdapter.notifyDataSetChanged();
 
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-//                int index = EntriesIndex.get(dataSnapshot.getKey());
-//                entries.remove(index);
-//                EntriesMap.delete(dataSnapshot.getKey(),index);
-//                notifyDataSetChanged();
-
                 for(Feedbox fb:feedboxesList){
                     if(fb.getId().equals(dataSnapshot.getKey())){
                         EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
                         feedboxesList.remove(fb);
-                        adapter.notifyDataSetChanged();
+                        recyclerViewAdapter.notifyDataSetChanged();
                         return;
                     }
                 }
@@ -123,17 +113,9 @@ public class EntriesTab extends Fragment {
             }
         });
 
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(recyclerViewAdapter);
 
 
         return entriesView;
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        entriesDb.removeEventListener(childEventListener);
-
     }
 }

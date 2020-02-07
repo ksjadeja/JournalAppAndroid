@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TimelineViewPad extends AppCompatActivity {
 
@@ -15,6 +18,10 @@ public class TimelineViewPad extends AppCompatActivity {
     FloatingActionButton editFab;
 
     TextView dateField,timeField,dataField;
+
+    ImageButton deleteEntryButton;
+
+    DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
 
     @Override
@@ -26,6 +33,15 @@ public class TimelineViewPad extends AppCompatActivity {
         dateField = findViewById(R.id.timeline_view_pad_date);
         timeField = findViewById(R.id.timeline_view_pad_time);
         dataField = findViewById(R.id.timeline_view_pad_data);
+
+        deleteEntryButton = findViewById(R.id.deleteEntryButton);
+
+        deleteEntryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteEntry();
+            }
+        });
 
         Intent intent = getIntent();
         date = intent.getStringExtra("dateField");
@@ -53,6 +69,12 @@ public class TimelineViewPad extends AppCompatActivity {
         intent.putExtra("data",data);
         intent.putExtra("id",id);
         startActivity(intent);
+        finish();
+    }
+
+    private void deleteEntry(){
+        entriesDb.child(id).removeValue();
+        EntriesMap.delete(id,EntriesMap.EntriesIndex.get(id));
         finish();
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.journalapp.calendar.CalendarFragment;
 import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
@@ -107,7 +108,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 
         if(menuItem.getItemId() == R.id.nav_gallery)
         {
-            fragment = new GalleryFragment2();
+            fragment = new CalendarFragment();
         }
         else if(menuItem.getItemId() == R.id.nav_home)
         {
