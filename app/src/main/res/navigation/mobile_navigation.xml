@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.journalapp.GalleryFragment2"
+        android:name="com.journalapp.calendar.CalendarFragment"
         android:label="Demo"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_calendar" />
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_slideshow"-->

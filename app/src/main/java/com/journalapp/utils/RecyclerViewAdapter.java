@@ -47,7 +47,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(final Context context, final ArrayList<Feedbox> entries){
         this.entries = entries;
         this.context=context;
-        entriesDb.addChildEventListener(new ChildEventListener() {
+
+/*        entriesDb.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String key;
@@ -106,7 +107,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(context,"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
         if(entries.size()==0)
         {
@@ -146,13 +147,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-    
-    /*public void addNewData(String company_name){
-        Feedbox feedbox=new Feedbox();
-        feedbox.setData(company_name);
-        entries.add(feedbox);
-        notifyDataSetChanged();
-    }*/
+
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
@@ -174,7 +169,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView getTimeField() {
             return timeField;
         }
-
         public TextView getDataField() {
             return dataField;
         }

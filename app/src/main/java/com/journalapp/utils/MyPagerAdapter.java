@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.journalapp.home.AccEntriesTab;
 import com.journalapp.home.EntriesTab;
+import com.journalapp.home.ExpEntriesTab;
 
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -26,6 +27,9 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 AccEntriesTab statusFragment = new AccEntriesTab();
                 return statusFragment;
+            case 2:
+                ExpEntriesTab expEntriesTab = new ExpEntriesTab();
+                return expEntriesTab;
         }
         return null;
     }
