@@ -2,6 +2,7 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +10,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.journalapp.EntriesMap;
 import com.journalapp.R;
 import com.journalapp.TimelineViewPad;
 import com.journalapp.models.Feedbox;
+import com.journalapp.models.FeedboxDao;
 
 import java.util.ArrayList;
 
+import static com.journalapp.EntriesMap.EntriesIndex;
+
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.EntryHolder>{
-        ArrayList<Feedbox> entries;
+
+    ArrayList<Feedbox> entries;
     Context context;
+    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
+
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,15 +44,76 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return pvh;
     }
 
-    public RecyclerViewAdapter(Context context, ArrayList<Feedbox> persons){
-        this.entries = persons;
+    public RecyclerViewAdapter(final Context context, final ArrayList<Feedbox> entries){
+        this.entries = entries;
         this.context=context;
+        entriesDb.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key;
+                FeedboxDao feedboxDao;
+                key = dataSnapshot.getKey();
+                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
+
+                Log.i("data",feedboxDao.getDate());
+                Log.i("data",feedboxDao.getTime());
+                Log.i("data",feedboxDao.getData());
+
+                entries.add(0,new Feedbox(feedboxDao,key));
+                EntriesMap.addFirst(key);
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key;
+                FeedboxDao feedboxDao;
+                    key = dataSnapshot.getKey();
+                    feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
+
+                    int index = EntriesIndex.get(key);
+                    entries.set(index,new Feedbox(feedboxDao,key));
+                    notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+//                int index = EntriesIndex.get(dataSnapshot.getKey());
+//                entries.remove(index);
+//                EntriesMap.delete(dataSnapshot.getKey(),index);
+//                notifyDataSetChanged();
+
+                for(Feedbox fb:entries){
+                    if(fb.getId().equals(dataSnapshot.getKey())){
+                        EntriesMap.delete(fb.getId(),entries.indexOf(fb));
+                        entries.remove(fb);
+                        notifyDataSetChanged();
+                        return;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context,"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
         if(entries.size()==0)
         {
             Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(context, "list is not empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -56,6 +131,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra("dateField",holder.getDateField().getText());
                 intent.putExtra("time",holder.getTimeField().getText());
                 intent.putExtra("data",holder.getDataField().getText());
+                intent.putExtra("id", entries.get(holder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });
@@ -71,12 +147,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         super.onAttachedToRecyclerView(recyclerView);
     }
     
-    public void addNewData(String company_name){
+    /*public void addNewData(String company_name){
         Feedbox feedbox=new Feedbox();
         feedbox.setData(company_name);
         entries.add(feedbox);
         notifyDataSetChanged();
-    }
+    }*/
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
