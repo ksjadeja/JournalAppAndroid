@@ -11,6 +11,7 @@ import com.journalapp.home.ExpEntriesTab;
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     int tabCount;
+
     public MyPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         this.tabCount=tabCount;
@@ -22,11 +23,11 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         switch (position){
 
             case 0:
-                EntriesTab entriesTab= new EntriesTab();
+                EntriesTab entriesTab = new EntriesTab();
                 return entriesTab;
             case 1:
-                AccEntriesTab statusFragment = new AccEntriesTab();
-                return statusFragment;
+                AccEntriesTab accEntriesTab = new AccEntriesTab();
+                return accEntriesTab;
             case 2:
                 ExpEntriesTab expEntriesTab = new ExpEntriesTab();
                 return expEntriesTab;

@@ -37,10 +37,12 @@ public class EntriesTab extends Fragment {
     RecyclerView recyclerView;
     ArrayList<Feedbox> feedboxesList;
     DatabaseReference entriesDb;
+
     RecyclerViewAdapter adapter;
 
     public EntriesTab() {
         // Required empty public constructor
+
     }
 
 
@@ -53,7 +55,6 @@ public class EntriesTab extends Fragment {
         View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
         entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-
 
         feedboxesList = new ArrayList<>();
 
@@ -133,5 +134,6 @@ public class EntriesTab extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 //        entriesDb.removeEventListener(childEventListener);
+
     }
 }
