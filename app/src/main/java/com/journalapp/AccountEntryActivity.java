@@ -134,6 +134,7 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 alertDialog2.show();
                 break;
             case R.id.btn_add_expense_entry:
+
                 break;
         }
     }

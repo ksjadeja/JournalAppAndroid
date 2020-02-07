@@ -36,6 +36,7 @@ public class EntriesTab extends Fragment {
     ChildEventListener childEventListener;
     public EntriesTab() {
         // Required empty public constructor
+
     }
 
 
@@ -65,6 +66,6 @@ public class EntriesTab extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        entiesDb.removeEventListener(childEventListener);
+//        entiesDb.removeEventListener(childEventListener);
     }
 }
