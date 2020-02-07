@@ -26,40 +26,27 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:id="@+id/account_entry_date"
+<!--<FrameLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:id="@+id/frame_account">-->
+<!--</FrameLayout>-->
+<Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:id="@+id/btn_add_account_entry"
+    android:text="Add Account Entry"
+    android:layout_marginTop="100dp"
+    />
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="4dp"
-            android:text="dateField is here"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_gravity="center"
+            android:id="@+id/btn_add_expense_entry"
+            android:text="Add Expense Entry"
+            android:layout_marginTop="100dp"
             />
-        <TextView
-            android:id="@+id/account_entry_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="time is here"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            />
-    </LinearLayout>
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/frame_account">
-</FrameLayout>
-
 
     </LinearLayout>
 
