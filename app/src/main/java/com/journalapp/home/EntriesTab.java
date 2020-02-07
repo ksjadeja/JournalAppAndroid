@@ -49,7 +49,7 @@ public class EntriesTab extends Fragment {
         recyclerView=entriesView.findViewById(R.id.recycler_view);
         entiesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
-        button = entriesView.findViewById(R.id.btn_add_item);
+//        button = entriesView.findViewById(R.id.btn_add_item);
 
         feedboxesList = new ArrayList<>();
 
