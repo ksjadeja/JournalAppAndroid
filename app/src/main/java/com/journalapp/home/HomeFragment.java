@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
         tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
         tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
+        tabLayout.addTab(tabLayout.newTab().setText("Expense Entries "));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         tabLayout.setOnTabSelectedListener(this);
@@ -39,8 +40,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         viewPager.setAdapter(myPagerAdapter);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-
 
 
         return root;

@@ -6,13 +6,20 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.journalapp.home.AccEntriesTab;
 import com.journalapp.home.EntriesTab;
+import com.journalapp.home.ExpenseEntriesTab;
 
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     int tabCount;
+    EntriesTab entriesTab;
+    AccEntriesTab accEntriesTab;
+    ExpenseEntriesTab expenseEntriesTab;
     public MyPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         this.tabCount=tabCount;
+        entriesTab= new EntriesTab();
+        expenseEntriesTab = new ExpenseEntriesTab();
+        accEntriesTab= new AccEntriesTab();
     }
 
     @Override
@@ -21,11 +28,14 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         switch (position){
 
             case 0:
-                EntriesTab entriesTab= new EntriesTab();
+
                 return entriesTab;
             case 1:
-                AccEntriesTab statusFragment = new AccEntriesTab();
-                return statusFragment;
+
+                return accEntriesTab;
+            case 2:
+
+                return expenseEntriesTab;
         }
         return null;
     }
