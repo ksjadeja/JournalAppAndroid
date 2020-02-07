@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,7 +135,9 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 alertDialog2.show();
                 break;
             case R.id.btn_add_expense_entry:
-
+                Intent intent = new Intent(AccountEntryActivity.this,ExpenseEntryActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
     }
