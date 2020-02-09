@@ -54,7 +54,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
             public void onClick(View v) {
                 Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
 
-                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this,TimelineEditPad.class);
+                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this, EntriesEditPad.class);
                 startActivity(newEntryIntent);
 
             }

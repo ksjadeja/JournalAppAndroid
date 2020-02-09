@@ -67,7 +67,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 //            @Override
 //            public void onClick(View v) {
 //                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(context, TimelineViewPad.class);
+//                Intent intent = new Intent(context, EntriesViewPad.class);
 //                intent.putExtra("dateField",holder.getDateField().getText());
 //                intent.putExtra("time",holder.getTimeField().getText());
 //                intent.putExtra("data",holder.getItemName().getText());

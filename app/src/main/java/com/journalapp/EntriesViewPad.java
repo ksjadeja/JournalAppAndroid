@@ -1,5 +1,7 @@
 package com.journalapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,12 +9,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class TimelineViewPad extends AppCompatActivity {
+public class EntriesViewPad extends AppCompatActivity {
 
     String date,time,data,id;
     FloatingActionButton editFab;
@@ -22,6 +28,7 @@ public class TimelineViewPad extends AppCompatActivity {
     ImageButton deleteEntryButton;
 
     DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
+    DatabaseReference byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
 
 
     @Override
@@ -63,7 +70,7 @@ public class TimelineViewPad extends AppCompatActivity {
     }
 
     private void editEntry(){
-        Intent intent = new Intent(getApplicationContext(), TimelineEditPad.class);
+        Intent intent = new Intent(getApplicationContext(), EntriesEditPad.class);
         intent.putExtra("date",date);
         intent.putExtra("time",time);
         intent.putExtra("data",data);
@@ -74,6 +81,34 @@ public class TimelineViewPad extends AppCompatActivity {
 
     private void deleteEntry(){
         entriesDb.child(id).removeValue();
+        byDateDb.child(date).child("journal_entries").orderByValue().equalTo(id).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                byDateDb.child(date).child("journal_entries").child(dataSnapshot.getKey()).removeValue();
+                Toast.makeText(EntriesViewPad.this,"Deleted from by_date",Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         EntriesMap.delete(id,EntriesMap.EntriesIndex.get(id));
         finish();
     }
