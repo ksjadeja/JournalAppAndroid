@@ -54,7 +54,7 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
                 @Override
                 public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                String date="Date is "+newDay+"-"+newMonth+1+"-"+newYear;
+                String date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
                 Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
                 }
         });

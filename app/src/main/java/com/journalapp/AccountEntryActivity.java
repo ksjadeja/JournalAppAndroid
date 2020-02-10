@@ -41,7 +41,8 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         user = "Kiran1901";
         entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
         byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
         addAccountEntry = findViewById(R.id.btn_add_account_entry);

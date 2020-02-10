@@ -2,7 +2,6 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,30 +9,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.journalapp.EntriesMap;
 import com.journalapp.R;
-import com.journalapp.TimelineViewPad;
+import com.journalapp.EntriesViewPad;
 import com.journalapp.models.Feedbox;
-import com.journalapp.models.FeedboxDao;
 
 import java.util.ArrayList;
-
-import static com.journalapp.EntriesMap.EntriesIndex;
 
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.EntryHolder>{
 
     ArrayList<Feedbox> entries;
     Context context;
+
+    public void setEntries(ArrayList<Feedbox> entries) {
+        this.entries = entries;
+        notifyDataSetChanged();
+    }
+
     DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
     @NonNull
@@ -128,7 +125,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, TimelineViewPad.class);
+                Intent intent = new Intent(context, EntriesViewPad.class);
                 intent.putExtra("dateField",holder.getDateField().getText());
                 intent.putExtra("time",holder.getTimeField().getText());
                 intent.putExtra("data",holder.getDataField().getText());

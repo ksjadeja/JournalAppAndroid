@@ -70,9 +70,6 @@ public class EntriesTab extends Fragment {
                 key = dataSnapshot.getKey();
                 feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
 
-                Log.i("data",feedboxDao.getDate());
-                Log.i("data",feedboxDao.getTime());
-                Log.i("data",feedboxDao.getData());
 
                 feedboxesList.add(0,new Feedbox(feedboxDao,key));
                 EntriesMap.addFirst(key);
@@ -86,7 +83,6 @@ public class EntriesTab extends Fragment {
                 FeedboxDao feedboxDao;
                 key = dataSnapshot.getKey();
                 feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-
                 int index = EntriesIndex.get(key);
                 feedboxesList.set(index,new Feedbox(feedboxDao,key));
                 adapter.notifyDataSetChanged();
