@@ -4,22 +4,28 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.journalapp.AccountEntryActivity;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.EntryHolder>{
 
     ArrayList<AccountBox> entries;
     Context context;
+    View myView;
 //    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
     @NonNull
@@ -56,6 +62,59 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         }else{
             holder.radioTake.setChecked(true);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView accountEntryDate;
+                TextView accountEntryTime;
+                EditText personName;
+                EditText amount;
+                EditText desc;
+                final RadioButton giveRadio;
+                final RadioButton takeRadio;
+                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
+                LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                myView = layoutInflater.inflate(R.layout.layout_account_entries, null, false);
+                accountEntryDate = myView.findViewById(R.id.account_entry_date);
+                accountEntryTime = myView.findViewById(R.id.account_entry_time);
+                personName = myView.findViewById(R.id.edt_person_name);
+                amount = myView.findViewById(R.id.edt_amount);
+                desc = myView.findViewById(R.id.edt_desc);
+                giveRadio = myView.findViewById(R.id.radio_category_give);
+                takeRadio = myView.findViewById(R.id.radio_category_take);
+//                giveRadio.setClickable(false);
+//                takeRadio.setClickable(false);
+                giveRadio.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        giveRadio.setChecked(true);
+                    }
+                });
+                takeRadio.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        takeRadio.setChecked(true);
+                    }
+                });
+                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(context);
+//                if(myView.getParent() != null) {
+//                    ((ViewGroup)myView.getParent()).removeView(myView); // <- fix
+//                }
+                alertDialog2.setView(myView);
+                accountEntryDate.setText(holder.getDateField().getText());
+                accountEntryTime.setText(holder.getTimeField().getText());
+                personName.setText(holder.getPersonName().getText());
+                amount.setText(holder.getAmount().getText());
+                desc.setText(holder.getDescription().getText());
+                if(holder.isGiveRadioSelected()==true) {
+                    giveRadio.setChecked(true);
+                }else if(holder.isTakeRadioSelected()==true){
+                    takeRadio.setChecked(true);
+                }
+
+                alertDialog2.show();
+            }
+        });
     }
 
 
@@ -131,5 +190,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         public TextView getDescription() {
             return description;
         }
+        public boolean isGiveRadioSelected(){ return radioGive.isChecked();}
+        public boolean isTakeRadioSelected(){ return radioTake.isChecked();}
     }
 }

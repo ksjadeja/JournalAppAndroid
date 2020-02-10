@@ -1,11 +1,13 @@
 package com.journalapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.journalapp.models.AccountBoxDao;
 
 import java.text.SimpleDateFormat;
@@ -64,7 +69,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
-
         // Check which radio button was clicked
         switch (view.getId()) {
             case R.id.radio_category_give:
@@ -113,75 +117,24 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         accEntrybox.setT_type(String.valueOf(t_type));
                         accEntrybox.setDate(date);
                         accEntrybox.setTime(time);
-                        String key = entriesDb.push().getKey();
+                        final String key = entriesDb.push().getKey();
                         entriesDb.child(key).setValue(accEntrybox);
-//                        byDateDb.child(date).child("journal_entries").addChildEventListener(new ChildEventListener() {
-//                            @Override
-//                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                                final String key,newKey;
-//                                key = dataSnapshot.getKey();
-//                                newKey = dataSnapshot.getValue(String.class);
-//                                entriesDb.child(newKey);
-//                                entriesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-//                                        AccountBoxDao accountEntryBoxDao;
-//                                        accountEntryBoxDao= dataSnapshot1.getValue(AccountBoxDao.class);
-//                                        feedboxesList.add(0, new AccountBoxDao(accountEntryBoxDao, dataSnapshot1.getKey()));
-////                        EntriesMap.addFirst(key);
-//                                        recyclerViewAdapter.notifyItemInserted(0);
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                    }
-//                                });
-//
-//
-//                            }
-//
-//                            @Override
-//                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                                String newKey;
-//                                FeedboxDao feedboxDao;
-//                                newKey = dataSnapshot.getValue(String.class);
-//                                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-//                                // TODO add something which reflects changes in real-time
-//
-//                                for(int i=0; i<feedboxesList.size();i++){
-//                                    if(feedboxesList.get(i).getId().equals(newKey)){
-//                                        feedboxesList.set(i,new Feedbox(feedboxDao,newKey));
-//                                    }
-//                                }
-//                                recyclerViewAdapter.notifyDataSetChanged();
-//
-//                            }
-//
-//                            @Override
-//                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//                                for(Feedbox fb:feedboxesList){
-//                                    if(fb.getId().equals(dataSnapshot.getKey())){
-////                        EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
-//                                        feedboxesList.remove(fb);
-//                                        recyclerViewAdapter.notifyDataSetChanged();
-//                                        return;
-//                                    }
-//                                }
-//
-//                            }
-//
-//                            @Override
-//                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-//                            }
-//                        });
+                        byDateDb.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String newKey = byDateDb.child(date).child("account_entries").push().getKey();
+                                byDateDb.child(date).child("account_entries").child(newKey).setValue(key);
+                                Log.i("msg2","added in by_entry");
+                                Toast.makeText(AccountEntryActivity.this,"added in by_entry",Toast.LENGTH_LONG).show();
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                         Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
 
                     }
