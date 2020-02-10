@@ -12,7 +12,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ExpenseEntryActivity"></activity>
-        <activity android:name=".AccountEntryActivity" />
+        <activity android:name=".AccountEntryActivity" >
+
+        </activity>
         <activity android:name=".TimelineViewPad" />
         <activity android:name=".TimelineEditPad" />
         <activity android:name=".DrawerLayoutActivity2" />

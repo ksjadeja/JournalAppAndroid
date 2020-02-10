@@ -11,15 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.journalapp.home.AccEntriesTab;
-import com.journalapp.models.AccEntrybox;
+import com.journalapp.models.AccountBoxDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,16 +32,15 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     String date, time;
     private View myView;
     String user;
-    DatabaseReference entriesDb;
+    DatabaseReference entriesDb,byDateDb;
     private int t_type=-1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_entry);
         user = "Kiran1901";
         entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-
+        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
@@ -56,8 +53,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 
         accountEntryDate = myView.findViewById(R.id.account_entry_date);
         accountEntryTime = myView.findViewById(R.id.account_entry_time);
-
-
 
 
         addAccountEntry.setOnClickListener(this);
@@ -105,21 +100,87 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         final EditText edtAmount = myView.findViewById(R.id.edt_amount);
                         final EditText description = myView.findViewById(R.id.edt_desc);
 
-                        AccEntrybox accEntrybox = new AccEntrybox();
+                        AccountBoxDao accEntrybox = new AccountBoxDao();
                         accEntrybox.setName(edtName.getText().toString());
                         try {
-                            accEntrybox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
+                            accEntrybox.setAmount(edtAmount.getText().toString());
                         }catch (Exception e)
                         {
                             Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
                         }
                         accEntrybox.setDesc(description.getText().toString());
-                        accEntrybox.setT_type(t_type);
+                        accEntrybox.setT_type(String.valueOf(t_type));
                         accEntrybox.setDate(date);
                         accEntrybox.setTime(time);
                         String key = entriesDb.push().getKey();
                         entriesDb.child(key).setValue(accEntrybox);
-
+//                        byDateDb.child(date).child("journal_entries").addChildEventListener(new ChildEventListener() {
+//                            @Override
+//                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                                final String key,newKey;
+//                                key = dataSnapshot.getKey();
+//                                newKey = dataSnapshot.getValue(String.class);
+//                                entriesDb.child(newKey);
+//                                entriesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+//                                        AccountBoxDao accountEntryBoxDao;
+//                                        accountEntryBoxDao= dataSnapshot1.getValue(AccountBoxDao.class);
+//                                        feedboxesList.add(0, new AccountBoxDao(accountEntryBoxDao, dataSnapshot1.getKey()));
+////                        EntriesMap.addFirst(key);
+//                                        recyclerViewAdapter.notifyItemInserted(0);
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                                String newKey;
+//                                FeedboxDao feedboxDao;
+//                                newKey = dataSnapshot.getValue(String.class);
+//                                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
+//                                // TODO add something which reflects changes in real-time
+//
+//                                for(int i=0; i<feedboxesList.size();i++){
+//                                    if(feedboxesList.get(i).getId().equals(newKey)){
+//                                        feedboxesList.set(i,new Feedbox(feedboxDao,newKey));
+//                                    }
+//                                }
+//                                recyclerViewAdapter.notifyDataSetChanged();
+//
+//                            }
+//
+//                            @Override
+//                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                for(Feedbox fb:feedboxesList){
+//                                    if(fb.getId().equals(dataSnapshot.getKey())){
+////                        EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
+//                                        feedboxesList.remove(fb);
+//                                        recyclerViewAdapter.notifyDataSetChanged();
+//                                        return;
+//                                    }
+//                                }
+//
+//                            }
+//
+//                            @Override
+//                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
+//                            }
+//                        });
                         Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
 
                     }
