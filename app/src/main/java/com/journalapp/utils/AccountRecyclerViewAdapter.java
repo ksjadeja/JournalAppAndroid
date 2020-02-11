@@ -1,6 +1,8 @@
 package com.journalapp.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.journalapp.AccountEntryActivity;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
+import com.journalapp.models.AccountBoxDao;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,11 +34,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     ArrayList<AccountBox> entries;
     Context context;
     View myView;
-//    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
+    DatabaseReference accountDb,byDateDb;
 
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
+        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_account_entry_box, parent, false);
         EntryHolder pvh = new EntryHolder(v);
         return pvh;
@@ -65,13 +75,15 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView accountEntryDate;
-                TextView accountEntryTime;
-                EditText personName;
-                EditText amount;
-                EditText desc;
+                final TextView accountEntryDate;
+                final TextView accountEntryTime;
+                final EditText personName;
+                final EditText amount;
+                final EditText desc;
                 final RadioButton giveRadio;
                 final RadioButton takeRadio;
+                final String accountBoxKey = entries.get(holder.getAdapterPosition()).getId();
+
                 Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 myView = layoutInflater.inflate(R.layout.layout_account_entries, null, false);
@@ -111,6 +123,53 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 }else if(holder.isTakeRadioSelected()==true){
                     takeRadio.setChecked(true);
                 }
+                alertDialog2.setPositiveButton("Modify Account Entry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+//                finish();
+                        final AccountBoxDao accEntryBoxDao = new AccountBoxDao();
+                        accEntryBoxDao.setName(personName.getText().toString());
+                        try {
+                            accEntryBoxDao.setAmount(amount.getText().toString());
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(context, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
+                        }
+                        accEntryBoxDao.setDesc(desc.getText().toString());
+                        int t_type = giveRadio.isChecked()?0:1;
+                        accEntryBoxDao.setT_type(String.valueOf(t_type));
+                        accEntryBoxDao.setDate(accountEntryDate.getText().toString());
+                        accEntryBoxDao.setTime(accountEntryTime.getText().toString());
+                        //final String key = accountDb.push().getKey();
+                        accountDb.child(accountBoxKey).setValue(accEntryBoxDao);
+                        accountDb.child(accountEntryDate.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                String newKey = byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").push().getKey();
+//                                byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").child(newKey).setValue(key);
+                                entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
+                                notifyDataSetChanged();
+                                Log.i("msg2","modified in by_entry");
+                                Toast.makeText(context,"modified in by_entry",Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Toast.makeText(context,"Entry Saved",Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                alertDialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
 
                 alertDialog2.show();
             }
