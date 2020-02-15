@@ -1,9 +1,18 @@
 package com.journalapp.models;
 
-public class AccEntrybox {
+public class AccountBoxDao {
 
     private String name;
     private String date;
+    private String time;
+    private String amount;
+    private String desc;
+
+
+
+//    private static final int GIVE=0;
+//    private static final int TAKE=1;
+    private String t_type;
 
     public String getDate() {
         return date;
@@ -21,12 +30,6 @@ public class AccEntrybox {
         this.time = time;
     }
 
-    private String time;
-    private float amount;
-    private String desc;
-    private static final int GIVE=0;
-    private static final int TAKE=1;
-    private int t_type;
 
     public String getName() {
         return name;
@@ -36,11 +39,11 @@ public class AccEntrybox {
         this.name = name;
     }
 
-    public float getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -52,12 +55,11 @@ public class AccEntrybox {
         this.desc = desc;
     }
 
-    public int getT_type() {
+    public String getT_type() {
         return t_type;
     }
 
-    public void setT_type(int t_type) {
+    public void setT_type(String t_type) {
         this.t_type = t_type;
     }
-
 }

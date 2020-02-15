@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.journalapp.R;
 
-import com.journalapp.models.Expensebox;
+import com.journalapp.models.ExpenseBox;
+import com.journalapp.models.ExpenseBoxDao;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.Calendar;
 
 public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecyclerViewAdapter.EntryHolder>{
 
-    ArrayList<Expensebox> entries;
+    ArrayList<ExpenseBoxDao> entries;
     Context context;
 //    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
@@ -35,7 +37,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         return pvh;
     }
 
-    public ExpenseRecyclerViewAdapter(final Context context, final ArrayList<Expensebox> entries){
+    public ExpenseRecyclerViewAdapter(final Context context, final ArrayList<ExpenseBoxDao> entries){
         this.entries = entries;
         this.context=context;
 //        if(entries.size()==0)
@@ -49,14 +51,32 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 
     @Override
     public void onBindViewHolder(@NonNull final EntryHolder holder, final int position) {
-        holder.dateField.setText(entries.get(position).getDate());
-        holder.timeField.setText(entries.get(position).getTime());
+//        holder.setIsRecyclable(false);
+//        holder.cv.removeAllViews();
+        
+//        String dt = "12/12/2020";
+//        boolean isNew=true;
+//        isNew = holder.getDateField().getText().equals(dt)?true:false;
+        Toast.makeText(context, "onBindBefore"+holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
+        holder.getDateField().setText(entries.get(position).getDate());
+        Toast.makeText(context, "onBindAfter"+holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
+        holder.getTimeField().setText(entries.get(position).getTime());
+//        if(isNew) {
+//            holder.getItemName().setText("");
+//            holder.getAmount().setText("");
+//            holder.getDescription().setText("");
+//        }else{
+//            holder.getItemName().setText(entries.get(position).getItemName());
+//            holder.getAmount().setText(entries.get(position).getAmount());
+//            holder.getDescription().setText(entries.get(position).getDesc());
+//        }
         holder.deleteExpenseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 entries.remove(holder.getAdapterPosition());
                 notifyItemRemoved(holder.getAdapterPosition());
                 notifyItemRangeChanged(holder.getAdapterPosition(), entries.size());
+
             }
         });
 //        holder.itemName.setText(entries.get(position).getItemName());
@@ -86,23 +106,26 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        entries.clear();
     }
 
     public void addNewData(){
-        Expensebox expensebox = new Expensebox();
+        ExpenseBoxDao expenseboxDao = new ExpenseBoxDao();
         Calendar calendar = Calendar.getInstance();
         DateFormat dateFormat,timeFormat;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
-        Toast.makeText(context, "date is "+dateFormat.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
-        expensebox.setDate(dateFormat.format(calendar.getTime()));
-        expensebox.setTime(timeFormat.format(calendar.getTime()));
-        expensebox.setItemName("");
-        expensebox.setAmount("");
-        expensebox.setDesc("");
+//        Toast.makeText(context, " "+expenseboxDao, Toast.LENGTH_SHORT).show();
+        expenseboxDao.setDate(dateFormat.format(calendar.getTime()));
+        expenseboxDao.setTime(timeFormat.format(calendar.getTime()));
+        expenseboxDao.setItemName("");
+        expenseboxDao.setAmount("");
+        expenseboxDao.setDesc("");
 
-        entries.add(expensebox);
+        entries.add(expenseboxDao);
         notifyDataSetChanged();
+//        notifyItemInserted(entries.size()-1);
+//        notifyItemRangeChanged(entries.size()-1,entries.size());
     }
 
 
@@ -114,7 +137,6 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         EditText amount;
         EditText description;
         Button deleteExpenseButton;
-        String id;
 
         public EntryHolder(final View itemView) {
             super(itemView);
@@ -122,10 +144,9 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
             dateField = itemView.findViewById(R.id.expense_date_field);
             timeField = itemView.findViewById(R.id.expense_time_field);
             itemName = itemView.findViewById(R.id.edt_item_name);
-            amount = itemView.findViewById(R.id.edt_amount);
-            description= itemView.findViewById(R.id.edt_desc);
+            amount = itemView.findViewById(R.id.expense_amount);
+            description= itemView.findViewById(R.id.expense_desc);
             deleteExpenseButton = itemView.findViewById(R.id.btn_delete_expense_entry);
-
         }
 
 
