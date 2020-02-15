@@ -52,6 +52,7 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.DatePi
     public void onDatePickerSelection(String date) {
         selectedDate = date;
         feedboxesList.clear();
+        recyclerViewAdapter.notifyDataSetChanged();
         byDateDb.child(selectedDate).child("journal_entries").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
