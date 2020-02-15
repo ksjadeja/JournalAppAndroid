@@ -19,11 +19,15 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.journalapp.calendar.CalendarFragment;
+import com.journalapp.calendar.DatewiseEntries;
 import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
+
+    public static CalendarFragment calendarFragment;
+    public static DatewiseEntries datewiseEntries;
 
     private Boolean fabExpanded = false;
     private LinearLayout layoutAccEntryFab, layoutEntryFab;
@@ -109,6 +113,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         if(menuItem.getItemId() == R.id.nav_gallery)
         {
             fragment = new CalendarFragment();
+            calendarFragment = ((CalendarFragment) fragment);
         }
         else if(menuItem.getItemId() == R.id.nav_home)
         {

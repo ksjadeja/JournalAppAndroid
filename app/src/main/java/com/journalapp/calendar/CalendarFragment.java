@@ -1,5 +1,7 @@
 package com.journalapp.calendar;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.R;
 import com.journalapp.utils.CalendarTabPagerAdapter;
 
@@ -25,6 +28,15 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     private TabLayout calendarTabs;
     private ViewPager calendarViewPager;
     private CalendarTabPagerAdapter calendarPagerAdapter;
+    private String date;
+
+    DatePickerSelectionListener datePickerSelectionListener;
+
+    public interface DatePickerSelectionListener{
+
+        public void onDatePickerSelection(String date);
+
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -54,8 +66,16 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
                 @Override
                 public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                String date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
-                Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
+                if (datePickerSelectionListener!=null){
+                    datePickerSelectionListener.onDatePickerSelection(date);
+                    Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();
+                }
+
+
                 }
         });
 
@@ -81,6 +101,12 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
     }
 }
