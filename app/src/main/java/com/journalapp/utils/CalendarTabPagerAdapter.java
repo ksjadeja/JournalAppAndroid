@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.calendar.DatewiseAccEntries;
 import com.journalapp.calendar.DatewiseEntries;
 import com.journalapp.calendar.DatewiseExpEntries;
@@ -21,6 +22,7 @@ public class CalendarTabPagerAdapter extends FragmentStatePagerAdapter {    int 
 
             case 0:
                 DatewiseEntries entriesTab= new DatewiseEntries();
+                DrawerLayoutActivity2.datewiseEntries = entriesTab;
                 return entriesTab;
             case 1:
                 DatewiseAccEntries accEntriesTab = new DatewiseAccEntries();
