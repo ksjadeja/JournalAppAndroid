@@ -44,14 +44,15 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.DatePi
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 
-
     public DatewiseEntries() {
     }
 
     @Override
     public void onDatePickerSelection(String date) {
         selectedDate = date;
+
         feedboxesList.clear();
+        recyclerViewAdapter.notifyDataSetChanged();
         byDateDb.child(selectedDate).child("journal_entries").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
