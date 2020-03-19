@@ -17,19 +17,30 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EntriesViewPad extends AppCompatActivity {
 
     String date,time,data,id;
     FloatingActionButton editFab;
 
+    String USER = "Kiran1901";
+
     TextView dateField,timeField,dataField;
 
     ImageButton deleteEntryButton;
 
-    DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-    DatabaseReference byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
+//    DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
+//    DatabaseReference byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
 
+    CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
+    CollectionReference byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,35 +91,43 @@ public class EntriesViewPad extends AppCompatActivity {
     }
 
     private void deleteEntry(){
-        entriesDb.child(id).removeValue();
-        byDateDb.child(date).child("journal_entries").orderByValue().equalTo(id).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                byDateDb.child(date).child("journal_entries").child(dataSnapshot.getKey()).removeValue();
-                Toast.makeText(EntriesViewPad.this,"Deleted from by_date",Toast.LENGTH_LONG).show();
 
-            }
+        journalEntriesRef.document(USER).collection("entries").document(id).delete();
+        Map<String, Object> map= new HashMap<>();
+        map.put("array", FieldValue.arrayRemove(id));
+        byDateEntriesRef.document(USER).collection(date).document("journal_entries").set(map, SetOptions.merge());
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//        entriesDb.child(id).removeValue();
+//        byDateDb.child(date).child("journal_entries").orderByValue().equalTo(id).addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                byDateDb.child(date).child("journal_entries").child(dataSnapshot.getKey()).removeValue();
+//                Toast.makeText(EntriesViewPad.this,"Deleted from by_date",Toast.LENGTH_LONG).show();
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
-            }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         EntriesMap.delete(id,EntriesMap.EntriesIndex.get(id));
         finish();
     }
