@@ -83,3 +83,4 @@ lint/tmp/
 # lint/reports/
 .idea/codeStyles/Project.xml
 .idea/codeStyles/Project.xml___jb_tmp___
+.idea/*
