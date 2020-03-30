@@ -16,21 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.DrawerLayoutActivity2;
-import com.journalapp.EntriesMap;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 import com.journalapp.models.FeedboxDao;
@@ -44,12 +37,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import static com.journalapp.EntriesMap.EntriesIndex;
-
-public class DatewiseEntries extends Fragment implements CalendarFragment.DatePickerSelectionListener {
+public class DatewiseEntries extends Fragment implements CalendarFragment.JDatePickerSelectionListener {
 
     private RecyclerView recyclerView;
-    private ArrayList<Feedbox> feedboxesList;
+    private ArrayList<Feedbox> feedboxesList= new ArrayList<>();
     private DatabaseReference entriesDb,byDateDb;
     private RecyclerViewAdapter recyclerViewAdapter;
 
@@ -68,7 +59,6 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.DatePi
         selectedDate = date;
         feedboxesList.clear();
         recyclerViewAdapter.notifyDataSetChanged();
-
 
         byDateEntriesRef.document(USER).collection(selectedDate).document("journal_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -122,8 +112,7 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.DatePi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        DrawerLayoutActivity2.calendarFragment.datePickerSelectionListener=this;
-
+        DrawerLayoutActivity2.calendarFragment.jdatePickerSelectionListener =this;
         final View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
         entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child(USER);

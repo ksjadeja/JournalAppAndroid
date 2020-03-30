@@ -17,15 +17,25 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.SetOptions;
 import com.journalapp.models.AccountBoxDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,15 +47,19 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     String date, time;
     private View myView;
     String user;
-    DatabaseReference entriesDb,byDateDb;
+    String USER= "Kiran1901";
+    CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+    CollectionReference byDateAccEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
+    ListenerRegistration liveAccountEntries;
+//    DatabaseReference entriesDb,byDateDb;
     private int t_type=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_entry);
         user = "Kiran1901";
-        entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
+//        entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
+//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
 
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
@@ -104,7 +118,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         final EditText edtName = myView.findViewById(R.id.edt_person_name);
                         final EditText edtAmount = myView.findViewById(R.id.edt_amount);
                         final EditText description = myView.findViewById(R.id.edt_desc);
-
                         AccountBoxDao accEntrybox = new AccountBoxDao();
                         accEntrybox.setName(edtName.getText().toString());
                         try {
@@ -117,23 +130,34 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         accEntrybox.setT_type(String.valueOf(t_type));
                         accEntrybox.setDate(date);
                         accEntrybox.setTime(time);
-                        final String key = entriesDb.push().getKey();
-                        entriesDb.child(key).setValue(accEntrybox);
-                        byDateDb.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                        accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String newKey = byDateDb.child(date).child("account_entries").push().getKey();
-                                byDateDb.child(date).child("account_entries").child(newKey).setValue(key);
-                                Log.i("msg2","added in by_entry");
-                                Toast.makeText(AccountEntryActivity.this,"added in by_entry",Toast.LENGTH_LONG).show();
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()){
+                                    Map<String, Object> map= new HashMap<>();
+                                    map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
+                                    byDateAccEntriesRef.document(USER).collection(date).document("account_entries").set(map, SetOptions.merge());
+                                }else {
+                                    Log.i("Status:","db entry is not successful");
+                                }
                             }
                         });
+//                        final String key = entriesDb.push().getKey();
+//                        entriesDb.child(key).setValue(accEntrybox);
+//                        byDateDb.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                String newKey = byDateDb.child(date).child("account_entries").push().getKey();
+//                                byDateDb.child(date).child("account_entries").child(newKey).setValue(key);
+//                                Log.i("msg2","added in by_entry");
+//                                Toast.makeText(AccountEntryActivity.this,"added in by_entry",Toast.LENGTH_LONG).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
 
                         Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
 

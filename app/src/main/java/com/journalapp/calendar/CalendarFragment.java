@@ -1,6 +1,5 @@
 package com.journalapp.calendar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.R;
 import com.journalapp.utils.CalendarTabPagerAdapter;
 
@@ -30,14 +28,14 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     private CalendarTabPagerAdapter calendarPagerAdapter;
     private String date;
 
-    DatePickerSelectionListener datePickerSelectionListener;
-
-    public interface DatePickerSelectionListener{
-
-        public void onDatePickerSelection(String date);
-
+    JDatePickerSelectionListener jdatePickerSelectionListener;
+    public interface JDatePickerSelectionListener {
+        void onDatePickerSelection(String date);
     }
-
+    ADatePickerSelectionListener adatePickerSelectionListener;
+    public interface ADatePickerSelectionListener {
+        void onDatePickerSelection(String date);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
@@ -66,17 +64,23 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
                 @Override
                 public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
-                if (datePickerSelectionListener!=null){
-                    datePickerSelectionListener.onDatePickerSelection(date);
-                    Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "date changed to "+date, Toast.LENGTH_SHORT).show();
+                    date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
 
-                }else{
-                    Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();
+                        if (jdatePickerSelectionListener != null) {
+                            jdatePickerSelectionListener.onDatePickerSelection(date);
+                            Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();
+                        }
+                    if (adatePickerSelectionListener != null) {
+                        adatePickerSelectionListener.onDatePickerSelection(date);
+                        Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-
-                }
         });
 
 

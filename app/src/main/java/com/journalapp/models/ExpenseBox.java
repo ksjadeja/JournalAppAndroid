@@ -9,7 +9,18 @@ public class ExpenseBox {
     private String time;
     private String id;
 
+    public ExpenseBoxDao getExpenseBoxDao() {
+        return expenseBoxDao;
+    }
+
+    public void setExpenseBoxDao(ExpenseBoxDao expenseBoxDao) {
+        this.expenseBoxDao = expenseBoxDao;
+    }
+
+    private ExpenseBoxDao expenseBoxDao;
+
     public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key) {
+        this.setExpenseBoxDao(expenseBoxDao);
         this.setDate(expenseBoxDao.getDate());
         this.setTime(expenseBoxDao.getTime());
         this.setItemName(expenseBoxDao.getItemName());

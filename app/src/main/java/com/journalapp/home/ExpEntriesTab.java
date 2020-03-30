@@ -1,6 +1,7 @@
 package com.journalapp.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.journalapp.AccEntriesMap;
+import com.journalapp.ExpEntriesMap;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
@@ -28,12 +38,18 @@ import com.journalapp.utils.ExpenseRecyclerViewAdapterView;
 
 import java.util.ArrayList;
 
+import static com.journalapp.AccEntriesMap.AccEntriesIndex;
+import static com.journalapp.ExpEntriesMap.ExpEntriesIndex;
+
 public class ExpEntriesTab extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ExpenseBox> expenseEntryList;
-    DatabaseReference expenseEntriesDb;
-
+//    DatabaseReference expenseEntriesDb;
+    String USER= "Kiran1901";
+    CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
+    CollectionReference byDateExpEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
     ExpenseRecyclerViewAdapterView adapter;
+    ListenerRegistration liveExpenseEntries;
     public ExpEntriesTab (){
         // Required empty public constructor
 
@@ -43,75 +59,73 @@ public class ExpEntriesTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View expenseView = inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
-//        recyclerView=expenseView.findViewById(R.id.acc_recycler_view);
-//        expenseEntriesDb = FirebaseDatabase.getInstance().getReference("expense_entries").child("Kiran1901");
-//
-//        expenseEntryList= new ArrayList<>();
-//
-//
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        adapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseEntryList);
-//
-//        expenseEntriesDb.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                String key;
-//                ExpenseBoxDao expenseBoxDao;
-//                key = dataSnapshot.getKey();
-//                expenseBoxDao = dataSnapshot.getValue(ExpenseBoxDao.class);
-//
-//                expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
-////                EntriesMap.addFirst(key);
-//                adapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-////                String key;
-////                AccountBoxDao accountEntryBoxDao;
-////                key = dataSnapshot.getKey();
-////                accountEntryBoxDao= dataSnapshot.getValue(AccountBoxDao.class);
-////
-////                int index = EntriesIndex.get(key);
-////                accountEntryList.set(index,new AccountBox(accountEntryBoxDao,key));
-////                adapter.notifyDataSetChanged();
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-////                int index = EntriesIndex.get(dataSnapshot.getKey());
-////                entries.remove(index);
-////                EntriesMap.delete(dataSnapshot.getKey(),index);
-////                notifyDataSetChanged();
-//
-////                for(Feedbox fb:feedboxesList){
-////                    if(fb.getId().equals(dataSnapshot.getKey())){
-////                        EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
-////                        feedboxesList.remove(fb);
-////                        adapter.notifyDataSetChanged();
-////                        return;
-////                    }
-////                }
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-//            }
-//        });
-//
-//        recyclerView.setAdapter(adapter);
-        return expenseView;
+        final View rootView = inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
+        recyclerView=rootView.findViewById(R.id.exp_recycler_view);
+//        accountEntriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
+
+        expenseEntryList= new ArrayList<>();
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseEntryList);
+        liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").addSnapshotListener( new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.i("ERROR:", "listen:error", e);
+                    return;
+                }
+
+                int i=0;
+                for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    String key=null;
+                    ExpenseBoxDao expenseBoxDao= null;
+                    switch (dc.getType()) {
+                        case ADDED:
+                            key = dc.getDocument().getId();
+                            Log.i("CntA:",(i++)+":::"+key);
+//                            Log.e("Type",""+dc.getType());
+                            expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
+                            expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
+                            ExpEntriesMap.addFirst(key);
+                            adapter.notifyDataSetChanged();
+//                            SharedPreferences sharedPreferences = rootView.getContext().getSharedPreferences("AccountData",MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString("currentKey",key);
+//                            editor.commit();
+                            break;
+
+                        case MODIFIED:
+                            key = dc.getDocument().getId();
+                            expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
+                            int index = ExpEntriesIndex.get(key);
+                            expenseEntryList.set(index,new ExpenseBox(expenseBoxDao,key));
+                            adapter.notifyDataSetChanged();
+                            break;
+
+                        case REMOVED:
+                            for(ExpenseBox ex:expenseEntryList){            //TODO optimize it futher
+                                if(ex.getId().equals(dc.getDocument().getId())){
+                                    ExpEntriesMap.delete(ex.getId(),expenseEntryList.indexOf(ex));
+                                    expenseEntryList.remove(ex);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+
+        return rootView;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        liveExpenseEntries.remove();
     }
 }

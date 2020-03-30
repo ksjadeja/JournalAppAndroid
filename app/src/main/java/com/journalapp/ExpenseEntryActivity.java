@@ -1,20 +1,33 @@
 package com.journalapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-//import com.journalapp.models.ExpenseBox;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.SetOptions;
+import com.journalapp.models.AccountBoxDao;
+import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.utils.ExpenseRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExpenseEntryActivity extends AppCompatActivity {
 
@@ -23,6 +36,10 @@ public class ExpenseEntryActivity extends AppCompatActivity {
     RecyclerView expenseRecyclerView;
     ExpenseRecyclerViewAdapter expenseRecyclerViewAdapter;
     ArrayList<ExpenseBoxDao> expenseList;
+    String USER= "Kiran1901";
+    CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
+    CollectionReference byDateExpEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
+    ListenerRegistration liveAccountEntries;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +48,6 @@ public class ExpenseEntryActivity extends AppCompatActivity {
        addExpenseButton = findViewById(R.id.btn_add_expense_entry);
        expSaveButton = findViewById(R.id.exp_btn_save);
        expenseRecyclerView = findViewById(R.id.expense_recycler_view);
-
-
-
 
         expenseRecyclerView.setLayoutManager(new LinearLayoutManager(ExpenseEntryActivity.this));
         expenseRecyclerViewAdapter = new ExpenseRecyclerViewAdapter(ExpenseEntryActivity.this,expenseList);
@@ -44,7 +58,6 @@ public class ExpenseEntryActivity extends AppCompatActivity {
            @Override
            public void onClick(View view) {
                expenseRecyclerViewAdapter.addNewData();
-
            }
        });
 
@@ -54,7 +67,27 @@ public class ExpenseEntryActivity extends AppCompatActivity {
         expSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ExpenseEntryActivity.this, "items "+expenseList.get(expenseList.size()-1).getTime(), Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(ExpenseEntryActivity.this, "items " + expenseList.get(expenseList.size() - 1).getItemName(), Toast.LENGTH_SHORT).show();
+                }catch(Exception e){
+                    Toast.makeText(ExpenseEntryActivity.this, "Sorry, No items to add", Toast.LENGTH_SHORT).show();
+                }
+                for(final ExpenseBoxDao expBoxDao:expenseList)
+                {
+                    expenseEntriesRef.document(USER).collection("entries").add(expBoxDao).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()){
+                                Map<String, Object> map= new HashMap<>();
+                                map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
+                                byDateExpEntriesRef.document(USER).collection(expBoxDao.getDate()).document("account_entries").set(map, SetOptions.merge());
+                            }else {
+                                Log.i("Status:","db entry is not successful");
+                            }
+                        }
+                    });
+                }
+                finish();
             }
         });
 

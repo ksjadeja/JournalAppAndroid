@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.ExpenseBox;
@@ -21,6 +23,9 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
 
     ArrayList<ExpenseBox> entries;
     Context context;
+    View myView;
+    String USER = "Kiran1901";
+    CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
 //    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
     @NonNull

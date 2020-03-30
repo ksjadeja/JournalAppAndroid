@@ -181,7 +181,6 @@ public class EntriesEditPad extends AppCompatActivity {
         entry.setDate(date);
         entry.setTime(time);
         entry.setData(data);
-
 //        entriesDb.child(id).setValue(entry);
         journalEntriesRef.document(USER).collection("entries").document(id).set(entry);
 

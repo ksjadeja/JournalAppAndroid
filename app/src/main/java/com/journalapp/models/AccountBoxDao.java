@@ -7,12 +7,10 @@ public class AccountBoxDao {
     private String time;
     private String amount;
     private String desc;
-
-
-
+    private String t_type;
 //    private static final int GIVE=0;
 //    private static final int TAKE=1;
-    private String t_type;
+
 
     public String getDate() {
         return date;

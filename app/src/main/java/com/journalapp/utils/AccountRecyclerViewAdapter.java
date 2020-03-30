@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.AccountEntryActivity;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
@@ -34,13 +36,16 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     ArrayList<AccountBox> entries;
     Context context;
     View myView;
-    DatabaseReference accountDb,byDateDb;
+    String USER = "Kiran1901";
+    CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+//    DatabaseReference accountDb,byDateDb;
 
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
-        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
+//        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
+//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_account_entry_box, parent, false);
         EntryHolder pvh = new EntryHolder(v);
         return pvh;
@@ -118,9 +123,9 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 personName.setText(holder.getPersonName().getText());
                 amount.setText(holder.getAmount().getText());
                 desc.setText(holder.getDescription().getText());
-                if(holder.isGiveRadioSelected()==true) {
+                if(holder.isGiveRadioSelected()) {
                     giveRadio.setChecked(true);
-                }else if(holder.isTakeRadioSelected()==true){
+                }else if(holder.isTakeRadioSelected()){
                     takeRadio.setChecked(true);
                 }
                 alertDialog2.setPositiveButton("Modify Account Entry", new DialogInterface.OnClickListener() {
@@ -140,27 +145,32 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                         accEntryBoxDao.setT_type(String.valueOf(t_type));
                         accEntryBoxDao.setDate(accountEntryDate.getText().toString());
                         accEntryBoxDao.setTime(accountEntryTime.getText().toString());
+
+                        accountEntriesRef.document(USER).collection("entries").document(accountBoxKey).set(accEntryBoxDao);
+                        entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
+                        notifyDataSetChanged();
+
                         //final String key = accountDb.push().getKey();
-                        accountDb.child(accountBoxKey).setValue(accEntryBoxDao);
-                        accountDb.child(accountEntryDate.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                String newKey = byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").push().getKey();
-//                                byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").child(newKey).setValue(key);
-                                entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
-                                notifyDataSetChanged();
-                                Log.i("msg2","modified in by_entry");
-                                Toast.makeText(context,"modified in by_entry",Toast.LENGTH_LONG).show();
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
+//                        accountDb.child(accountBoxKey).setValue(accEntryBoxDao);
+//                        accountDb.child(accountEntryDate.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                                String newKey = byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").push().getKey();
+////                                byDateDb.child(accountEntryDate.getText().toString()).child("account_entries").child(newKey).setValue(key);
+//                                entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
+//                                notifyDataSetChanged();
+//                                Log.i("msg2","modified in by_entry");
+//                                Toast.makeText(context,"modified in by_entry",Toast.LENGTH_LONG).show();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//
                         Toast.makeText(context,"Entry Saved",Toast.LENGTH_SHORT).show();
-
                     }
                 });
                 alertDialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
