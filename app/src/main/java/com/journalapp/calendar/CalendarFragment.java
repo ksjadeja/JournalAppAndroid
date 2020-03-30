@@ -36,6 +36,10 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     public interface ADatePickerSelectionListener {
         void onDatePickerSelection(String date);
     }
+    EDatePickerSelectionListener edatePickerSelectionListener;
+    public interface EDatePickerSelectionListener {
+        void onDatePickerSelection(String date);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
@@ -75,6 +79,12 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
                         }
                     if (adatePickerSelectionListener != null) {
                         adatePickerSelectionListener.onDatePickerSelection(date);
+                        Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();
+                    }
+                    if (edatePickerSelectionListener != null) {
+                        edatePickerSelectionListener.onDatePickerSelection(date);
                         Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "datelistener is null", Toast.LENGTH_SHORT).show();

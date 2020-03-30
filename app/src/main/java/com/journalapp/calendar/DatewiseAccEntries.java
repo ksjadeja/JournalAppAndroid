@@ -101,13 +101,13 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
                                     }
                                     accountRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -221,13 +221,13 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
                                     }
                                     accountRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-                                    Toast.makeText(getContext(), "acc entry deleted", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "acc entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-                    Toast.makeText(getContext(), "No acc entries", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "No acc entries", Toast.LENGTH_SHORT).show();
                 }
             }
         });

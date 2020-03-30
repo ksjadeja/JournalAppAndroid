@@ -99,12 +99,12 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                         });
                     }
                 }else {
-                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Toast.makeText(getContext(),"date selected:"+selectedDate,Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(),"date selected:"+selectedDate,Toast.LENGTH_SHORT).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -157,13 +157,13 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                                     }
                                     recyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else {
-                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
                 }
             }
         });

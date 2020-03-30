@@ -25,7 +25,12 @@ import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.utils.ExpenseRecyclerViewAdapter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +85,9 @@ public class ExpenseEntryActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 Map<String, Object> map= new HashMap<>();
                                 map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
-                                byDateExpEntriesRef.document(USER).collection(expBoxDao.getDate()).document("account_entries").set(map, SetOptions.merge());
+                                String ddate = expBoxDao.getDate();
+                                ddate = ddate.replaceAll("/","-");
+                                byDateExpEntriesRef.document(USER).collection(ddate).document("expense_entries").set(map, SetOptions.merge());
                             }else {
                                 Log.i("Status:","db entry is not successful");
                             }
