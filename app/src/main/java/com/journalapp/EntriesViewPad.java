@@ -21,26 +21,23 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.journalapp.models.Feedbox;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EntriesViewPad extends AppCompatActivity {
 
-    String date,time,data,id;
     FloatingActionButton editFab;
 
     String USER = "Kiran1901";
 
     TextView dateField,timeField,dataField;
+    Feedbox feedbox;
 
     ImageButton deleteEntryButton;
 
-//    DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-//    DatabaseReference byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
-
     CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
-    CollectionReference byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +59,11 @@ public class EntriesViewPad extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        date = intent.getStringExtra("dateField");
-        time = intent.getStringExtra("time");
-        data = intent.getStringExtra("data");
-        id = intent.getStringExtra("id");
+        feedbox = ((Feedbox) intent.getSerializableExtra("feedbox"));
 
-        dateField.setText(date);
-        timeField.setText(time);
-        dataField.setText(data);
+        dateField.setText(feedbox.getDate());
+        timeField.setText(feedbox.getTime());
+        dataField.setText(feedbox.getData());
 
         editFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,53 +76,15 @@ public class EntriesViewPad extends AppCompatActivity {
 
     private void editEntry(){
         Intent intent = new Intent(getApplicationContext(), EntriesEditPad.class);
-        intent.putExtra("date",date);
-        intent.putExtra("time",time);
-        intent.putExtra("data",data);
-        intent.putExtra("id",id);
+        intent.putExtra("feedbox",feedbox);
         startActivity(intent);
         finish();
     }
 
     private void deleteEntry(){
 
-        journalEntriesRef.document(USER).collection("entries").document(id).delete();
-        Map<String, Object> map= new HashMap<>();
-        map.put("array", FieldValue.arrayRemove(id));
-        byDateEntriesRef.document(USER).collection(date).document("journal_entries").set(map, SetOptions.merge());
-
-//        entriesDb.child(id).removeValue();
-//        byDateDb.child(date).child("journal_entries").orderByValue().equalTo(id).addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                byDateDb.child(date).child("journal_entries").child(dataSnapshot.getKey()).removeValue();
-//                Toast.makeText(EntriesViewPad.this,"Deleted from by_date",Toast.LENGTH_LONG).show();
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-        EntriesMap.delete(id,EntriesMap.EntriesIndex.get(id));
+        journalEntriesRef.document(USER).collection("entries").document(feedbox.getId()).delete();
+        EntriesMap.delete(feedbox.getId(),EntriesMap.EntriesIndex.get(feedbox.getId()));
         finish();
     }
 }
