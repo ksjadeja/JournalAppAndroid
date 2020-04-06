@@ -126,10 +126,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View v) {
                 Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, EntriesViewPad.class);
-                intent.putExtra("dateField",holder.getDateField().getText());
-                intent.putExtra("time",holder.getTimeField().getText());
-                intent.putExtra("data",holder.getDataField().getText());
-                intent.putExtra("id", entries.get(holder.getAdapterPosition()).getId());
+                Feedbox feedbox = new Feedbox();
+                feedbox.setId(entries.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("feedbox",entries.get(holder.getAdapterPosition()));
+//                intent.putExtra("dateField",holder.getDateField().getText());
+//                intent.putExtra("time",holder.getTimeField().getText());
+//                intent.putExtra("data",holder.getDataField().getText());
+//                intent.putExtra("id", entries.get(holder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });

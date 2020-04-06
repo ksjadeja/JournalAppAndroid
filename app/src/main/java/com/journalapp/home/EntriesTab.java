@@ -27,7 +27,9 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.EntriesMap;
 import com.journalapp.R;
@@ -55,17 +57,13 @@ public class EntriesTab extends Fragment {
     RecyclerViewAdapter adapter;
     ListenerRegistration liveJournalEntries;
 
-    public EntriesTab() {
-        // Required empty public constructor
-
-    }
+    public EntriesTab() {}
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
@@ -76,7 +74,7 @@ public class EntriesTab extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
 
-        liveJournalEntries = journalEntriesRef.document(USER).collection("entries").addSnapshotListener( new EventListener<QuerySnapshot>() {
+        liveJournalEntries = journalEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
@@ -86,7 +84,6 @@ public class EntriesTab extends Fragment {
                     return;
                 }
 
-                int i=0;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     String key=null;
                     FeedboxDao feedboxDao = null;
@@ -94,8 +91,8 @@ public class EntriesTab extends Fragment {
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            Log.i("Cnt:",(i++)+":::"+key);
                             feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
                             feedboxesList.add(0,new Feedbox(feedboxDao,key));
                             EntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();
@@ -104,6 +101,7 @@ public class EntriesTab extends Fragment {
                         case MODIFIED:
                             key = dc.getDocument().getId();
                             feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
                             int index = EntriesIndex.get(key);
                             feedboxesList.set(index,new Feedbox(feedboxDao,key));
                             adapter.notifyDataSetChanged();

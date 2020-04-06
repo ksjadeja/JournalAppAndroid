@@ -11,6 +11,10 @@ import com.journalapp.home.ExpEntriesTab;
 public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     int tabCount;
+    EntriesTab entriesTab;
+    AccEntriesTab accEntriesTab;
+    ExpEntriesTab expEntriesTab;
+
 
     public MyPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
@@ -22,13 +26,19 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                EntriesTab entriesTab = new EntriesTab();
+                if(entriesTab==null) {
+                    entriesTab = new EntriesTab();
+                }
                 return entriesTab;
             case 1:
-                AccEntriesTab accEntriesTab = new AccEntriesTab();
+                if(accEntriesTab==null) {
+                    accEntriesTab = new AccEntriesTab();
+                }
                 return accEntriesTab;
             case 2:
-                ExpEntriesTab expEntriesTab = new ExpEntriesTab();
+                if(expEntriesTab==null) {
+                    expEntriesTab = new ExpEntriesTab();
+                }
                 return expEntriesTab;
         }
         return null;
