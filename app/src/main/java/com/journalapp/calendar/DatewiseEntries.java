@@ -1,6 +1,5 @@
 package com.journalapp.calendar;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,14 +36,13 @@ import javax.annotation.Nullable;
 
 public class DatewiseEntries extends Fragment implements CalendarFragment.JDatePickerSelectionListener {
 
-    Context context;
     private RecyclerView recyclerView;
     private ArrayList<Feedbox> feedboxesList= new ArrayList<>();
     private RecyclerViewAdapter recyclerViewAdapter;
 
     private String USER = "Kiran1901";
-    DateFormat dateFormat;
-    private String selectedDate;
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 
     CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
 
@@ -112,12 +110,9 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                                 break;
                         }
                     }
-                }else {
-                    Toast.makeText(context, "No entries jour", Toast.LENGTH_SHORT).show();
+
                 }
             });
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -131,24 +126,18 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
         DrawerLayoutActivity2.calendarFragment.jdatePickerSelectionListener = this;
         final View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
-
         feedboxesList = new ArrayList<>();
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), feedboxesList);
-
         Calendar cal = Calendar.getInstance();
         Date start = cal.getTime();
         start.setHours(0);
         start.setMinutes(0);
         start.setSeconds(0);
         cal.setTime(start);
-
         String startDate = dateFormat.format(start);
         onDatePickerSelection(startDate);
-
         recyclerView.setAdapter(recyclerViewAdapter);
-
         return entriesView;
     }
 }

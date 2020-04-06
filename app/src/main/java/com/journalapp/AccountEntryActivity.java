@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
+import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 
 import java.text.SimpleDateFormat;
@@ -118,18 +119,20 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         final EditText edtName = myView.findViewById(R.id.edt_person_name);
                         final EditText edtAmount = myView.findViewById(R.id.edt_amount);
                         final EditText description = myView.findViewById(R.id.edt_desc);
-                        AccountBoxDao accEntrybox = new AccountBoxDao();
-                        accEntrybox.setName(edtName.getText().toString());
+                        AccountBox accountBox = new AccountBox();
+//                        AccountBoxDao accEntrybox = new AccountBoxDao();
+                        accountBox.setName(edtName.getText().toString());
                         try {
-                            accEntrybox.setAmount(edtAmount.getText().toString());
+                            accountBox.setAmount(edtAmount.getText().toString());
                         }catch (Exception e)
                         {
                             Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
                         }
-                        accEntrybox.setDesc(description.getText().toString());
-                        accEntrybox.setT_type(String.valueOf(t_type));
-                        accEntrybox.setDate(date);
-                        accEntrybox.setTime(time);
+                        accountBox.setDesc(description.getText().toString());
+                        accountBox.setT_type(String.valueOf(t_type));
+                        accountBox.setDate(date);
+                        accountBox.setTime(time);
+                        AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
                         accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -169,8 +172,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         dialogInterface.dismiss();
                     }
                 });
-
-
                 alertDialog2.show();
                 break;
             case R.id.btn_add_expense_entry:

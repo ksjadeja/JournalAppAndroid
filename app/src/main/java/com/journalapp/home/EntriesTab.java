@@ -52,13 +52,10 @@ public class EntriesTab extends Fragment {
     DatabaseReference entriesDb;
 
     CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
-    CollectionReference byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
-
     RecyclerViewAdapter adapter;
     ListenerRegistration liveJournalEntries;
 
     public EntriesTab() {}
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -119,10 +116,8 @@ public class EntriesTab extends Fragment {
                             break;
                     }
                 }
-
             }
         });
-
 //        entriesDb.addChildEventListener(new ChildEventListener() {
 //            @Override
 //            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -179,14 +174,9 @@ public class EntriesTab extends Fragment {
 //                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
 //            }
 //        });
-
         recyclerView.setAdapter(adapter);
-
-
         return entriesView;
     }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();

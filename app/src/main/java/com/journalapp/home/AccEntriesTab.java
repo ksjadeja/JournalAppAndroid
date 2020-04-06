@@ -26,6 +26,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.AccEntriesMap;
 import com.journalapp.R;
@@ -51,7 +52,6 @@ public class AccEntriesTab extends Fragment {
     String USER= "Kiran1901";
 //    DatabaseReference accountEntriesDb;
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
-    CollectionReference byDateAccEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
     AccountRecyclerViewAdapter adapter;
     ListenerRegistration liveAccountEntries;
     public AccEntriesTab() {
@@ -65,23 +65,19 @@ public class AccEntriesTab extends Fragment {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_home_acc_entries, container, false);
         recyclerView=rootView.findViewById(R.id.acc_recycler_view);
-//        accountEntriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
-
         accountEntryList= new ArrayList<>();
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AccountRecyclerViewAdapter(getContext(), accountEntryList);
-        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").addSnapshotListener( new EventListener<QuerySnapshot>() {
+        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
-
                 if (e != null) {
                     Log.i("ERROR:", "listen:error", e);
                     return;
                 }
-
                 int i=0;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     String key=null;

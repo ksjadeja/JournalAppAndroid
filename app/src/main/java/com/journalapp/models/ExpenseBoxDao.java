@@ -1,12 +1,41 @@
 package com.journalapp.models;
 
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+
 public class ExpenseBoxDao {
+    private Timestamp timestamp;
+
     private String itemName;
     private String amount;
     private String desc;
     private String date;
     private String time;
+    public ExpenseBoxDao(){}
+    public ExpenseBoxDao(ExpenseBox expenseBox){
+        if(expenseBox.getTimestamp()!=null){
+            timestamp = new Timestamp(expenseBox.getTimestamp());
+        }
+        else{
+            timestamp = new Timestamp(new Date());
+        }
+        itemName = expenseBox.getItemName();
+        amount = expenseBox.getAmount();
+        desc = expenseBox.getDesc();
+    }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+    public void setTimeStampp(Date date){
+        if(timestamp==null) {
+            timestamp = new Timestamp(new Date());
+        }
+    }
     public String getDate() {
         return date;
     }

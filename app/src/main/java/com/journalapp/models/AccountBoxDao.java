@@ -1,33 +1,41 @@
 package com.journalapp.models;
 
+
+
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+
 public class AccountBoxDao {
 
+    private Timestamp timestamp;
     private String name;
-    private String date;
-    private String time;
     private String amount;
     private String desc;
     private String t_type;
 //    private static final int GIVE=0;
 //    private static final int TAKE=1;
 
-
-    public String getDate() {
-        return date;
+    public AccountBoxDao(){}
+    public AccountBoxDao(AccountBox accountBox){
+        if(accountBox.getTimestamp()!=null){
+            timestamp = new Timestamp(accountBox.getTimestamp());
+        }
+        else{
+            timestamp = new Timestamp(new Date());
+        }
+        name = accountBox.getName();
+        amount = accountBox.getAmount();
+        desc = accountBox.getDesc();
+        t_type = accountBox.getT_type();
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
-
-    public String getTime() {
-        return time;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
 
     public String getName() {
         return name;

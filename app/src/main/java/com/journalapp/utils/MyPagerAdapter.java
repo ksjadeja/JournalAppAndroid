@@ -14,13 +14,10 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
     EntriesTab entriesTab;
     AccEntriesTab accEntriesTab;
     ExpEntriesTab expEntriesTab;
-
-
     public MyPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         this.tabCount=tabCount;
     }
-
     @Override
 
     public Fragment getItem(int position) {

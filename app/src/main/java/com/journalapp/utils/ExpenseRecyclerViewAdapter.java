@@ -171,6 +171,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 //        Toast.makeText(context, " "+expenseboxDao, Toast.LENGTH_SHORT).show();
         expenseboxDao.setDate(dateFormat.format(calendar.getTime()));
         expenseboxDao.setTime(timeFormat.format(calendar.getTime()));
+        expenseboxDao.setTimeStampp(calendar.getTime());
         expenseboxDao.setItemName("");
         expenseboxDao.setAmount("");
         expenseboxDao.setDesc("");

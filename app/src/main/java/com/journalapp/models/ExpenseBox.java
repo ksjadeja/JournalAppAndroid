@@ -1,7 +1,11 @@
 package com.journalapp.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ExpenseBox {
 
+    private Date timestamp;
     private String itemName;
     private String amount;
     private String desc;
@@ -9,25 +13,43 @@ public class ExpenseBox {
     private String time;
     private String id;
 
-    public ExpenseBoxDao getExpenseBoxDao() {
-        return expenseBoxDao;
-    }
+    public ExpenseBox(){}
 
-    public void setExpenseBoxDao(ExpenseBoxDao expenseBoxDao) {
-        this.expenseBoxDao = expenseBoxDao;
+    public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key){
+        itemName= expenseBoxDao.getItemName();
+        amount = expenseBoxDao.getAmount();
+        desc = expenseBoxDao.getDesc();
+        id = key;
+        timestamp = expenseBoxDao.getTimestamp().toDate();
+        date = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
+        time = new SimpleDateFormat("hh:mm:ss a").format(timestamp);
     }
-
-    private ExpenseBoxDao expenseBoxDao;
-
-    public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key) {
-        this.setExpenseBoxDao(expenseBoxDao);
-        this.setDate(expenseBoxDao.getDate());
-        this.setTime(expenseBoxDao.getTime());
-        this.setItemName(expenseBoxDao.getItemName());
-        this.setAmount(expenseBoxDao.getAmount());
-        this.setDesc(expenseBoxDao.getDesc());
-        this.setId(key);
+    public Date getTimestamp() {
+        return timestamp;
     }
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+//
+//    public ExpenseBoxDao getExpenseBoxDao() {
+//        return expenseBoxDao;
+//    }
+//
+//    public void setExpenseBoxDao(ExpenseBoxDao expenseBoxDao) {
+//        this.expenseBoxDao = expenseBoxDao;
+//    }
+
+//    private ExpenseBoxDao expenseBoxDao;
+
+//    public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key) {
+//        this.setExpenseBoxDao(expenseBoxDao);
+//        this.setDate(expenseBoxDao.getDate());
+//        this.setTime(expenseBoxDao.getTime());
+//        this.setItemName(expenseBoxDao.getItemName());
+//        this.setAmount(expenseBoxDao.getAmount());
+//        this.setDesc(expenseBoxDao.getDesc());
+//        this.setId(key);
+//    }
 
     public String getDate() {
         return date;

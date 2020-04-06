@@ -28,8 +28,10 @@ import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.EntryHolder>{
 
@@ -50,7 +52,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         EntryHolder pvh = new EntryHolder(v);
         return pvh;
     }
-
     public AccountRecyclerViewAdapter(final Context context, final ArrayList<AccountBox> entries){
         this.entries = entries;
         this.context=context;
@@ -80,6 +81,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final AccountBox accountBox=entries.get(position);
                 final TextView accountEntryDate;
                 final TextView accountEntryTime;
                 final EditText personName;
@@ -132,20 +134,23 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 //                finish();
-                        final AccountBoxDao accEntryBoxDao = new AccountBoxDao();
-                        accEntryBoxDao.setName(personName.getText().toString());
+
+//                        final AccountBoxDao accEntryBoxDao = new AccountBoxDao();
+                        accountBox.setName(personName.getText().toString());
                         try {
-                            accEntryBoxDao.setAmount(amount.getText().toString());
+                            accountBox.setAmount(amount.getText().toString());
                         }catch (Exception e)
                         {
                             Toast.makeText(context, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
                         }
-                        accEntryBoxDao.setDesc(desc.getText().toString());
+                        accountBox.setDesc(desc.getText().toString());
                         int t_type = giveRadio.isChecked()?0:1;
-                        accEntryBoxDao.setT_type(String.valueOf(t_type));
-                        accEntryBoxDao.setDate(accountEntryDate.getText().toString());
-                        accEntryBoxDao.setTime(accountEntryTime.getText().toString());
-
+                        accountBox.setT_type(String.valueOf(t_type));
+//                        accountBox.setDate(accountEntryDate.getText().toString());
+//                        accountBox.setTime(accountEntryTime.getText().toString());
+//
+//                        accountBox.setTimestamp(new SimpleDateFormat("dd-MM-yyyy"));
+                        AccountBoxDao accEntryBoxDao = new AccountBoxDao(accountBox);
                         accountEntriesRef.document(USER).collection("entries").document(accountBoxKey).set(accEntryBoxDao);
                         entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
                         notifyDataSetChanged();

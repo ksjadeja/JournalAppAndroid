@@ -24,6 +24,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.AccEntriesMap;
 import com.journalapp.ExpEntriesMap;
@@ -47,14 +48,9 @@ public class ExpEntriesTab extends Fragment {
 //    DatabaseReference expenseEntriesDb;
     String USER= "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
-    CollectionReference byDateExpEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
     ExpenseRecyclerViewAdapterView adapter;
     ListenerRegistration liveExpenseEntries;
-    public ExpEntriesTab (){
-        // Required empty public constructor
-
-    }
-
+    public ExpEntriesTab (){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,11 +60,9 @@ public class ExpEntriesTab extends Fragment {
 //        accountEntriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
 
         expenseEntryList= new ArrayList<>();
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseEntryList);
-        liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").addSnapshotListener( new EventListener<QuerySnapshot>() {
+        liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
@@ -76,7 +70,6 @@ public class ExpEntriesTab extends Fragment {
                     Log.i("ERROR:", "listen:error", e);
                     return;
                 }
-
                 int i=0;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     String key=null;
@@ -85,15 +78,10 @@ public class ExpEntriesTab extends Fragment {
                         case ADDED:
                             key = dc.getDocument().getId();
                             Log.i("CntA:",(i++)+":::"+key);
-//                            Log.e("Type",""+dc.getType());
                             expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
                             expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
                             ExpEntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();
-//                            SharedPreferences sharedPreferences = rootView.getContext().getSharedPreferences("AccountData",MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = sharedPreferences.edit();
-//                            editor.putString("currentKey",key);
-//                            editor.commit();
                             break;
 
                         case MODIFIED:
@@ -120,7 +108,6 @@ public class ExpEntriesTab extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
-
         return rootView;
     }
     @Override

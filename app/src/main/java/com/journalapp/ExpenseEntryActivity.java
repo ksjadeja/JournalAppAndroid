@@ -43,7 +43,6 @@ public class ExpenseEntryActivity extends AppCompatActivity {
     ArrayList<ExpenseBoxDao> expenseList;
     String USER= "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
-    CollectionReference byDateExpEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
     ListenerRegistration liveAccountEntries;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +78,16 @@ public class ExpenseEntryActivity extends AppCompatActivity {
                 }
                 for(final ExpenseBoxDao expBoxDao:expenseList)
                 {
+
                     expenseEntriesRef.document(USER).collection("entries").add(expBoxDao).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
                             if (task.isSuccessful()){
-                                Map<String, Object> map= new HashMap<>();
-                                map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
-                                String ddate = expBoxDao.getDate();
-                                ddate = ddate.replaceAll("/","-");
-                                byDateExpEntriesRef.document(USER).collection(ddate).document("expense_entries").set(map, SetOptions.merge());
+                                Log.i("Status:","db entry is successful");
+//                                Map<String, Object> map= new HashMap<>();
+//                                map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
+//                                String ddate = expBoxDao.getDate();
+//                                ddate = ddate.replaceAll("/","-");
                             }else {
                                 Log.i("Status:","db entry is not successful");
                             }
