@@ -1,5 +1,6 @@
 package com.journalapp.calendar;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,20 +40,19 @@ import javax.annotation.Nullable;
 
 public class DatewiseEntries extends Fragment implements CalendarFragment.JDatePickerSelectionListener {
 
+    Context context;
     private RecyclerView recyclerView;
-    private ArrayList<Feedbox> feedboxesList= new ArrayList<>();
-    private DatabaseReference entriesDb,byDateDb;
+    private ArrayList<Feedbox> feedboxesList;
+//    private DatabaseReference entriesDb,byDateDb;
     private RecyclerViewAdapter recyclerViewAdapter;
 
     private String USER = "Kiran1901";
-    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
+    DateFormat dateFormat;
+    private String selectedDate;
 
-    CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
-    CollectionReference byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
-
-    public DatewiseEntries() {
-    }
+    CollectionReference journalEntriesRef;
+    CollectionReference byDateEntriesRef;
+    public DatewiseEntries() {}
 
     @Override
     public void onDatePickerSelection(String date) {
@@ -60,7 +60,7 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
         feedboxesList.clear();
         recyclerViewAdapter.notifyDataSetChanged();
 
-        byDateEntriesRef.document(USER).collection(selectedDate).document("journal_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            byDateEntriesRef.document(USER).collection(selectedDate).document("journal_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -84,7 +84,8 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                         journalEntriesRef.document(USER).collection("entries").document(entry).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                if (documentSnapshot.exists()){
+                                if (documentSnapshot.exists())
+                                {
                                     FeedboxDao feedboxDao = documentSnapshot.toObject(FeedboxDao.class);
                                     for(int i=0;i<feedboxesList.size();i++){
                                         if(feedboxesList.get(i).getId().equals(entry)){
@@ -93,13 +94,13 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                                     }
                                     recyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else {
-//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries jour", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -111,18 +112,20 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        context=getContext();
         DrawerLayoutActivity2.calendarFragment.jdatePickerSelectionListener =this;
+         dateFormat= new SimpleDateFormat("dd-MM-yyyy");
+        selectedDate = dateFormat.format(Calendar.getInstance().getTime());
+        journalEntriesRef= FirebaseFirestore.getInstance().collection("journal_entries");
+        byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
+        feedboxesList = new ArrayList<>();
         final View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
-        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child(USER);
-        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(USER);
-
-        feedboxesList = new ArrayList<>();
+//        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child(USER);
+//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(USER);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), feedboxesList);
-
 
         byDateEntriesRef.document(USER).collection(selectedDate).document("journal_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -157,20 +160,17 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                                     }
                                     recyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else {
-//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries jour", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
         recyclerView.setAdapter(recyclerViewAdapter);
-
-
         return entriesView;
     }
 }

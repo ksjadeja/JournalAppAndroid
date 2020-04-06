@@ -21,7 +21,6 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     public Fragment getItem(int position) {
         switch (position){
-
             case 0:
                 EntriesTab entriesTab = new EntriesTab();
                 return entriesTab;

@@ -27,8 +27,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
     DrawerLayout drawerLayout;
 
     public static CalendarFragment calendarFragment;
-    public static DatewiseEntries datewiseEntries;
-
+//    public static DatewiseEntries datewiseEntries;
     private Boolean fabExpanded = false;
     private LinearLayout layoutAccEntryFab, layoutEntryFab;
     private FloatingActionButton add_fab;
@@ -36,9 +35,9 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_layout2);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         add_fab = findViewById(R.id.add_fab);
         layoutEntryFab = findViewById(R.id.layoutEntry);
         layoutAccEntryFab = findViewById(R.id.layoutAccEntry);
@@ -57,7 +56,6 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
             @Override
             public void onClick(View v) {
                 Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-
                 Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this, EntriesEditPad.class);
                 startActivity(newEntryIntent);
 
@@ -128,7 +126,6 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
             fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
             fragmentTransaction.commit();
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

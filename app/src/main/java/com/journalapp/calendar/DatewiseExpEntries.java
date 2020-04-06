@@ -1,5 +1,6 @@
 package com.journalapp.calendar;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,31 +42,34 @@ import javax.annotation.Nullable;
 public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDatePickerSelectionListener {
 
     private RecyclerView recyclerView;
-    private ArrayList<ExpenseBox> expenseBoxList= new ArrayList<>();
+    private ArrayList<ExpenseBox> expenseBoxList;
     private ExpenseRecyclerViewAdapterView expenseRecyclerViewAdapter;
-    CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
-    CollectionReference byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
+    CollectionReference expenseEntriesRef;
+    CollectionReference byDateEntriesRef;
     private String USER = "Kiran1901";
-    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());;
-
+    DateFormat dateFormat;
+    private String selectedDate;
+    Context context;
     public DatewiseExpEntries(){}
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View expenseView =  inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
-        DrawerLayoutActivity2.calendarFragment.edatePickerSelectionListener=this;
-        recyclerView=expenseView.findViewById(R.id.exp_recycler_view);
-//        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
-
+        context=getContext();
         expenseBoxList = new ArrayList<>();
+        dateFormat= new SimpleDateFormat("dd-MM-yyyy");
+        selectedDate= dateFormat.format(Calendar.getInstance().getTime());
+         byDateEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
+        expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
 
+        DrawerLayoutActivity2.calendarFragment.edatePickerSelectionListener=this;
+        final View expenseView =  inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
+        recyclerView=expenseView.findViewById(R.id.exp_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         expenseRecyclerViewAdapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseBoxList);
-        // database code
+
+
         byDateEntriesRef.document(USER).collection(selectedDate).document("expense_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -74,8 +78,7 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
                     return;
                 }
                 expenseBoxList.clear();
-                List<String> expenseEntryKeys = new ArrayList<>();
-                expenseEntryKeys = (ArrayList<String>)documentSnapshot.get("array");
+                List<String> expenseEntryKeys = (ArrayList<String>)documentSnapshot.get("array");
                 if(expenseEntryKeys!=null && expenseEntryKeys.size()>0)
                 {
                     for(final String expKey:expenseEntryKeys)
@@ -100,18 +103,17 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
                                     for(int i=0;i<expenseBoxList.size();i++){
                                         if(expenseBoxList.get(i).getId().equals(expKey)){
                                             expenseBoxList.set(i, new ExpenseBox(expenseBoxDao,expKey));
-
                                         }
                                     }
                                     expenseRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries exp", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -174,10 +176,7 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
 //                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
 //            }
 //        });
-
         recyclerView.setAdapter(expenseRecyclerViewAdapter);
-
-
         return expenseView;
     }
 
@@ -187,6 +186,7 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
         selectedDate=date;
         expenseBoxList.clear();
         expenseRecyclerViewAdapter.notifyDataSetChanged();
+
         byDateEntriesRef.document(USER).collection(selectedDate).document("expense_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -195,8 +195,7 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
                     return;
                 }
                 expenseBoxList.clear();
-                List<String> expenseEntryKeys = new ArrayList<>();
-                expenseEntryKeys = (ArrayList<String>)documentSnapshot.get("array");
+                List<String> expenseEntryKeys = ((List<String>)documentSnapshot.get("array"));
                 if(expenseEntryKeys!=null && expenseEntryKeys.size()>0)
                 {
                     for(final String expKey:expenseEntryKeys)
@@ -221,18 +220,17 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
                                     for(int i=0;i<expenseBoxList.size();i++){
                                         if(expenseBoxList.get(i).getId().equals(expKey)){
                                             expenseBoxList.set(i, new ExpenseBox(expenseBoxDao,expKey));
-
                                         }
                                     }
                                     expenseRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries exp", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.journalapp.calendar;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,12 +46,14 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
     private String USER = "Kiran1901";
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());;
+    Context context;
     public DatewiseAccEntries(){}
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        context=getContext();
         final View accountView =  inflater.inflate(R.layout.fragment_home_acc_entries, container, false);
         DrawerLayoutActivity2.calendarFragment.adatePickerSelectionListener =this;
         recyclerView=accountView.findViewById(R.id.acc_recycler_view);
@@ -101,13 +104,13 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
                                     }
                                     accountRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-//                                    Toast.makeText(getContext(), "entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-//                    Toast.makeText(getContext(), "No entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries acc", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -221,13 +224,13 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
                                     }
                                     accountRecyclerViewAdapter.notifyDataSetChanged();
                                 }else{
-//                                    Toast.makeText(getContext(), "acc entry deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "acc entry deleted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 }else{
-//                    Toast.makeText(getContext(), "No acc entries", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No entries acc", Toast.LENGTH_SHORT).show();
                 }
             }
         });

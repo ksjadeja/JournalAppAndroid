@@ -9,27 +9,40 @@ import com.journalapp.calendar.DatewiseAccEntries;
 import com.journalapp.calendar.DatewiseEntries;
 import com.journalapp.calendar.DatewiseExpEntries;
 
-public class CalendarTabPagerAdapter extends FragmentStatePagerAdapter {    int tabCount;
+public class CalendarTabPagerAdapter extends FragmentStatePagerAdapter {
+    int tabCount;
+    DatewiseEntries datewiseEntries;
+    DatewiseAccEntries datewiseAccEntries;
+    DatewiseExpEntries datewiseExpEntries;
+
     public CalendarTabPagerAdapter(FragmentManager supportFragmentManager, int tabCount) {
         super(supportFragmentManager);
         this.tabCount=tabCount;
     }
-
     @Override
-
     public Fragment getItem(int position) {
         switch (position){
-
             case 0:
-                DatewiseEntries entriesTab= new DatewiseEntries();
-                DrawerLayoutActivity2.datewiseEntries = entriesTab;
-                return entriesTab;
+                if(datewiseEntries!=null) {
+                    return datewiseEntries;
+                }else {
+                    datewiseEntries = new DatewiseEntries();
+                    return datewiseEntries;
+                }
             case 1:
-                DatewiseAccEntries accEntriesTab = new DatewiseAccEntries();
-                return accEntriesTab;
+                if(datewiseAccEntries!=null) {
+                    return datewiseAccEntries;
+                }else {
+                    datewiseAccEntries= new DatewiseAccEntries();
+                    return datewiseAccEntries;
+                }
             case 2:
-                DatewiseExpEntries expEntriesTab = new DatewiseExpEntries();
-                return expEntriesTab;
+                if(datewiseExpEntries!=null) {
+                    return datewiseExpEntries;
+                }else {
+                    datewiseExpEntries= new DatewiseExpEntries();
+                    return datewiseExpEntries;
+                }
         }
         return null;
     }

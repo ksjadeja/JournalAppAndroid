@@ -36,7 +36,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         tabLayout.setOnTabSelectedListener(this);
          myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(myPagerAdapter);
-
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
 
@@ -46,7 +45,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         getActivity().setTitle("Home");
     }
 
