@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.journalapp.calendar.CalendarFragment;
-import com.journalapp.calendar.DatewiseEntries;
+import com.journalapp.charts.ChartsFragment;
 import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
@@ -119,7 +119,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         }
         else if(menuItem.getItemId() == R.id.nav_slideshow)
         {
-            fragment = new SlideShowFragment2();
+            fragment = new ChartsFragment();
         }
         if (fragment != null){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

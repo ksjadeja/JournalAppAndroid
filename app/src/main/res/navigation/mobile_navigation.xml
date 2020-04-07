@@ -17,11 +17,11 @@
         android:label="Demo"
         tools:layout="@layout/fragment_calendar" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_slideshow"-->
-<!--        android:name="com.journalapp.SlideShowFragment2"-->
-<!--        android:label="Demo2"-->
-<!--        tools:layout="@layout/fragment_slideshow" />-->
+    <fragment
+        android:id="@+id/nav_charts"
+       android:name="com.journalapp.charts.ChartsFragment"
+        android:label="Demo2"
+        tools:layout="@layout/fragment_charts" />
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_tools"-->

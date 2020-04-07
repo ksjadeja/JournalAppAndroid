@@ -69,7 +69,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         holder.dateField.setText(entries.get(position).getDate());
         holder.timeField.setText(entries.get(position).getTime());
         holder.personName.setText(entries.get(position).getName());
-        holder.amount.setText(entries.get(position).getAmount());
+        holder.amount.setText(Integer.toString(entries.get(position).getAmount()));
         holder.description.setText(entries.get(position).getDesc());
         int x=Integer.parseInt(entries.get(position).getT_type());
         if(x==0)
@@ -138,7 +138,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //                        final AccountBoxDao accEntryBoxDao = new AccountBoxDao();
                         accountBox.setName(personName.getText().toString());
                         try {
-                            accountBox.setAmount(amount.getText().toString());
+                            accountBox.setAmount(Integer.parseInt(amount.getText().toString()));
                         }catch (Exception e)
                         {
                             Toast.makeText(context, "Enter amount in figures only", Toast.LENGTH_SHORT).show();

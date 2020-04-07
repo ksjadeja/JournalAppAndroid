@@ -123,7 +123,7 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 //                        AccountBoxDao accEntrybox = new AccountBoxDao();
                         accountBox.setName(edtName.getText().toString());
                         try {
-                            accountBox.setAmount(edtAmount.getText().toString());
+                            accountBox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
                         }catch (Exception e)
                         {
                             Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();

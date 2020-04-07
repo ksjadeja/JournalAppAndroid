@@ -9,7 +9,7 @@ public class AccountBox{
     private String name;
     private String date;
     private String time;
-    private String amount;
+    private int amount;
     private String desc;
     private String t_type;
     private String id;
@@ -50,10 +50,10 @@ public class AccountBox{
     public void setTime(String time) {
         this.time = time;
     }
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
     public String getDesc() {
