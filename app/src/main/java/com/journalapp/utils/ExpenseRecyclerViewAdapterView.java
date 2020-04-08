@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.R;
-import com.journalapp.models.AccountBox;
 import com.journalapp.models.ExpenseBox;
 
 import java.util.ArrayList;
@@ -26,7 +24,6 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
     View myView;
     String USER = "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
-//    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
     @NonNull
     @Override

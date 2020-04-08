@@ -1,8 +1,6 @@
 package com.journalapp.charts;
 
-import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,15 +17,11 @@ import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.common.util.ArrayUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -36,7 +30,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.AccEntriesMap;
-import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
@@ -47,10 +40,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 public class ChartsFragment extends Fragment implements View.OnClickListener {
 
@@ -94,14 +84,9 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
-//                        start = new Date();
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year,month,day,0,0,0);
-//                        calendar.setTimeZone(TimeZone.getTimeZone("UTC+5:30"));
                         start = calendar.getTime();
-//                        Toast.makeText(getActivity(), "year timezone"+start.getTimezoneOffset(), Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getActivity(), "year start "+year, Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(getActivity(), "year start "+formatter.format(start), Toast.LENGTH_SHORT).show();
                         startDate.setText(formatter.format(start));
                     }
                 }, yearr, monthh, dayy);
@@ -115,7 +100,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year,month,day,23,59,59);
                         end= calendar.getTime();
-//                        Toast.makeText(getActivity(), "year end "+year, Toast.LENGTH_SHORT).show();
                         endDate.setText(formatter.format(end));
                     }
                 }, yearr, monthh, dayy);
@@ -181,44 +165,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                     });
 
                     System.out.println("myList::::"+accountEntryList);
-//                    ArrayList<BarDataSet> dataSets = null;
-//
-////                    datewiseAccChart.getXAxis().
-//
-//                    ArrayList<BarEntry> valueSet1 = new ArrayList<>();
-//                    BarEntry v1e2 = new BarEntry(2f, new float[]{2,4,6}); // Feb
-//                    valueSet1.add(v1e2);
-//                    BarEntry v1e3 = new BarEntry(4f, new float[]{2,3,5,6}); // Mar
-//                    valueSet1.add(v1e3);
-//                    BarEntry v1e40 = new BarEntry(3f, new float[]{-2,-6,3,6}); // Mar
-//                    valueSet1.add(v1e40);
-//
-//
-//                    BarDataSet barDataSet1 = new BarDataSet(valueSet1, "Brand 1");
-//                    barDataSet1.setColors(ColorTemplate.MATERIAL_COLORS);
-//
-//                    barDataSet1.setStackLabels(new String[]{"kr","kh","kd","jn"});
-//
-//                    dataSets = new ArrayList<>();
-//                    dataSets.add(barDataSet1);
-//
-//
-//                    BarData data = new BarData(barDataSet1);
-////                            BarData(getXAxisValues(), dataSets);
-//
-////                    datewiseAccChart.getAxisLeft().setAxisMinimum(0f);
-//
-//                    datewiseAccChart.setData(data);
-//                    datewiseAccChart.getBarData().setBarWidth(.9f);
-//                    datewiseAccChart.animateXY(2000, 2000);
-////                    datewiseAccChart.groupBars(2f,0.2f,0.02f);
-//
-//                    datewiseAccChart.setTouchEnabled(true);
-//                    datewiseAccChart.setScaleEnabled(true);
-//
-//                    datewiseAccChart.setFitBars(true);
-//
-//                    datewiseAccChart.invalidate();
+
                     }
                 }
         }
@@ -269,12 +216,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             }
 
             BarDataSet barDataSet = new BarDataSet(dataset, "Entries");
-            barDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+            barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
             BarData data = new BarData(barDataSet);
             datewiseAccChart.setData(data);
             Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
             datewiseAccChart.getXAxis().setLabelCount(map.keySet().size());
-//            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()));
             datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
@@ -294,16 +240,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             datewiseAccChart.invalidate();
         }
 
-        private ArrayList<String> getXAxisValues () {
-            ArrayList<String> xAxis = new ArrayList<>();
-            xAxis.add("JAN");
-            xAxis.add("FEB");
-            xAxis.add("MAR");
-            xAxis.add("APR");
-            xAxis.add("MAY");
-            xAxis.add("JUN");
-            return xAxis;
-        }
 
 
     }

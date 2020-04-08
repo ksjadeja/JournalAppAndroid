@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.journalapp.R;
 import com.journalapp.utils.MyPagerAdapter;
-import com.google.android.material.tabs.TabLayout;
 
 public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
 

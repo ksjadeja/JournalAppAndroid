@@ -57,71 +57,9 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
         final View accountView =  inflater.inflate(R.layout.fragment_home_acc_entries, container, false);
         DrawerLayoutActivity2.calendarFragment.adatePickerSelectionListener =this;
         recyclerView=accountView.findViewById(R.id.acc_recycler_view);
-//        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
         accountBoxList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         accountRecyclerViewAdapter = new AccountRecyclerViewAdapter(getContext(), accountBoxList);
-        // database code
-
-//        byDateDb.child(selectedDate).child("account_entries").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                final String key, newKey;
-//                key = dataSnapshot.getKey();
-//                newKey = dataSnapshot.getValue(String.class);
-//
-//                accountDb.child(newKey).addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        AccountBoxDao accountBoxDao;
-//                        accountBoxDao = dataSnapshot.getValue(AccountBoxDao.class);
-//                        for (int i=0;i<accountBoxList.size();i++){
-//                            if(accountBoxList.get(i).getId().equals(dataSnapshot.getKey())){
-//                                accountBoxList.set(i, new AccountBox(accountBoxDao, dataSnapshot.getKey()));
-//                                accountRecyclerViewAdapter.notifyDataSetChanged();
-//                                return;
-//                            }
-//                        }
-//                        accountBoxList.add(0, new AccountBox(accountBoxDao, dataSnapshot.getKey()));
-//                        accountRecyclerViewAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                // Not happening
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//                for(AccountBox ab:accountBoxList){
-//                    if(ab.getId().equals(dataSnapshot.getKey())){
-////                        EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
-//                        accountBoxList.remove(ab);
-//                        accountRecyclerViewAdapter.notifyDataSetChanged();
-//                        return;
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-//            }
-//        });
 
         Calendar cal = Calendar.getInstance();
         Date start = cal.getTime();
@@ -197,53 +135,5 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
         }catch (ParseException e) {
             e.printStackTrace();
         }
-//        byDateEntriesRef.document(USER).collection(selectedDate).document("account_entries").addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.i("ERROR:", "listen:error", e);
-//                    return;
-//                }
-//                accountBoxList.clear();
-//                List<String> accountEntryKeys;
-//                accountEntryKeys = (ArrayList<String>)documentSnapshot.get("array");
-//                if(accountEntryKeys!=null && accountEntryKeys.size()>0)
-//                {
-//                    for(final String accKey:accountEntryKeys)
-//                    {
-//                        accountEntriesRef.document(USER).collection("entries").document(accKey).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                if(task.isSuccessful())
-//                                {
-//                                    AccountBoxDao accountBoxDao = task.getResult().toObject(AccountBoxDao.class);
-//                                    accountBoxList.add(new AccountBox(accountBoxDao,accKey));
-//                                    accountRecyclerViewAdapter.notifyDataSetChanged();
-//                                }
-//                            }
-//                        });
-//                        accountEntriesRef.document(USER).collection("entries").document(accKey).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                                if(documentSnapshot.exists())
-//                                {
-//                                    AccountBoxDao accountBoxDao = documentSnapshot.toObject(AccountBoxDao.class);
-//                                    for(int i=0;i<accountBoxList.size();i++){
-//                                        if(accountBoxList.get(i).getId().equals(accKey)){
-//                                                accountBoxList.set(i, new AccountBox(accountBoxDao,accKey));
-//                                        }
-//                                    }
-//                                    accountRecyclerViewAdapter.notifyDataSetChanged();
-//                                }else{
-//                                    Toast.makeText(context, "acc entry deleted", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//                    }
-//                }else{
-//                    Toast.makeText(context, "No entries acc", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
     }
 }

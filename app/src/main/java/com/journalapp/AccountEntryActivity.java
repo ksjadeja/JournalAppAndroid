@@ -51,16 +51,13 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     String USER= "Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     CollectionReference byDateAccEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
-    ListenerRegistration liveAccountEntries;
-//    DatabaseReference entriesDb,byDateDb;
+
     private int t_type=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_entry);
         user = "Kiran1901";
-//        entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
-//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child(user);
 
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
@@ -84,7 +81,7 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
-        // Check which radio button was clicked
+
         switch (view.getId()) {
             case R.id.radio_category_give:
                 if (checked)
@@ -115,12 +112,12 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
+
                         final EditText edtName = myView.findViewById(R.id.edt_person_name);
                         final EditText edtAmount = myView.findViewById(R.id.edt_amount);
                         final EditText description = myView.findViewById(R.id.edt_desc);
                         AccountBox accountBox = new AccountBox();
-//                        AccountBoxDao accEntrybox = new AccountBoxDao();
+
                         accountBox.setName(edtName.getText().toString());
                         try {
                             accountBox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
@@ -145,22 +142,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                                 }
                             }
                         });
-//                        final String key = entriesDb.push().getKey();
-//                        entriesDb.child(key).setValue(accEntrybox);
-//                        byDateDb.child(date).addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                String newKey = byDateDb.child(date).child("account_entries").push().getKey();
-//                                byDateDb.child(date).child("account_entries").child(newKey).setValue(key);
-//                                Log.i("msg2","added in by_entry");
-//                                Toast.makeText(AccountEntryActivity.this,"added in by_entry",Toast.LENGTH_LONG).show();
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                            }
-//                        });
 
                         Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
 

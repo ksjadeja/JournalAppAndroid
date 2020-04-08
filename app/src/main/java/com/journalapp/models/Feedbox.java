@@ -1,7 +1,4 @@
 package com.journalapp.models;
-import android.util.Log;
-
-import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
