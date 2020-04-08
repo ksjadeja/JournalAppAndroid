@@ -48,18 +48,22 @@
     android:layout_height="wrap_content"
     android:hint="Enter name of person"
     android:id="@+id/edt_person_name"
+    android:imeOptions="actionNext"
     />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter amount"
         android:id="@+id/edt_amount"
+        android:imeOptions="actionNext"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter description"
         android:id="@+id/edt_desc"
+        android:imeOptions="actionDone"
+        android:maxLines="10"
         />
     <RadioGroup
         android:layout_width="wrap_content"

@@ -1,5 +1,12 @@
 package com.journalapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,22 +16,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.journalapp.calendar.CalendarFragment;
+import com.journalapp.charts.ChartsFragment;
 import com.journalapp.home.HomeFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
 
+    public static CalendarFragment calendarFragment;
+//    public static DatewiseEntries datewiseEntries;
     private Boolean fabExpanded = false;
     private LinearLayout layoutAccEntryFab, layoutEntryFab;
     private FloatingActionButton add_fab;
@@ -32,9 +35,9 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_layout2);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         add_fab = findViewById(R.id.add_fab);
         layoutEntryFab = findViewById(R.id.layoutEntry);
         layoutAccEntryFab = findViewById(R.id.layoutAccEntry);
@@ -53,8 +56,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
             @Override
             public void onClick(View v) {
                 Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-
-                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this,TimelineEditPad.class);
+                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this, EntriesEditPad.class);
                 startActivity(newEntryIntent);
 
             }
@@ -109,6 +111,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         if(menuItem.getItemId() == R.id.nav_gallery)
         {
             fragment = new CalendarFragment();
+            calendarFragment = ((CalendarFragment) fragment);
         }
         else if(menuItem.getItemId() == R.id.nav_home)
         {
@@ -116,14 +119,13 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         }
         else if(menuItem.getItemId() == R.id.nav_slideshow)
         {
-            fragment = new SlideShowFragment2();
+            fragment = new ChartsFragment();
         }
         if (fragment != null){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
             fragmentTransaction.commit();
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

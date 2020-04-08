@@ -1,5 +1,6 @@
 package com.journalapp.calendar;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,8 +26,20 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     private TabLayout calendarTabs;
     private ViewPager calendarViewPager;
     private CalendarTabPagerAdapter calendarPagerAdapter;
+    private String date;
 
-
+    public interface JDatePickerSelectionListener {
+        void onDatePickerSelection(String date);
+    }
+    public interface ADatePickerSelectionListener {
+        void onDatePickerSelection(String date);
+    }
+    public interface EDatePickerSelectionListener{
+        void onDatePickerSelection(String date);
+    }
+    JDatePickerSelectionListener jdatePickerSelectionListener;
+    ADatePickerSelectionListener adatePickerSelectionListener;
+    EDatePickerSelectionListener edatePickerSelectionListener;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Nullable
     @Override
@@ -48,24 +61,38 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
 
         calendarViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(calendarTabs));
 
-
         datePicker = rootView.findViewById(R.id.datePicker);
         Calendar c = Calendar.getInstance();
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
                 @Override
                 public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                String date="Date is "+newDay+"-"+newMonth+1+"-"+newYear;
-                Toast.makeText(getContext(), date, Toast.LENGTH_SHORT).show();
+                    date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
+                    Toast.makeText(getContext(), "date changed to "+date, Toast.LENGTH_SHORT).show();
+                        if (jdatePickerSelectionListener != null) {
+                            jdatePickerSelectionListener.onDatePickerSelection(date);
+                            Toast.makeText(getContext(), date+"  jour", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "jour datelistener is null", Toast.LENGTH_SHORT).show();
+                        }
+                        if (adatePickerSelectionListener != null) {
+                        adatePickerSelectionListener.onDatePickerSelection(date);
+                        Toast.makeText(getContext(), date+"  acc", Toast.LENGTH_SHORT).show();
+                        } else {
+                        Toast.makeText(getContext(), "acc datelistener is null", Toast.LENGTH_SHORT).show();
+                        }
+                        if (edatePickerSelectionListener != null) {
+                            edatePickerSelectionListener.onDatePickerSelection(date);
+                            Toast.makeText(getContext(), date+"  exp", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "exp datelistener is null", Toast.LENGTH_SHORT).show();
+                        }
                 }
         });
-
-
         return rootView;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         getActivity().setTitle("Gallery");
     }
 
@@ -75,12 +102,13 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabUnselected(TabLayout.Tab tab) {}
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
+    public void onTabReselected(TabLayout.Tab tab) {}
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
     }
 }

@@ -5,23 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
+
+import java.util.ArrayList;
 
 public class FeedboxListAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<Feedbox> feedboxArrayList;
-//    ListView feedboxListView;
-    RecyclerView recyclerView;
     public FeedboxListAdapter(Context context, ArrayList<Feedbox> feedboxArrayList) {
         this.context=context;
         this.feedboxArrayList =feedboxArrayList;

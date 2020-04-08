@@ -1,28 +1,30 @@
 package com.journalapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.journalapp.models.Feedbox;
 
-public class TimelineViewPad extends AppCompatActivity {
+public class EntriesViewPad extends AppCompatActivity {
 
-    String date,time,data,id;
     FloatingActionButton editFab;
 
+    String USER = "Kiran1901";
+
     TextView dateField,timeField,dataField;
+    Feedbox feedbox;
 
     ImageButton deleteEntryButton;
 
-    DatabaseReference entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-
+    CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +46,11 @@ public class TimelineViewPad extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        date = intent.getStringExtra("dateField");
-        time = intent.getStringExtra("time");
-        data = intent.getStringExtra("data");
-        id = intent.getStringExtra("id");
+        feedbox = ((Feedbox) intent.getSerializableExtra("feedbox"));
 
-        dateField.setText(date);
-        timeField.setText(time);
-        dataField.setText(data);
+        dateField.setText(feedbox.getDate());
+        timeField.setText(feedbox.getTime());
+        dataField.setText(feedbox.getData());
 
         editFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,18 +62,16 @@ public class TimelineViewPad extends AppCompatActivity {
     }
 
     private void editEntry(){
-        Intent intent = new Intent(getApplicationContext(), TimelineEditPad.class);
-        intent.putExtra("date",date);
-        intent.putExtra("time",time);
-        intent.putExtra("data",data);
-        intent.putExtra("id",id);
+        Intent intent = new Intent(getApplicationContext(), EntriesEditPad.class);
+        intent.putExtra("feedbox",feedbox);
         startActivity(intent);
         finish();
     }
 
     private void deleteEntry(){
-        entriesDb.child(id).removeValue();
-        EntriesMap.delete(id,EntriesMap.EntriesIndex.get(id));
+
+        journalEntriesRef.document(USER).collection("entries").document(feedbox.getId()).delete();
+        EntriesMap.delete(feedbox.getId(),EntriesMap.EntriesIndex.get(feedbox.getId()));
         finish();
     }
 }

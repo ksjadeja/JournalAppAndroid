@@ -6,116 +6,138 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.journalapp.EntriesMap;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 import com.journalapp.models.FeedboxDao;
 import com.journalapp.utils.RecyclerViewAdapter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
-import static com.journalapp.EntriesMap.EntriesIndex;
+import javax.annotation.Nullable;
 
-public class DatewiseEntries extends Fragment {
+public class DatewiseEntries extends Fragment implements CalendarFragment.JDatePickerSelectionListener {
 
-    RecyclerView recyclerView;
-    ArrayList<Feedbox> feedboxesList;
-    DatabaseReference entriesDb;
-    RecyclerViewAdapter recyclerViewAdapter;
+    private RecyclerView recyclerView;
+    private ArrayList<Feedbox> feedboxesList= new ArrayList<>();
+    private RecyclerViewAdapter recyclerViewAdapter;
 
-    String startDate = "08/02/2020";
+    private String USER = "Kiran1901";
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 
+    CollectionReference journalEntriesRef = FirebaseFirestore.getInstance().collection("journal_entries");
 
-    public DatewiseEntries() {
+    public DatewiseEntries() {}
+
+    @Override
+    public void onDatePickerSelection(String date) {
+        selectedDate = date;
+        feedboxesList.clear();
+        recyclerViewAdapter.notifyDataSetChanged();
+
+        Calendar cal = Calendar.getInstance();
+
+        try {
+            Date start = new SimpleDateFormat("dd-MM-yyyy").parse(selectedDate);
+            cal.setTime(start);
+            cal.add(Calendar.DATE,1);
+            Date end = cal.getTime();
+
+            Log.i("MESSAGE(Others)  ==>","start:"+start+"  end:"+end);
+
+            journalEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp",start).whereLessThan("timestamp",end).orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                    if (e != null) {
+                        Log.i("ERROR:", "listen:error", e);
+                        return;
+                    }
+
+                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                        String key=null;
+                        FeedboxDao feedboxDao = null;
+
+                        switch (dc.getType()) {
+                            case ADDED:
+                                key = dc.getDocument().getId();
+                                feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                                Log.i("DEBUG    :","added ::"+feedboxDao.getData());
+                                feedboxesList.add(0,new Feedbox(feedboxDao,key));
+                                recyclerViewAdapter.notifyDataSetChanged();
+                                break;
+
+                            case MODIFIED:
+                                key = dc.getDocument().getId();
+                                feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                                Log.i("DEBUG    :","modified to::"+feedboxDao.getData());
+                                for(Feedbox fb:feedboxesList) {
+                                    if (fb.getId().equals(key)) {
+                                        feedboxesList.set(feedboxesList.indexOf(fb),new Feedbox(feedboxDao, key));
+                                        recyclerViewAdapter.notifyDataSetChanged();
+                                        break;
+                                    }
+                                }
+                                break;
+                            case REMOVED:
+                                for(Feedbox fb:feedboxesList){
+                                    if(fb.getId().equals(dc.getDocument().getId())){
+                                        Log.i("DEBUG    :","deleted ::"+fb.getData());
+                                        feedboxesList.remove(fb);
+                                        recyclerViewAdapter.notifyDataSetChanged();
+                                        break;
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
-        recyclerView=entriesView.findViewById(R.id.recycler_view);
-        entriesDb = FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901")
-                                    .orderByChild("date").equalTo(startDate).getRef();
-        feedboxesList = new ArrayList<>();
 
+        DrawerLayoutActivity2.calendarFragment.jdatePickerSelectionListener = this;
+        final View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
+        recyclerView=entriesView.findViewById(R.id.recycler_view);
+        feedboxesList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewAdapter = new RecyclerViewAdapter(getContext(), feedboxesList);
-
-// db listener
-        entriesDb.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String key;
-                FeedboxDao feedboxDao;
-                key = dataSnapshot.getKey();
-                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-
-                Log.i("data:cal",feedboxDao.getDate());
-                Log.i("data:cal",feedboxDao.getTime());
-                Log.i("data:cal",feedboxDao.getData());
-
-                feedboxesList.add(0,new Feedbox(feedboxDao,key));
-//                EntriesMap.addFirst(key);
-                recyclerViewAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String key;
-                FeedboxDao feedboxDao;
-                key = dataSnapshot.getKey();
-                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-
-                int index = EntriesIndex.get(key);
-                feedboxesList.set(index,new Feedbox(feedboxDao,key));
-                recyclerViewAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                for(Feedbox fb:feedboxesList){
-                    if(fb.getId().equals(dataSnapshot.getKey())){
-                        EntriesMap.delete(fb.getId(),feedboxesList.indexOf(fb));
-                        feedboxesList.remove(fb);
-                        recyclerViewAdapter.notifyDataSetChanged();
-                        return;
-                    }
-                }
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(),"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });
-
+        Calendar cal = Calendar.getInstance();
+        Date start = cal.getTime();
+        start.setHours(0);
+        start.setMinutes(0);
+        start.setSeconds(0);
+        cal.setTime(start);
+        String startDate = dateFormat.format(start);
+        onDatePickerSelection(startDate);
         recyclerView.setAdapter(recyclerViewAdapter);
-
-
         return entriesView;
     }
 }

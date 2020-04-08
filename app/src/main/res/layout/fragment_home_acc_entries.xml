@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".home.AccEntriesTab">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="acc entries fragment" />
+        android:id="@+id/acc_recycler_view">
 
+    </androidx.recyclerview.widget.RecyclerView>
 </FrameLayout>

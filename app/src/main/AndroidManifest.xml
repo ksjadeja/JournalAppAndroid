@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.journalapp">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,9 +14,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ExpenseEntryActivity"></activity>
-        <activity android:name=".AccountEntryActivity" />
-        <activity android:name=".TimelineViewPad" />
-        <activity android:name=".TimelineEditPad" />
+        <activity android:name=".AccountEntryActivity" >
+
+        </activity>
+<!--        <activity android:name=".TimelineViewPad" />-->
+<!--        <activity android:name=".TimelineEditPad" />-->
+        <activity android:name=".EntriesViewPad" />
+        <activity android:name=".EntriesEditPad" />
         <activity android:name=".DrawerLayoutActivity2" />
         <activity android:name=".MainActivity">
             <intent-filter>

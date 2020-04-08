@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.journalapp.R;
-import com.journalapp.models.AccEntrybox;
+import com.journalapp.models.AccountBoxDao;
 
 import java.util.ArrayList;
 
 public class AccEntriesListAdapter extends BaseAdapter {
 
     Context context;
-    ArrayList<AccEntrybox> accEntryboxArrayList;
+    ArrayList<AccountBoxDao> accEntryboxArrayList;
 
     @Override
     public int getCount() {

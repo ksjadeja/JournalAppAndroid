@@ -1,13 +1,36 @@
 package com.journalapp.models;
 
-public class Expensebox {
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+public class ExpenseBox {
+
+    private Date timestamp;
     private String itemName;
     private String amount;
     private String desc;
     private String date;
     private String time;
     private String id;
+
+    public ExpenseBox(){}
+
+    public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key){
+        itemName= expenseBoxDao.getItemName();
+        amount = expenseBoxDao.getAmount();
+        desc = expenseBoxDao.getDesc();
+        id = key;
+        timestamp = expenseBoxDao.getTimestamp().toDate();
+        date = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
+        time = new SimpleDateFormat("hh:mm:ss a").format(timestamp);
+    }
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public String getDate() {
         return date;

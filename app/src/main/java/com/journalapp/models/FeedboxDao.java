@@ -1,23 +1,32 @@
 package com.journalapp.models;
 
+import com.google.firebase.Timestamp;
+
+import java.util.Date;
+
 public class FeedboxDao {
 
-    String date,time,data;
+    private Timestamp timestamp;
+    private String data;
 
-    public String getDate() {
-        return date;
+    public FeedboxDao(){}
+
+    public FeedboxDao(Feedbox feedbox){
+
+        if (feedbox.getTimestamp()!=null){
+            timestamp = new Timestamp(feedbox.getTimestamp());
+        }else {
+            timestamp = new Timestamp(new Date());
+        }
+        data = feedbox.getData();
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getData() {

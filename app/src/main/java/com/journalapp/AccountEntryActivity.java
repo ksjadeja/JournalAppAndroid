@@ -1,28 +1,42 @@
 package com.journalapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.journalapp.home.AccEntriesTab;
-import com.journalapp.models.AccEntrybox;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.SetOptions;
+import com.journalapp.models.AccountBox;
+import com.journalapp.models.AccountBoxDao;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,17 +48,18 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     String date, time;
     private View myView;
     String user;
-    DatabaseReference entriesDb;
-    private int t_type=-1;
+    String USER= "Kiran1901";
+    CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+    CollectionReference byDateAccEntriesRef = FirebaseFirestore.getInstance().collection("by_date");
 
+    private int t_type=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_entry);
         user = "Kiran1901";
-        entriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child(user);
 
-        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
         addAccountEntry = findViewById(R.id.btn_add_account_entry);
@@ -58,8 +73,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         accountEntryTime = myView.findViewById(R.id.account_entry_time);
 
 
-
-
         addAccountEntry.setOnClickListener(this);
         addExpenseEntry.setOnClickListener(this);
 
@@ -69,7 +82,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
-        // Check which radio button was clicked
         switch (view.getId()) {
             case R.id.radio_category_give:
                 if (checked)
@@ -100,25 +112,36 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
+
                         final EditText edtName = myView.findViewById(R.id.edt_person_name);
                         final EditText edtAmount = myView.findViewById(R.id.edt_amount);
                         final EditText description = myView.findViewById(R.id.edt_desc);
+                        AccountBox accountBox = new AccountBox();
 
-                        AccEntrybox accEntrybox = new AccEntrybox();
-                        accEntrybox.setName(edtName.getText().toString());
+                        accountBox.setName(edtName.getText().toString());
                         try {
-                            accEntrybox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
+                            accountBox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
                         }catch (Exception e)
                         {
                             Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
                         }
-                        accEntrybox.setDesc(description.getText().toString());
-                        accEntrybox.setT_type(t_type);
-                        accEntrybox.setDate(date);
-                        accEntrybox.setTime(time);
-                        String key = entriesDb.push().getKey();
-                        entriesDb.child(key).setValue(accEntrybox);
+                        accountBox.setDesc(description.getText().toString());
+                        accountBox.setT_type(String.valueOf(t_type));
+                        accountBox.setDate(date);
+                        accountBox.setTime(time);
+                        AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
+                        accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful()){
+                                    Map<String, Object> map= new HashMap<>();
+                                    map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
+                                    byDateAccEntriesRef.document(USER).collection(date).document("account_entries").set(map, SetOptions.merge());
+                                }else {
+                                    Log.i("Status:","db entry is not successful");
+                                }
+                            }
+                        });
 
                         Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
 
@@ -130,8 +153,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                         dialogInterface.dismiss();
                     }
                 });
-
-
                 alertDialog2.show();
                 break;
             case R.id.btn_add_expense_entry:
