@@ -99,8 +99,8 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                expenseBoxDao.setAmount(holder.amount.getText().toString());
-                entries.get(holder.getAdapterPosition()).setAmount(holder.amount.getText().toString());
+                expenseBoxDao.setAmount(Integer.parseInt(holder.amount.getText().toString()));
+                entries.get(holder.getAdapterPosition()).setAmount(Integer.parseInt(holder.amount.getText().toString()));
             }
             @Override
             public void afterTextChanged(Editable editable) { }
@@ -173,7 +173,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         expenseboxDao.setTime(timeFormat.format(calendar.getTime()));
         expenseboxDao.setTimeStampp(calendar.getTime());
         expenseboxDao.setItemName("");
-        expenseboxDao.setAmount("");
+        expenseboxDao.setAmount(0);
         expenseboxDao.setDesc("");
         entries.add(expenseboxDao);
         notifyItemInserted(getItemCount()-1);
