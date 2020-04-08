@@ -27,6 +27,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -40,21 +41,25 @@ import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ChartsFragment extends Fragment implements View.OnClickListener {
 
     private BarChart datewiseAccChart;
     EditText startDate, endDate;
-    CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+    CollectionReference accountEntriesRef;
     Button submit;
     Date start, end;
-    int day, month, year;
+    int dayy, monthh, yearr;
 
     String USER = "Kiran1901";
 
@@ -63,7 +68,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        accountEntriesRef= FirebaseFirestore.getInstance().collection("account_entries");
         View rootView = inflater.inflate(R.layout.fragment_charts, container, false);
         datewiseAccChart = rootView.findViewById(R.id.datewiseAccChart);
         startDate = rootView.findViewById(R.id.start_date);
@@ -71,9 +76,9 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         submit = rootView.findViewById(R.id.submit);
         Calendar calendar = Calendar.getInstance();
 
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        month = calendar.get(Calendar.MONTH);
-        year = calendar.get(Calendar.YEAR);
+        dayy = calendar.get(Calendar.DAY_OF_MONTH);
+        monthh = calendar.get(Calendar.MONTH);
+        yearr = calendar.get(Calendar.YEAR);
         startDate.setOnClickListener(this);
         endDate.setOnClickListener(this);
         submit.setOnClickListener(this);
@@ -88,41 +93,37 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        start = new Date();
-                        start.setDate(day);
-                        start.setMonth(month);
-                        start.setYear(year);
-                        start.setSeconds(0);
-                        start.setMinutes(0);
-                        start.setHours(0);
-                        startDate.setText(start.toString());
+                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
+//                        start = new Date();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year,month,day,0,0,0);
+//                        calendar.setTimeZone(TimeZone.getTimeZone("UTC+5:30"));
+                        start = calendar.getTime();
+//                        Toast.makeText(getActivity(), "year timezone"+start.getTimezoneOffset(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "year start "+year, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "year start "+formatter.format(start), Toast.LENGTH_SHORT).show();
+                        startDate.setText(formatter.format(start));
                     }
-                }, year, month, day);
+                }, yearr, monthh, dayy);
                 datePickerDialog.show();
                 break;
-
-
             case R.id.end_date:
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        end = new Date();
-                        end.setDate(day);
-                        end.setMonth(month);
-                        end.setYear(year);
-                        end.setSeconds(0);
-                        end.setMinutes(0);
-                        end.setHours(0);
-                        endDate.setText(end.toString());
+                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year,month,day,23,59,59);
+                        end= calendar.getTime();
+//                        Toast.makeText(getActivity(), "year end "+year, Toast.LENGTH_SHORT).show();
+                        endDate.setText(formatter.format(end));
                     }
-                }, year, month, day);
+                }, yearr, monthh, dayy);
                 datePickerDialog2.show();
                 break;
 
 
             case R.id.submit:
-
-
                 if (start != null && end != null) {
                     System.out.println("  start::"+start+"  end::"+end+"  today::"+new Date());
                     Toast.makeText(getActivity(),"button clicked",Toast.LENGTH_LONG).show();
@@ -131,18 +132,22 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         @Override
                         public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                             if (e != null) {
+                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
                                 Log.i("ERROR:", "listen:error", e);
                                 return;
                             }
-
+//                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
                             for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
                                 String key = null;
                                 AccountBoxDao accountBoxDao = null;
                                 switch (dc.getType()) {
                                     case ADDED:
                                         System.out.println("in the add::::");
+
                                         key = dc.getDocument().getId();
                                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
                                         accountEntryList.add(0, new AccountBox(accountBoxDao, key));
                                         break;
 
@@ -170,13 +175,12 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                                         break;
                                 }
                             }
+                            Toast.makeText(getActivity(), "list  "+accountEntryList, Toast.LENGTH_SHORT).show();
+                            drawAccountBarChart(accountEntryList);
                         }
                     });
 
                     System.out.println("myList::::"+accountEntryList);
-
-                    drawAccountBarChart(accountEntryList);
-
 //                    ArrayList<BarDataSet> dataSets = null;
 //
 ////                    datewiseAccChart.getXAxis().
@@ -215,8 +219,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 //                    datewiseAccChart.setFitBars(true);
 //
 //                    datewiseAccChart.invalidate();
-
-
                     }
                 }
         }
@@ -233,12 +235,15 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             HashMap<String, ValueAndLabel<Float,String> > map = new HashMap<>();
             ValueAndLabel<Float,String> vl;
             for(AccountBox acc : accountEntryList){
+                Toast.makeText(getActivity(), "date "+acc.getDate(), Toast.LENGTH_SHORT).show();
                 if(map.containsKey(acc.getDate())){
+                    Toast.makeText(getActivity(), "same date ", Toast.LENGTH_SHORT).show();
                     vl=map.get(acc.getDate());
                     vl.values.add(((float) acc.getAmount()));
                     vl.labels.add(acc.getName());
                 }else {
-                    map.put(acc.getDate(),new ValueAndLabel<Float, String>(((float) acc.getAmount()),acc.getName()));
+                    Toast.makeText(getActivity(), "different date ", Toast.LENGTH_SHORT).show();
+                    map.put(acc.getDate(),new ValueAndLabel<>(((float) acc.getAmount()),acc.getName()));
                 }
             }
 
@@ -248,13 +253,17 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             float i=1;
             for(Map.Entry<String,ValueAndLabel<Float,String>> mapEntry : map.entrySet()){
                 if(mapEntry.getValue().values.size()>1){
+                    Toast.makeText(getActivity(), "multiple entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
                     values = new float[mapEntry.getValue().values.size()];
                     for (int p=0;p<mapEntry.getValue().values.size();p++){
                         values[p] = mapEntry.getValue().values.get(p);
                     }
                     bar = new BarEntry(i, values, mapEntry.getValue().labels);
-                }else {
+                    i+=1;
+                }else if(mapEntry.getValue().values.size()==1) {
+                    Toast.makeText(getActivity(), "single entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
                     bar = new BarEntry(i, mapEntry.getValue().values.get(0), mapEntry.getValue().labels.get(0));
+                    i+=1;
                 }
                 dataset.add(bar);
             }
@@ -262,23 +271,28 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             BarDataSet barDataSet = new BarDataSet(dataset, "Entries");
             barDataSet.setColors(ColorTemplate.PASTEL_COLORS);
             BarData data = new BarData(barDataSet);
-
             datewiseAccChart.setData(data);
-            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()));
-            datewiseAccChart.getBarData().setBarWidth(.9f);
-            datewiseAccChart.animateXY(2000, 2000);
+            Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
+            datewiseAccChart.getXAxis().setLabelCount(map.keySet().size());
+//            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()));
+            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    return super.getFormattedValue(value-0.5f, axis);
+                }
+            });
+            datewiseAccChart.getXAxis().setGranularity(1f);
+            datewiseAccChart.getXAxis().setDrawLabels(true);
 
+            datewiseAccChart.getXAxis().setCenterAxisLabels(true);
+            datewiseAccChart.getBarData().setBarWidth(.7f);
+            datewiseAccChart.animateXY(2000, 2000);
             datewiseAccChart.setTouchEnabled(true);
             datewiseAccChart.setScaleEnabled(true);
-
             datewiseAccChart.setFitBars(true);
-
+            datewiseAccChart.fitScreen();
             datewiseAccChart.invalidate();
-
-
         }
-
-
 
         private ArrayList<String> getXAxisValues () {
             ArrayList<String> xAxis = new ArrayList<>();
