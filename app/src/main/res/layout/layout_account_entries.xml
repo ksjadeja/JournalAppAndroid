@@ -43,13 +43,14 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             />
     </LinearLayout>
-<EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Enter name of person"
-    android:id="@+id/edt_person_name"
-    android:imeOptions="actionNext"
-    />
+
+    <AutoCompleteTextView
+        android:id="@+id/edt_person_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter name of person"
+        android:imeOptions="actionNext" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

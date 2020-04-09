@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -36,6 +38,7 @@ import com.journalapp.models.AccountBoxDao;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AccountEntryActivity extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +47,8 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
     TextView accountEntryTime;
     Button addAccountEntry;
     Button addExpenseEntry;
+    EditText edtAmount,description;
+    AutoCompleteTextView edtName;
     public static SimpleDateFormat dateFormat, timeFormat;
     String date, time;
     private View myView;
@@ -107,15 +112,24 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 Calendar c = Calendar.getInstance();
                 date = dateFormat.format(c.getTime());
                 time = timeFormat.format(c.getTime());
+
+//                edtName = myView.findViewById(R.id.edt_person_name);
+//                ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item,
+//                        accountEntriesRef.document(USER).collection("entries")
+//                                .whereGreaterThan("name",edtName.getText().toString())
+//                                .whereLessThan("name",nextWord(edtName.getText().toString())).get());
+//                edtName.setAdapter(adapter);
+
                 accountEntryDate.setText(date);
                 accountEntryTime.setText(time);
                 alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        final EditText edtName = myView.findViewById(R.id.edt_person_name);
-                        final EditText edtAmount = myView.findViewById(R.id.edt_amount);
-                        final EditText description = myView.findViewById(R.id.edt_desc);
+                        edtName = myView.findViewById(R.id.edt_person_name);
+                        edtAmount = myView.findViewById(R.id.edt_amount);
+                        description = myView.findViewById(R.id.edt_desc);
+
                         AccountBox accountBox = new AccountBox();
 
                         accountBox.setName(edtName.getText().toString());
@@ -162,4 +176,31 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
+
+    public String nextWord(String str)
+    {
+
+        // if string is empty
+        if (str == "")
+            return "a";
+
+        // Find first character from
+        // right which is not z.
+        int i = str.length() - 1;
+        while (i >= 0 && str.charAt(i) == 'z')
+            i--;
+
+        // If all characters are 'z',
+        // append an 'a' at the end.
+        if (i == -1)
+            str = str + 'a';
+
+        else
+            str = str.substring(0, i) +
+                    (char)((int)(str.charAt(i)) + 1) +
+                    str.substring(i + 1);
+        return str;
+    }
+
+
 }

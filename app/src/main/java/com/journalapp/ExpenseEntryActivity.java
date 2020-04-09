@@ -32,6 +32,7 @@ public class ExpenseEntryActivity extends AppCompatActivity {
     String USER= "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
     ListenerRegistration liveAccountEntries;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,29 +59,29 @@ public class ExpenseEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    Toast.makeText(ExpenseEntryActivity.this, "items " + expenseList.get(expenseList.size() - 1).getItemName(), Toast.LENGTH_SHORT).show();
-                }catch(Exception e){
-                    Toast.makeText(ExpenseEntryActivity.this, "Sorry, No items to add", Toast.LENGTH_SHORT).show();
-                }
-                for(final ExpenseBoxDao expBoxDao:expenseList)
-                {
 
-                    expenseEntriesRef.document(USER).collection("entries").add(expBoxDao).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if (task.isSuccessful()){
-                                Log.i("Status:","db entry is successful");
+                finish();            Toast.makeText(ExpenseEntryActivity.this, "items " + expenseList.get(expenseList.size() - 1).getItemName(), Toast.LENGTH_SHORT).show();
+            }catch(Exception e){
+                Toast.makeText(ExpenseEntryActivity.this, "Sorry, No items to add", Toast.LENGTH_SHORT).show();
+            }
+                for(final ExpenseBoxDao expBoxDao:expenseList)
+            {
+
+                expenseEntriesRef.document(USER).collection("entries").add(expBoxDao).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()){
+                            Log.i("Status:","db entry is successful");
 //                                Map<String, Object> map= new HashMap<>();
 //                                map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
 //                                String ddate = expBoxDao.getDate();
 //                                ddate = ddate.replaceAll("/","-");
-                            }else {
-                                Log.i("Status:","db entry is not successful");
-                            }
+                        }else {
+                            Log.i("Status:","db entry is not successful");
                         }
-                    });
-                }
-                finish();
+                    }
+                });
+            }
             }
         });
 

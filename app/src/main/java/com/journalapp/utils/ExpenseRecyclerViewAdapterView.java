@@ -50,7 +50,7 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         holder.dateField.setText(entries.get(position).getDate());
         holder.timeField.setText(entries.get(position).getTime());
         holder.itemName.setText(entries.get(position).getItemName());
-        holder.amount.setText(entries.get(position).getAmount());
+        holder.amount.setText(String.valueOf(entries.get(position).getAmount()));
         holder.description.setText(entries.get(position).getDesc());
     }
 
