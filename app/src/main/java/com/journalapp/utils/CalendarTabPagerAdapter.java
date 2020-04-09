@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.journalapp.DrawerLayoutActivity2;
 import com.journalapp.calendar.DatewiseAccEntries;
 import com.journalapp.calendar.DatewiseEntries;
 import com.journalapp.calendar.DatewiseExpEntries;

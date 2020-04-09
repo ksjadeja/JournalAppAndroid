@@ -45,7 +45,6 @@ import static com.journalapp.ExpEntriesMap.ExpEntriesIndex;
 public class ExpEntriesTab extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ExpenseBox> expenseEntryList;
-//    DatabaseReference expenseEntriesDb;
     String USER= "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
     ExpenseRecyclerViewAdapterView adapter;
@@ -57,7 +56,6 @@ public class ExpEntriesTab extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
         recyclerView=rootView.findViewById(R.id.exp_recycler_view);
-//        accountEntriesDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
 
         expenseEntryList= new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -77,7 +75,6 @@ public class ExpEntriesTab extends Fragment {
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            Log.i("CntA:",(i++)+":::"+key);
                             expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
                             expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
                             ExpEntriesMap.addFirst(key);

@@ -1,7 +1,6 @@
 package com.journalapp;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class EntriesMap extends HashMap {

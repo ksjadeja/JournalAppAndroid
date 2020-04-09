@@ -27,29 +27,10 @@ public class ExpenseBox {
     public Date getTimestamp() {
         return timestamp;
     }
+
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
-//
-//    public ExpenseBoxDao getExpenseBoxDao() {
-//        return expenseBoxDao;
-//    }
-//
-//    public void setExpenseBoxDao(ExpenseBoxDao expenseBoxDao) {
-//        this.expenseBoxDao = expenseBoxDao;
-//    }
-
-//    private ExpenseBoxDao expenseBoxDao;
-
-//    public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key) {
-//        this.setExpenseBoxDao(expenseBoxDao);
-//        this.setDate(expenseBoxDao.getDate());
-//        this.setTime(expenseBoxDao.getTime());
-//        this.setItemName(expenseBoxDao.getItemName());
-//        this.setAmount(expenseBoxDao.getAmount());
-//        this.setDesc(expenseBoxDao.getDesc());
-//        this.setId(key);
-//    }
 
     public String getDate() {
         return date;

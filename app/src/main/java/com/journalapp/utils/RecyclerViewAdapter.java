@@ -12,10 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.journalapp.R;
 import com.journalapp.EntriesViewPad;
+import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 
 import java.util.ArrayList;
@@ -31,8 +29,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged();
     }
 
-    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
-
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,66 +41,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.entries = entries;
         this.context=context;
 
-/*        entriesDb.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String key;
-                FeedboxDao feedboxDao;
-                key = dataSnapshot.getKey();
-                feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-
-                Log.i("data",feedboxDao.getDate());
-                Log.i("data",feedboxDao.getTime());
-                Log.i("data",feedboxDao.getData());
-
-                entries.add(0,new Feedbox(feedboxDao,key));
-                EntriesMap.addFirst(key);
-                notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                String key;
-                FeedboxDao feedboxDao;
-                    key = dataSnapshot.getKey();
-                    feedboxDao = dataSnapshot.getValue(FeedboxDao.class);
-
-                    int index = EntriesIndex.get(key);
-                    entries.set(index,new Feedbox(feedboxDao,key));
-                    notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-//                int index = EntriesIndex.get(dataSnapshot.getKey());
-//                entries.remove(index);
-//                EntriesMap.delete(dataSnapshot.getKey(),index);
-//                notifyDataSetChanged();
-
-                for(Feedbox fb:entries){
-                    if(fb.getId().equals(dataSnapshot.getKey())){
-                        EntriesMap.delete(fb.getId(),entries.indexOf(fb));
-                        entries.remove(fb);
-                        notifyDataSetChanged();
-                        return;
-                    }
-                }
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context,"Firebase Error: "+databaseError.getMessage(),Toast.LENGTH_LONG).show();
-            }
-        });*/
 
         if(entries.size()==0)
         {

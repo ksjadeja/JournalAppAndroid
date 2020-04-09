@@ -2,7 +2,6 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +15,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.journalapp.AccountEntryActivity;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.EntryHolder>{
 
@@ -40,13 +30,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     View myView;
     String USER = "Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
-//    DatabaseReference accountDb,byDateDb;
 
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        accountDb = FirebaseDatabase.getInstance().getReference("account_entries").child("Kiran1901");
-//        byDateDb = FirebaseDatabase.getInstance().getReference("by_date").child("Kiran1901");
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_account_entry_box, parent, false);
         EntryHolder pvh = new EntryHolder(v);

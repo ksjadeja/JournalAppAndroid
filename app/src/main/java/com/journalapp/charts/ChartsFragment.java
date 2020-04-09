@@ -186,44 +186,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                     });
 
                     System.out.println("myList::::"+accountEntryList);
-//                    ArrayList<BarDataSet> dataSets = null;
-//
-////                    datewiseAccChart.getXAxis().
-//
-//                    ArrayList<BarEntry> valueSet1 = new ArrayList<>();
-//                    BarEntry v1e2 = new BarEntry(2f, new float[]{2,4,6}); // Feb
-//                    valueSet1.add(v1e2);
-//                    BarEntry v1e3 = new BarEntry(4f, new float[]{2,3,5,6}); // Mar
-//                    valueSet1.add(v1e3);
-//                    BarEntry v1e40 = new BarEntry(3f, new float[]{-2,-6,3,6}); // Mar
-//                    valueSet1.add(v1e40);
-//
-//
-//                    BarDataSet barDataSet1 = new BarDataSet(valueSet1, "Brand 1");
-//                    barDataSet1.setColors(ColorTemplate.MATERIAL_COLORS);
-//
-//                    barDataSet1.setStackLabels(new String[]{"kr","kh","kd","jn"});
-//
-//                    dataSets = new ArrayList<>();
-//                    dataSets.add(barDataSet1);
-//
-//
-//                    BarData data = new BarData(barDataSet1);
-////                            BarData(getXAxisValues(), dataSets);
-//
-////                    datewiseAccChart.getAxisLeft().setAxisMinimum(0f);
-//
-//                    datewiseAccChart.setData(data);
-//                    datewiseAccChart.getBarData().setBarWidth(.9f);
-//                    datewiseAccChart.animateXY(2000, 2000);
-////                    datewiseAccChart.groupBars(2f,0.2f,0.02f);
-//
-//                    datewiseAccChart.setTouchEnabled(true);
-//                    datewiseAccChart.setScaleEnabled(true);
-//
-//                    datewiseAccChart.setFitBars(true);
-//
-//                    datewiseAccChart.invalidate();
+
                     }
                 break;
             case R.id.start_date_exp:
@@ -400,12 +363,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 dataset.add(bar);
             }
             BarDataSet barDataSet = new BarDataSet(dataset, "Entries");
-            barDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+            barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
             BarData data = new BarData(barDataSet);
             datewiseAccChart.setData(data);
             Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
             datewiseAccChart.getXAxis().setLabelCount(map.keySet().size());
-//            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()));
             datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {

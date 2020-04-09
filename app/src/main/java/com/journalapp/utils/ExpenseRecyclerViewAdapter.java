@@ -16,9 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.journalapp.R;
-
-import com.journalapp.models.AccountBoxDao;
-import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 
 import java.text.DateFormat;
@@ -30,7 +27,6 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 
     ArrayList<ExpenseBoxDao> entries;
     Context context;
-//    DatabaseReference entriesDb= FirebaseDatabase.getInstance().getReference("journal_entries").child("Kiran1901");
 
     @NonNull
     @Override

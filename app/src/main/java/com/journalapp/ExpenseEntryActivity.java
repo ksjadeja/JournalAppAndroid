@@ -1,38 +1,26 @@
 package com.journalapp;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.SetOptions;
-import com.journalapp.models.AccountBoxDao;
-import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.utils.ExpenseRecyclerViewAdapter;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExpenseEntryActivity extends AppCompatActivity {
 
@@ -65,8 +53,6 @@ public class ExpenseEntryActivity extends AppCompatActivity {
            }
        });
 
-//        LayoutInflater layoutInflater = getLayoutInflater();
-//        View view = layoutInflater.inflate(R.layout.layout_expense_box,null,false);
 
         expSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
