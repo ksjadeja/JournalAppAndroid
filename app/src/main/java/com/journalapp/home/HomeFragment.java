@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Home");
+        getActivity().setTitle("Timeline");
     }
 
     @Override

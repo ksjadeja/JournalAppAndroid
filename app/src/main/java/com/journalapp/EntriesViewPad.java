@@ -2,6 +2,7 @@ package com.journalapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -35,6 +36,9 @@ public class EntriesViewPad extends AppCompatActivity {
         dateField = findViewById(R.id.timeline_view_pad_date);
         timeField = findViewById(R.id.timeline_view_pad_time);
         dataField = findViewById(R.id.timeline_view_pad_data);
+
+        dataField.setMovementMethod(new ScrollingMovementMethod());
+        dataField.setVerticalScrollBarEnabled(true);
 
         deleteEntryButton = findViewById(R.id.deleteEntryButton);
 
