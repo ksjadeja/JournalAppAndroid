@@ -1,12 +1,14 @@
 package com.journalapp.calendar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,7 +17,11 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.journalapp.AccountEntryActivity;
+import com.journalapp.EntriesEditPad;
+import com.journalapp.ExpenseEntryActivity;
 import com.journalapp.R;
 import com.journalapp.utils.CalendarTabPagerAdapter;
 
@@ -27,6 +33,9 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     private ViewPager calendarViewPager;
     private CalendarTabPagerAdapter calendarPagerAdapter;
     private String date;
+    private LinearLayout layoutAccEntryFab, layoutEntryFab , layoutExpEntryFab;
+    private FloatingActionButton add_fab;
+    private Boolean fabExpanded = false;
 
     public interface JDatePickerSelectionListener {
         void onDatePickerSelection(String date);
@@ -45,10 +54,10 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fragment_calendar,container,false);
+        final View root = inflater.inflate(R.layout.fragment_calendar,container,false);
 
-        calendarTabs = rootView.findViewById(R.id.calendarTabs);
-        calendarViewPager = rootView.findViewById(R.id.calendarViewPager);
+        calendarTabs = root.findViewById(R.id.calendarTabs);
+        calendarViewPager = root.findViewById(R.id.calendarViewPager);
 
         calendarTabs.addTab(calendarTabs.newTab().setText("Journal Entries"));
         calendarTabs.addTab(calendarTabs.newTab().setText("Account Entries"));
@@ -56,12 +65,58 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         calendarTabs.setTabGravity(TabLayout.GRAVITY_FILL);
         calendarTabs.setOnTabSelectedListener(this);
 
+        add_fab = root.findViewById(R.id.add_fab);
+        layoutEntryFab = root.findViewById(R.id.layoutEntry);
+        layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
+        layoutExpEntryFab = root.findViewById(R.id.layoutExpEntry);
+        add_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fabExpanded){
+                    closeSubMenusFab();
+                }else {
+                    openSubMenusFab();
+                }
+            }
+        });
+
+        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"You've tapped new Entry",Toast.LENGTH_SHORT).show();
+                Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
+                startActivity(newEntryIntent);
+                closeSubMenusFab();
+
+            }
+        });
+
+        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
+                Intent accountEntryIntent = new Intent(getContext(), AccountEntryActivity.class);
+                startActivity(accountEntryIntent);
+                closeSubMenusFab();
+            }
+        });
+
+        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
+                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryActivity.class);
+                startActivity(expenseEntryIntent);
+                closeSubMenusFab();
+            }
+        });
+
         calendarPagerAdapter = new CalendarTabPagerAdapter(getActivity().getSupportFragmentManager(),calendarTabs.getTabCount());
         calendarViewPager.setAdapter(calendarPagerAdapter);
 
         calendarViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(calendarTabs));
 
-        datePicker = rootView.findViewById(R.id.datePicker);
+        datePicker = root.findViewById(R.id.datePicker);
         Calendar c = Calendar.getInstance();
         datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener(){
                 @Override
@@ -88,12 +143,14 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
                         }
                 }
         });
-        return rootView;
+
+        closeSubMenusFab();
+        return root;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Gallery");
+        getActivity().setTitle("Calendar");
     }
 
     @Override
@@ -110,5 +167,24 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+    }
+
+    //closes FAB submenus
+    private void closeSubMenusFab(){
+        layoutEntryFab.setVisibility(View.INVISIBLE);
+        layoutAccEntryFab.setVisibility(View.INVISIBLE);
+        layoutExpEntryFab.setVisibility(View.INVISIBLE);
+        add_fab.setImageResource(R.drawable.ic_plus_btn);
+        fabExpanded = false;
+    }
+
+    //Opens FAB submenus
+    private void openSubMenusFab(){
+        layoutEntryFab.setVisibility(View.VISIBLE);
+        layoutAccEntryFab.setVisibility(View.VISIBLE);
+        layoutExpEntryFab.setVisibility(View.VISIBLE);
+        //Change settings icon to 'X' icon
+        add_fab.setImageResource(R.drawable.ic_close_btn);
+        fabExpanded = true;
     }
 }

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -322,7 +323,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState){
             super.onViewCreated(view, savedInstanceState);
 
-            getActivity().setTitle("Slideshow");
+            getActivity().setTitle("Charts");
         }
 
         private void drawAccountBarChart(ArrayList<AccountBox> accountEntryList){
@@ -345,7 +346,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             ArrayList<BarEntry> dataset = new ArrayList<>();
             BarEntry bar = null;
             float[] values;
-            float i=0;
+            float i=0.5f;
             for(Map.Entry<String,ValueAndLabel<Float,String>> mapEntry : map.entrySet()){
                 if(mapEntry.getValue().values.size()>1){
                     Toast.makeText(getActivity(), "multiple entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
@@ -368,23 +369,18 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             datewiseAccChart.setData(data);
             Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
             datewiseAccChart.getXAxis().setLabelCount(map.keySet().size());
+
             datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
-                    return super.getFormattedValue(value-0.5f, axis);
+                    return super.getFormattedValue(value, axis);
                 }
             });
-//            class MyXAxisValueFormatter implements XAxisValueFormatter {
-//                @Override
-//                public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-//                    if (index == 0) return "";
-//                    else return original;
-//                }
-//            }
+
 //            datewiseAccChart.getXAxis().setGranularity(1f);
             datewiseAccChart.getXAxis().setDrawLabels(true);
             datewiseAccChart.getXAxis().setCenterAxisLabels(true);
-//            datewiseAccChart.getXAxis().setXOffset(-1f);
+            datewiseAccChart.getXAxis().setAxisMinimum(0);
             datewiseAccChart.getBarData().setBarWidth(.5f);
             datewiseAccChart.animateXY(2000, 2000);
             datewiseAccChart.setTouchEnabled(true);
@@ -413,7 +409,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             ArrayList<BarEntry> dataset = new ArrayList<>();
             BarEntry bar = null;
             float[] values;
-            float i=0;
+            float i=0.5f;
             for(Map.Entry<String,ValueAndLabel<Float,String>> mapEntry : map.entrySet()){
                 if(mapEntry.getValue().values.size()>1){
                     Toast.makeText(getActivity(), "multiple entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
@@ -435,25 +431,21 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             BarData data = new BarData(barDataSet);
             datewiseExpChart.setData(data);
             Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
+
             datewiseExpChart.getXAxis().setLabelCount(map.keySet().size());
-//            datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()));
+
             datewiseExpChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
-                    return super.getFormattedValue(value-0.5f, axis);
+                    return super.getFormattedValue(value, axis);
                 }
             });
-//            class MyXAxisValueFormatter implements XAxisValueFormatter {
-//                @Override
-//                public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-//                    if (index == 0) return "";
-//                    else return original;
-//                }
-//            }
+
+            datewiseExpChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+
 //            datewiseAccChart.getXAxis().setGranularity(1f);
             datewiseExpChart.getXAxis().setDrawLabels(true);
             datewiseExpChart.getXAxis().setCenterAxisLabels(true);
-//            datewiseAccChart.getXAxis().setXOffset(-1f);
             datewiseExpChart.getBarData().setBarWidth(.5f);
             datewiseExpChart.animateXY(2000, 2000);
             datewiseExpChart.setTouchEnabled(true);

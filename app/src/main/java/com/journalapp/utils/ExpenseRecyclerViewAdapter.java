@@ -95,15 +95,19 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                expenseBoxDao.setAmount(Integer.parseInt(holder.amount.getText().toString()));
-                entries.get(holder.getAdapterPosition()).setAmount(Integer.parseInt(holder.amount.getText().toString()));
+                if(!holder.amount.getText().toString().equals("")){
+                    expenseBoxDao.setAmount(Integer.parseInt(holder.amount.getText().toString()));
+                    entries.get(holder.getAdapterPosition()).setAmount(Integer.parseInt(holder.amount.getText().toString()));
+                }
             }
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+
+            }
         });
             holder.getItemName().setText(expenseBoxDao.getItemName());
             Toast.makeText(context, "onBindAfter" +position+" name " + expenseBoxDao.getItemName(), Toast.LENGTH_SHORT).show();
-            holder.getAmount().setText(expenseBoxDao.getAmount());
+            holder.getAmount().setText(String.valueOf(expenseBoxDao.getAmount()));
             holder.getDescription().setText(expenseBoxDao.getDesc());
 //        }
 //        if(isNew) {

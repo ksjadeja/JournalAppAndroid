@@ -31,7 +31,6 @@ public class ExpenseEntryActivity extends AppCompatActivity {
     ArrayList<ExpenseBoxDao> expenseList;
     String USER= "Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
-    ListenerRegistration liveAccountEntries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

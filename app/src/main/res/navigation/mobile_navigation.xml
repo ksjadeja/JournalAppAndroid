@@ -12,15 +12,15 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_calendar"
         android:name="com.journalapp.calendar.CalendarFragment"
-        android:label="Demo"
+        android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
         android:id="@+id/nav_charts"
-       android:name="com.journalapp.charts.ChartsFragment"
-        android:label="Demo2"
+        android:name="com.journalapp.charts.ChartsFragment"
+        android:label="Charts"
         tools:layout="@layout/fragment_charts" />
 
 <!--    <fragment-->
