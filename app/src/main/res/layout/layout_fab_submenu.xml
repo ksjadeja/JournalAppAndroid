@@ -18,7 +18,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="140dp"
+        android:layout_marginBottom="200dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -50,7 +50,7 @@
             app:backgroundTint="@color/lightFab"
             app:fabSize="auto"
             app:maxImageSize="28dp"
-            app:srcCompat="@drawable/ic_entries_btn" />
+            app:srcCompat="@drawable/ic_entries_white" />
 
     </LinearLayout>
 
@@ -61,7 +61,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="135dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -93,9 +93,53 @@
             app:backgroundTint="@color/lightFab"
             app:fabSize="auto"
             app:maxImageSize="28dp"
-            app:srcCompat="@drawable/ic_acc_entry_btn" />
+            app:srcCompat="@drawable/ic_account_entries_white" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutExpEntry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="65dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/cardview_light_background"
+            app:cardCornerRadius="@dimen/cardCornerRadius"
+            app:cardElevation="@dimen/cardElevation"
+            app:cardUseCompatPadding="true">
+
+            <TextView
+                android:id="@+id/exp_entry_fab_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/cardview_horizontal_padding"
+                android:paddingTop="@dimen/cardview_vertical_padding"
+                android:paddingRight="@dimen/cardview_horizontal_padding"
+                android:paddingBottom="@dimen/cardview_vertical_padding"
+                android:text="@string/expense_entry"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/exp_entry_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/lightFab"
+            app:fabSize="auto"
+            app:maxImageSize="28dp"
+            app:srcCompat="@drawable/ic_expense_entries_white" />
+
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_fab"

@@ -7,7 +7,7 @@ public class ExpenseBox {
 
     private Date timestamp;
     private String itemName;
-    private String amount;
+    private int amount;
     private String desc;
     private String date;
     private String time;
@@ -56,11 +56,11 @@ public class ExpenseBox {
         this.itemName= name;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

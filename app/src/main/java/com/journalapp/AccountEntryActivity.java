@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -36,14 +38,17 @@ import com.journalapp.models.AccountBoxDao;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class AccountEntryActivity extends AppCompatActivity implements View.OnClickListener {
+public class AccountEntryActivity extends AppCompatActivity{
 
     TextView accountEntryDate;
     TextView accountEntryTime;
-    Button addAccountEntry;
-    Button addExpenseEntry;
+
+
+    EditText edtAmount,description;
+    AutoCompleteTextView edtName;
     public static SimpleDateFormat dateFormat, timeFormat;
     String date, time;
     private View myView;
@@ -62,9 +67,6 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
-        addAccountEntry = findViewById(R.id.btn_add_account_entry);
-        addExpenseEntry = findViewById(R.id.btn_add_expense_entry);
-
 
         LayoutInflater layoutInflater = getLayoutInflater();
         myView = layoutInflater.inflate(R.layout.layout_account_entries, null, false);
@@ -72,9 +74,74 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
         accountEntryDate = myView.findViewById(R.id.account_entry_date);
         accountEntryTime = myView.findViewById(R.id.account_entry_time);
 
+        AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(AccountEntryActivity.this);
+        if(myView.getParent() != null) {
+            ((ViewGroup)myView.getParent()).removeView(myView); // <- fix
+        }
+        alertDialog2.setView(myView);
+        Calendar c = Calendar.getInstance();
+        date = dateFormat.format(c.getTime());
+        time = timeFormat.format(c.getTime());
 
-        addAccountEntry.setOnClickListener(this);
-        addExpenseEntry.setOnClickListener(this);
+//                edtName = myView.findViewById(R.id.edt_person_name);
+//                ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item,
+//                        accountEntriesRef.document(USER).collection("entries")
+//////                                .whereGreaterThan("name",edtName.getText().toString())
+//////                                .whereLessThan("name",nextWord(edtName.getText().toString())).get());
+//////                edtName.setAdapter(adapter);
+
+
+        accountEntryDate.setText(date);
+        accountEntryTime.setText(time);
+        alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                edtName = myView.findViewById(R.id.edt_person_name);
+                edtAmount = myView.findViewById(R.id.edt_amount);
+                description = myView.findViewById(R.id.edt_desc);
+
+                AccountBox accountBox = new AccountBox();
+
+                accountBox.setName(edtName.getText().toString());
+                try {
+                    accountBox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
+                }catch (Exception e)
+                {
+                    Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
+                }
+                accountBox.setDesc(description.getText().toString());
+                accountBox.setT_type(String.valueOf(t_type));
+                accountBox.setDate(date);
+                accountBox.setTime(time);
+                AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
+                accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()){
+                            Map<String, Object> map= new HashMap<>();
+                            map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
+                            byDateAccEntriesRef.document(USER).collection(date).document("account_entries").set(map, SetOptions.merge());
+                        }else {
+                            Log.i("Status:","db entry is not successful");
+                        }
+                    }
+                });
+
+                Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        });
+        alertDialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                finish();
+            }
+        });
+        alertDialog2.show();
+//        addAccountEntry.setOnClickListener(this);
 
 
     }
@@ -95,71 +162,32 @@ public class AccountEntryActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_add_account_entry:
-                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(AccountEntryActivity.this);
-                if(myView.getParent() != null) {
-                    ((ViewGroup)myView.getParent()).removeView(myView); // <- fix
-                }
-                alertDialog2.setView(myView);
-                Calendar c = Calendar.getInstance();
-                date = dateFormat.format(c.getTime());
-                time = timeFormat.format(c.getTime());
-                accountEntryDate.setText(date);
-                accountEntryTime.setText(time);
-                alertDialog2.setPositiveButton("Add Account Entry", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                        final EditText edtName = myView.findViewById(R.id.edt_person_name);
-                        final EditText edtAmount = myView.findViewById(R.id.edt_amount);
-                        final EditText description = myView.findViewById(R.id.edt_desc);
-                        AccountBox accountBox = new AccountBox();
 
-                        accountBox.setName(edtName.getText().toString());
-                        try {
-                            accountBox.setAmount(Integer.parseInt(edtAmount.getText().toString()));
-                        }catch (Exception e)
-                        {
-                            Toast.makeText(AccountEntryActivity.this, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
-                        }
-                        accountBox.setDesc(description.getText().toString());
-                        accountBox.setT_type(String.valueOf(t_type));
-                        accountBox.setDate(date);
-                        accountBox.setTime(time);
-                        AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
-                        accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()){
-                                    Map<String, Object> map= new HashMap<>();
-                                    map.put("array", FieldValue.arrayUnion(task.getResult().getId()));
-                                    byDateAccEntriesRef.document(USER).collection(date).document("account_entries").set(map, SetOptions.merge());
-                                }else {
-                                    Log.i("Status:","db entry is not successful");
-                                }
-                            }
-                        });
+    public String nextWord(String str)
+    {
 
-                        Toast.makeText(AccountEntryActivity.this,"Entry Saved",Toast.LENGTH_SHORT).show();
+        // if string is empty
+        if (str == "")
+            return "a";
 
-                    }
-                });
-                alertDialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                alertDialog2.show();
-                break;
-            case R.id.btn_add_expense_entry:
-                Intent intent = new Intent(AccountEntryActivity.this,ExpenseEntryActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-        }
+        // Find first character from
+        // right which is not z.
+        int i = str.length() - 1;
+        while (i >= 0 && str.charAt(i) == 'z')
+            i--;
+
+        // If all characters are 'z',
+        // append an 'a' at the end.
+        if (i == -1)
+            str = str + 'a';
+
+        else
+            str = str.substring(0, i) +
+                    (char)((int)(str.charAt(i)) + 1) +
+                    str.substring(i + 1);
+        return str;
     }
+
+
 }

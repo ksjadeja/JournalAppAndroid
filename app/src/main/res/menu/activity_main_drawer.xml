@@ -6,20 +6,28 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_album"
+            android:icon="@drawable/ic_timeline"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_lock"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/menu_calendar" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_error"
-            android:title="@string/menu_slideshow" />
-<!--        <item-->
-<!--            android:id="@+id/nav_tools"-->
-<!--            android:icon="@drawable/ic_menu_manage"-->
-<!--            android:title="@string/menu_tools" />-->
+            android:id="@+id/nav_charts"
+            android:icon="@drawable/ic_charts"
+            android:title="@string/menu_charts" />
+        <item
+            android:id="@+id/nav_calculate"
+            android:icon="@drawable/ic_calculate"
+            android:title="@string/menu_calculate" />
+        <item
+            android:id="@+id/nav_email"
+            android:icon="@drawable/ic_mail"
+            android:title="@string/menu_mail" />
+        <item
+            android:id="@+id/nav_contact_us"
+            android:icon="@drawable/ic_contact_us"
+            android:title="@string/menu_contact_us" />
     </group>
 
 <!--    <item android:title="Communicate">-->
