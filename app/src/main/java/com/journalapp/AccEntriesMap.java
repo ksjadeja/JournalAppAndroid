@@ -21,4 +21,13 @@ public class AccEntriesMap extends HashMap {
         }
         AccEntriesIndex.remove(key);
     }
+    public static void clearMap()
+    {
+        AccEntriesIndex.clear();
+    }
+    public static boolean isKeyPresent(String key)
+    {
+        return AccEntriesIndex.containsKey(key);
+    }
+
 }
