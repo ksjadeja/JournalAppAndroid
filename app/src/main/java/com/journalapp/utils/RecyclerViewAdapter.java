@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 import com.journalapp.EntriesViewPad;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
@@ -44,10 +46,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         if(entries.size()==0)
         {
-            Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "visible...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -95,6 +97,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public EntryHolder(final View itemView) {
             super(itemView);
             cv =  itemView.findViewById(R.id.card_view);
+            int radius = 20;
+            MaterialCardView dcv =  itemView.findViewById(R.id.data_card_view);
+            dcv.setShapeAppearanceModel(
+                   dcv.getShapeAppearanceModel()
+                            .toBuilder()
+                            .setTopLeftCorner(CornerFamily.ROUNDED,radius)
+                            .setTopRightCornerSize(0)
+                            .setBottomRightCorner(CornerFamily.ROUNDED,radius)
+                            .setBottomLeftCorner(CornerFamily.ROUNDED,radius)
+                            .build());
             dateField = itemView.findViewById(R.id.dateField);
             timeField = itemView.findViewById(R.id.timeField);
             dataField = itemView.findViewById(R.id.dataField);

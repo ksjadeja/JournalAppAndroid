@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -191,7 +192,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         EditText itemName;
         EditText amount;
         EditText description;
-        Button deleteExpenseButton;
+        ImageButton deleteExpenseButton;
 
         public EntryHolder(final View itemView) {
             super(itemView);
@@ -216,7 +217,7 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         }
 
         public MaterialCardView getCv() { return cv; }
-        public Button getDeleteExpenseButton() { return deleteExpenseButton; }
+        public ImageButton getDeleteExpenseButton() { return deleteExpenseButton; }
         public TextView getDateField() {
             return dateField;
         }

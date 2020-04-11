@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -16,4 +16,52 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="feedbox_data_cardview" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/feedbox_data_rounded_cut</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+    <style name="feedbox_header_cardview" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/feedbox_header_rounded_cut</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+    <style name="aacountbox_left_cardview_component" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/aacountbox_single_cardview_component</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+    <style name="expensebox_header_cardview_component" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/expensebox_header_rounded_cut</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="feedbox_data_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeBottomRight">20dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+    </style>
+
+    <style name="feedbox_header_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+    <style name="aacountbox_single_cardview_component" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+    <style name="expensebox_header_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+    </style>
+
 </resources>
