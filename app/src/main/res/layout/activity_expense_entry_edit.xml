@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Account Entry "
+                android:text="Expense Entry  "
                 android:textColor="#000"
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
@@ -112,7 +112,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/account_entry_date"
+                        android:id="@+id/expense_entry_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
@@ -121,7 +121,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
-                        android:id="@+id/account_entry_time"
+                        android:id="@+id/expense_entry_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -155,7 +155,7 @@
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Name:" />
+                        android:text="Label: " />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -168,7 +168,7 @@
                     android:layout_marginBottom="5dp">
 
                     <EditText
-                        android:id="@+id/account_entry_name"
+                        android:id="@+id/expense_entry_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter name of person"
@@ -215,74 +215,11 @@
                     android:layout_marginBottom="5dp">
 
                     <EditText
-                        android:id="@+id/account_entry_amount"
+                        android:id="@+id/expense_entry_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter amount"
                         android:imeOptions="actionNext" />
-
-                </com.google.android.material.card.MaterialCardView>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/account_input_data_label_cards"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:paddingStart="15dp"
-                        android:paddingLeft="15dp"
-                        android:paddingEnd="15dp"
-                        android:paddingRight="15dp"
-                        android:text="Type:" />
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/account_input_data_input_cards"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
-
-                    <RadioGroup
-                        android:id="@+id/radio_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/radio_category_give"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:onClick="onRadioButtonClicked"
-                            android:paddingRight="10dp"
-                            android:text="Give" />
-
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/radio_category_take"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:onClick="onRadioButtonClicked"
-                            android:paddingRight="10dp"
-                            android:text="Take" />
-                    </RadioGroup>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -328,7 +265,7 @@
                         android:layout_marginBottom="10dp">
 
                         <EditText
-                            android:id="@+id/account_entry_desc"
+                            android:id="@+id/expense_entry_desc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Enter description"
@@ -354,25 +291,25 @@
                 android:layout_marginBottom="10dp">
 
 
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_gravity="right"
-                        app:cornerRadius="20dp"
-                        app:elevation="10dp"
-                        android:id="@+id/discard_button_account_entry_dialog"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="Discard" />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_gravity="right"
+                    app:cornerRadius="20dp"
+                    app:elevation="10dp"
+                    android:id="@+id/discard_button_expense_entry_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Discard" />
 
 
-                    <com.google.android.material.button.MaterialButton
-                        android:layout_gravity="right"
-                        app:cornerRadius="20dp"
-                        app:elevation="10dp"
-                        android:id="@+id/save_button_account_entry_dialog"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Save" />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_gravity="right"
+                    app:cornerRadius="20dp"
+                    app:elevation="10dp"
+                    android:id="@+id/save_button_expense_entry_dialog"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Save" />
 
 
 

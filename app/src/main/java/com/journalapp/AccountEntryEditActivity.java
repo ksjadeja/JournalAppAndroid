@@ -114,7 +114,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         discard_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
             }
         });
 
@@ -169,7 +169,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        if (!TextUtils.isEmpty(nameText.getText()) || !TextUtils.isEmpty(amountText.getText()) || !TextUtils.isEmpty(descText.getText())){
+        if(isChanged()){
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
@@ -186,6 +186,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                 }
             });
             saveAlert.show();
+        }else {
+            finish();
         }
     }
 
@@ -253,9 +255,37 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     }
 
     private void deleteEntry(){
-        accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
-        AccEntriesMap.delete(accountBox.getId(), AccEntriesMap.AccEntriesIndex.get(accountBox.getId()));
-        finish();
+        final AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
+        saveAlert.setTitle("Do you really want to Delete?");
+        saveAlert.setCancelable(false);
+        saveAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
+                AccEntriesMap.delete(accountBox.getId(), AccEntriesMap.AccEntriesIndex.get(accountBox.getId()));
+                finish();
+            }
+        });
+        saveAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        saveAlert.show();
+
+    }
+
+    private boolean isChanged(){
+        if(update){
+            if(nameText.getText().toString().equals(accountBox.getName()) &&
+                    amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) &&
+                    t_type==Integer.parseInt(accountBox.getT_type()) &&
+                    descText.getText().toString().equals(accountBox.getDesc())){
+                return false;
+            }
+        }
+        return true;
     }
 
 }

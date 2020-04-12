@@ -1,10 +1,12 @@
 package com.journalapp.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.journalapp.EntriesViewPad;
+import com.journalapp.ExpenseEntryEditActivity;
 import com.journalapp.R;
 import com.journalapp.models.ExpenseBox;
+import com.journalapp.models.Feedbox;
 
 import java.util.ArrayList;
 
@@ -52,6 +57,19 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         holder.itemName.setText(entries.get(position).getItemName());
         holder.amount.setText(String.valueOf(entries.get(position).getAmount()));
         holder.description.setText(entries.get(position).getDesc());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, ExpenseEntryEditActivity.class);
+                ExpenseBox expensebox = new ExpenseBox();
+                expensebox.setId(entries.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("expensebox",entries.get(holder.getAdapterPosition()));
+                context.startActivity(intent);
+            }
+        });
+
     }
 
 
