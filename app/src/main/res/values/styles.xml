@@ -21,17 +21,45 @@
         <item name="shapeAppearance">@style/feedbox_data_rounded_cut</item>
         <item name="cardElevation">0dp</item>
     </style>
+
     <style name="feedbox_header_cardview" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/feedbox_header_rounded_cut</item>
         <item name="cardElevation">0dp</item>
     </style>
+
     <style name="aacountbox_left_cardview_component" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/aacountbox_single_cardview_component</item>
         <item name="cardElevation">3dp</item>
     </style>
+
     <style name="expensebox_header_cardview_component" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/expensebox_header_rounded_cut</item>
         <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="account_input_data_label_cards" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_input_data_label_rounded_cut</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="account_input_data_input_cards" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_input_data_input_rounded_cut</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="account_input_desc_data_card" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_input_desc_data_rounded_cut</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <style name="account_delete_card" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_delete_rounded_cut</item>
+        <item name="cardElevation">10dp</item>
+    </style>
+
+    <style name="account_main_card_left" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_main_card_left_cut</item>
+        <item name="cardElevation">10dp</item>
     </style>
 
     <style name="feedbox_data_rounded_cut" parent="">
@@ -49,6 +77,7 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">15dp</item>
     </style>
+
     <style name="aacountbox_single_cardview_component" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">15dp</item>
@@ -56,6 +85,7 @@
         <item name="cornerSizeBottomRight">15dp</item>
         <item name="cornerSizeBottomLeft">15dp</item>
     </style>
+
     <style name="expensebox_header_rounded_cut" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">20dp</item>
@@ -64,4 +94,43 @@
         <item name="cornerSizeBottomLeft">20dp</item>
     </style>
 
+    <style name="account_input_data_label_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+
+    <style name="account_input_data_input_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="account_input_desc_data_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+
+    <style name="account_delete_rounded_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+    </style>
+
+    <style name="account_main_card_left_cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">30dp</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeBottomRight">30dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
 </resources>

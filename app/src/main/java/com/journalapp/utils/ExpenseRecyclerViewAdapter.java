@@ -6,7 +6,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecyclerViewAdapter.EntryHolder>{
+public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecyclerViewAdapter.EntryHolder> {
 
     ArrayList<ExpenseBoxDao> entries;
     Context context;
@@ -34,13 +33,13 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_expense_box, parent, false);
         EntryHolder pvh = new EntryHolder(v);
-        Toast.makeText(context, "view OnCreateViewHolder "+(getItemCount()-1), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "view OnCreateViewHolder " + (getItemCount() - 1), Toast.LENGTH_SHORT).show();
         return pvh;
     }
 
-    public ExpenseRecyclerViewAdapter(final Context context, final ArrayList<ExpenseBoxDao> entries){
+    public ExpenseRecyclerViewAdapter(final Context context, final ArrayList<ExpenseBoxDao> entries) {
         this.entries = entries;
-        this.context=context;
+        this.context = context;
 //        if(entries.size()==0)
 //        {
 //            Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
@@ -61,55 +60,66 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 //        isNew = holder.getDateField().getText().equals(dt)?true:false;
 //        if (position > getItemCount() - 1 || position==0) {
 //            holder.setIsRecyclable(false);
-            final ExpenseBoxDao expenseBoxDao = entries.get(position);
-            Toast.makeText(context, "onBindBefore "+position+" " + holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
-            holder.getDateField().setText(expenseBoxDao.getDate());
-            Toast.makeText(context, "onBindAfter" +position+" " + holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
-            holder.getTimeField().setText(expenseBoxDao.getTime());
-            Toast.makeText(context, "onBindBefore" +position+" name " + holder.getItemName().getText().toString(), Toast.LENGTH_SHORT).show();
+        final ExpenseBoxDao expenseBoxDao = entries.get(position);
+        Toast.makeText(context, "onBindBefore " + position + " " + holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
+        holder.getDateField().setText(expenseBoxDao.getDate());
+        Toast.makeText(context, "onBindAfter" + position + " " + holder.getDateField().getText(), Toast.LENGTH_SHORT).show();
+        holder.getTimeField().setText(expenseBoxDao.getTime());
+        Toast.makeText(context, "onBindBefore" + position + " name " + holder.getItemName().getText().toString(), Toast.LENGTH_SHORT).show();
 
-            holder.itemName.addTextChangedListener(new TextWatcher() {
+        holder.itemName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 expenseBoxDao.setItemName(holder.itemName.getText().toString());
                 entries.get(holder.getAdapterPosition()).setItemName(holder.itemName.getText().toString());
             }
+
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
         holder.description.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 expenseBoxDao.setDesc(holder.description.getText().toString());
                 entries.get(holder.getAdapterPosition()).setDesc(holder.description.getText().toString());
             }
+
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         holder.amount.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!holder.amount.getText().toString().equals("")){
+                if (!holder.amount.getText().toString().equals("")) {
                     expenseBoxDao.setAmount(Integer.parseInt(holder.amount.getText().toString()));
                     entries.get(holder.getAdapterPosition()).setAmount(Integer.parseInt(holder.amount.getText().toString()));
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
             }
         });
-            holder.getItemName().setText(expenseBoxDao.getItemName());
-            Toast.makeText(context, "onBindAfter" +position+" name " + expenseBoxDao.getItemName(), Toast.LENGTH_SHORT).show();
-            holder.getAmount().setText(String.valueOf(expenseBoxDao.getAmount()));
-            holder.getDescription().setText(expenseBoxDao.getDesc());
+        holder.getItemName().setText(expenseBoxDao.getItemName());
+        Toast.makeText(context, "onBindAfter" + position + " name " + expenseBoxDao.getItemName(), Toast.LENGTH_SHORT).show();
+        holder.getAmount().setText(String.valueOf(expenseBoxDao.getAmount()));
+        holder.getDescription().setText(expenseBoxDao.getDesc());
 //        }
 //        if(isNew) {
 //            holder.getItemName().setText("");
@@ -121,16 +131,16 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 //            holder.getDescription().setText(entries.get(position).getDesc());
 //        }
 
-            holder.deleteExpenseButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        holder.deleteExpenseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 //                    holder.setIsRecyclable(true);
-                    entries.remove(holder.getAdapterPosition());
-                    notifyItemRemoved(holder.getAdapterPosition());
+                entries.remove(holder.getAdapterPosition());
+                notifyItemRemoved(holder.getAdapterPosition());
 //                    notifyItemRangeRemoved(position, 1);
-                    Toast.makeText(context, "Item removed " + (holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                }
-            });
+                Toast.makeText(context, "Item removed " + (holder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
+            }
+        });
 //        holder.itemName.setText(entries.get(position).getItemName());
 //        holder.amount.setText(entries.get(position).getAmount());
 //        holder.description.setText(entries.get(position).getDesc());
@@ -150,11 +160,11 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
     }
 
 
-
     @Override
     public int getItemCount() {
         return entries != null ? entries.size() : 0;
     }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
@@ -162,11 +172,11 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         notifyDataSetChanged();
     }
 
-    public void addNewData(){
-        Toast.makeText(context, "add start "+getItemCount(), Toast.LENGTH_SHORT).show();
+    public void addNewData() {
+        Toast.makeText(context, "add start " + getItemCount(), Toast.LENGTH_SHORT).show();
         ExpenseBoxDao expenseboxDao = new ExpenseBoxDao();
         Calendar calendar = Calendar.getInstance();
-        DateFormat dateFormat,timeFormat;
+        DateFormat dateFormat, timeFormat;
         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
 //        Toast.makeText(context, " "+expenseboxDao, Toast.LENGTH_SHORT).show();
@@ -177,14 +187,15 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         expenseboxDao.setAmount(0);
         expenseboxDao.setDesc("");
         entries.add(expenseboxDao);
-        notifyItemInserted(getItemCount()-1);
-        Toast.makeText(context, "Item added "+(getItemCount()-1), Toast.LENGTH_SHORT).show();
+        notifyItemInserted(getItemCount() - 1);
+        Toast.makeText(context, "Item added " + (getItemCount() - 1), Toast.LENGTH_SHORT).show();
 
 //        notifyDataSetChanged();
 
 //        notifyItemInserted(entries.size()-1);
 //        notifyItemRangeChanged(entries.size()-1,entries.size());
     }
+
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
         TextView dateField;
@@ -196,12 +207,12 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 
         public EntryHolder(final View itemView) {
             super(itemView);
-            cv =  itemView.findViewById(R.id.expense_card_view);
+            cv = itemView.findViewById(R.id.expense_card_view);
             dateField = itemView.findViewById(R.id.expense_date_field);
             timeField = itemView.findViewById(R.id.expense_time_field);
             itemName = itemView.findViewById(R.id.edt_item_name);
             amount = itemView.findViewById(R.id.expense_amount);
-            description= itemView.findViewById(R.id.expense_desc);
+            description = itemView.findViewById(R.id.expense_desc);
             deleteExpenseButton = itemView.findViewById(R.id.btn_delete_expense_entry);
 //            deleteExpenseButton.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -216,11 +227,18 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 
         }
 
-        public MaterialCardView getCv() { return cv; }
-        public ImageButton getDeleteExpenseButton() { return deleteExpenseButton; }
+        public MaterialCardView getCv() {
+            return cv;
+        }
+
+        public ImageButton getDeleteExpenseButton() {
+            return deleteExpenseButton;
+        }
+
         public TextView getDateField() {
             return dateField;
         }
+
         public TextView getTimeField() {
             return timeField;
         }

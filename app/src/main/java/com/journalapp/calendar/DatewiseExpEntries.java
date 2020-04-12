@@ -7,31 +7,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.DrawerLayoutActivity2;
+import com.journalapp.DrawerLayoutActivity;
 import com.journalapp.R;
-import com.journalapp.models.AccountBox;
-import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
-import com.journalapp.utils.AccountRecyclerViewAdapter;
 import com.journalapp.utils.ExpenseRecyclerViewAdapterView;
 
 import java.text.DateFormat;
@@ -40,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -65,7 +56,7 @@ public class DatewiseExpEntries extends Fragment implements CalendarFragment.EDa
         dateFormat= new SimpleDateFormat("dd-MM-yyyy");
         selectedDate= dateFormat.format(Calendar.getInstance().getTime());
 
-        DrawerLayoutActivity2.calendarFragment.edatePickerSelectionListener=this;
+        DrawerLayoutActivity.calendarFragment.edatePickerSelectionListener=this;
         final View expenseView =  inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
         recyclerView=expenseView.findViewById(R.id.exp_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

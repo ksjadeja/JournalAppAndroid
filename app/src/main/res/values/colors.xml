@@ -7,5 +7,6 @@
     <color name="bgColor">#1FF1DD</color>
     <color name="black">#000000</color>
     <color name="lightFab">#AE80F3</color>
+    <color name="transparent">#00000000</color>
 
 </resources>

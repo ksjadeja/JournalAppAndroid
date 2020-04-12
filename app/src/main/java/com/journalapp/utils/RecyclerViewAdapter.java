@@ -67,10 +67,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Feedbox feedbox = new Feedbox();
                 feedbox.setId(entries.get(holder.getAdapterPosition()).getId());
                 intent.putExtra("feedbox",entries.get(holder.getAdapterPosition()));
-//                intent.putExtra("dateField",holder.getDateField().getText());
-//                intent.putExtra("time",holder.getTimeField().getText());
-//                intent.putExtra("data",holder.getDataField().getText());
-//                intent.putExtra("id", entries.get(holder.getAdapterPosition()).getId());
                 context.startActivity(intent);
             }
         });

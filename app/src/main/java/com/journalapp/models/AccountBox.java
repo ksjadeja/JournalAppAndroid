@@ -1,9 +1,10 @@
 package com.journalapp.models;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AccountBox{
+public class AccountBox implements Serializable {
 
     private Date timestamp;
     private String name;

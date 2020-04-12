@@ -19,7 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.journalapp.AccountEntryActivity;
+import com.journalapp.AccountEntryEditActivity;
 import com.journalapp.EntriesEditPad;
 import com.journalapp.ExpenseEntryActivity;
 import com.journalapp.R;
@@ -95,7 +95,7 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
-                Intent accountEntryIntent = new Intent(getContext(), AccountEntryActivity.class);
+                Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
                 startActivity(accountEntryIntent);
                 closeSubMenusFab();
             }

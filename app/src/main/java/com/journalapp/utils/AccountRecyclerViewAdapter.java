@@ -2,6 +2,7 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.journalapp.AccountEntryEditActivity;
+import com.journalapp.EntriesViewPad;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
+import com.journalapp.models.Feedbox;
 
 import java.util.ArrayList;
 
@@ -27,9 +31,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     ArrayList<AccountBox> entries;
     Context context;
-    View myView;
     String USER = "Kiran1901";
-    CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
 
     @NonNull
     @Override
@@ -69,92 +71,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AccountBox accountBox=entries.get(position);
-                final TextView accountEntryDate;
-                final TextView accountEntryTime;
-                final EditText personName;
-                final EditText amount;
-                final EditText desc;
-                final RadioButton giveRadio;
-                final RadioButton takeRadio;
-                final String accountBoxKey = entries.get(holder.getAdapterPosition()).getId();
-
                 Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                myView = layoutInflater.inflate(R.layout.layout_account_entries, null, false);
-                accountEntryDate = myView.findViewById(R.id.account_entry_date);
-                accountEntryTime = myView.findViewById(R.id.account_entry_time);
-                personName = myView.findViewById(R.id.edt_person_name);
-                amount = myView.findViewById(R.id.edt_amount);
-                desc = myView.findViewById(R.id.edt_desc);
-                giveRadio = myView.findViewById(R.id.radio_category_give);
-                takeRadio = myView.findViewById(R.id.radio_category_take);
-//                giveRadio.setClickable(false);
-//                takeRadio.setClickable(false);
-                giveRadio.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        giveRadio.setChecked(true);
-                    }
-                });
-                takeRadio.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        takeRadio.setChecked(true);
-                    }
-                });
-                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(context);
-//                if(myView.getParent() != null) {
-//                    ((ViewGroup)myView.getParent()).removeView(myView); // <- fix
-//                }
-                alertDialog2.setView(myView);
-                accountEntryDate.setText(holder.getDateField().getText());
-                accountEntryTime.setText(holder.getTimeField().getText());
-                personName.setText(holder.getPersonName().getText());
-                amount.setText(holder.getAmount().getText());
-                desc.setText(holder.getDescription().getText());
-                if(holder.type.getText().equals("GIVE")) {
-                    giveRadio.setChecked(true);
-                }else if(holder.type.getText().equals("TAKE")){
-                    takeRadio.setChecked(true);
-                }
-                alertDialog2.setPositiveButton("Modify Account Entry", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-//                finish();
-
-//                        final AccountBoxDao accEntryBoxDao = new AccountBoxDao();
-                        accountBox.setName(personName.getText().toString());
-                        try {
-                            accountBox.setAmount(Integer.parseInt(amount.getText().toString()));
-                        }catch (Exception e)
-                        {
-                            Toast.makeText(context, "Enter amount in figures only", Toast.LENGTH_SHORT).show();
-                        }
-                        accountBox.setDesc(desc.getText().toString());
-                        int t_type = giveRadio.isChecked()?0:1;
-                        accountBox.setT_type(String.valueOf(t_type));
-//                        accountBox.setDate(accountEntryDate.getText().toString());
-//                        accountBox.setTime(accountEntryTime.getText().toString());
-//
-//                        accountBox.setTimestamp(new SimpleDateFormat("dd-MM-yyyy"));
-                        AccountBoxDao accEntryBoxDao = new AccountBoxDao(accountBox);
-                        accountEntriesRef.document(USER).collection("entries").document(accountBoxKey).set(accEntryBoxDao);
-                        entries.set(holder.getAdapterPosition(),new AccountBox(accEntryBoxDao,accountBoxKey));
-                        notifyDataSetChanged();
-//
-                        Toast.makeText(context,"Entry Saved",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                alertDialog2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-
-                alertDialog2.show();
+                Intent intent = new Intent(context, AccountEntryEditActivity.class);
+                AccountBox accountBox = new AccountBox();
+                accountBox.setId(entries.get(holder.getAdapterPosition()).getId());
+                intent.putExtra("accountbox",entries.get(holder.getAdapterPosition()));
+                context.startActivity(intent);
             }
         });
     }

@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.DrawerLayoutActivity2;
+import com.journalapp.DrawerLayoutActivity;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 import com.journalapp.models.FeedboxDao;
@@ -123,7 +123,7 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        DrawerLayoutActivity2.calendarFragment.jdatePickerSelectionListener = this;
+        DrawerLayoutActivity.calendarFragment.jdatePickerSelectionListener = this;
         final View entriesView =  inflater.inflate(R.layout.fragment_home_entries, container, false);
         recyclerView=entriesView.findViewById(R.id.recycler_view);
         feedboxesList = new ArrayList<>();

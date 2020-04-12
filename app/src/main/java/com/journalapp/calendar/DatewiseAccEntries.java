@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.DrawerLayoutActivity2;
+import com.journalapp.DrawerLayoutActivity;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
@@ -55,7 +55,7 @@ public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADa
                              Bundle savedInstanceState) {
         context=getContext();
         final View accountView =  inflater.inflate(R.layout.fragment_home_acc_entries, container, false);
-        DrawerLayoutActivity2.calendarFragment.adatePickerSelectionListener =this;
+        DrawerLayoutActivity.calendarFragment.adatePickerSelectionListener =this;
         recyclerView=accountView.findViewById(R.id.acc_recycler_view);
         accountBoxList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -1,11 +1,8 @@
 package com.journalapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,7 +19,7 @@ import com.journalapp.calendar.CalendarFragment;
 import com.journalapp.charts.ChartsFragment;
 import com.journalapp.home.HomeFragment;
 
-public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class DrawerLayoutActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
 
@@ -34,7 +31,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer_layout2);
+        setContentView(R.layout.activity_drawer_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,8 +54,8 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 //        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-//                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this, EntriesEditPad.class);
+//                Toast.makeText(DrawerLayoutActivity.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
+//                Intent newEntryIntent = new Intent(DrawerLayoutActivity.this, EntriesEditPad.class);
 //                startActivity(newEntryIntent);
 //                closeSubMenusFab();
 //
@@ -68,8 +65,8 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 //        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
-//                Intent accountEntryIntent = new Intent(DrawerLayoutActivity2.this,AccountEntryActivity.class);
+//                Toast.makeText(DrawerLayoutActivity.this,"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
+//                Intent accountEntryIntent = new Intent(DrawerLayoutActivity.this,AccountEntryEditActivity.class);
 //                startActivity(accountEntryIntent);
 //                closeSubMenusFab();
 //            }
@@ -78,8 +75,8 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 //        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
-//                Intent expenseEntryIntent = new Intent(DrawerLayoutActivity2.this,ExpenseEntryActivity.class);
+//                Toast.makeText(DrawerLayoutActivity.this,"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
+//                Intent expenseEntryIntent = new Intent(DrawerLayoutActivity.this,ExpenseEntryActivity.class);
 //                startActivity(expenseEntryIntent);
 //                closeSubMenusFab();
 //            }
