@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.journalapp.calendar.CalendarFragment;
 import com.journalapp.charts.ChartsFragment;
 import com.journalapp.home.HomeFragment;
+import com.journalapp.mail.MailFragment;
 
 public class DrawerLayoutActivity2 extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     NavigationView navigationView;
@@ -38,53 +39,6 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        add_fab = findViewById(R.id.add_fab);
-//        layoutEntryFab = findViewById(R.id.layoutEntry);
-//        layoutAccEntryFab = findViewById(R.id.layoutAccEntry);
-//        layoutExpEntryFab = findViewById(R.id.layoutExpEntry);
-//        add_fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(fabExpanded){
-//                    closeSubMenusFab();
-//                }else {
-//                    openSubMenusFab();
-//                }
-//            }
-//        });
-//
-//        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Entry",Toast.LENGTH_SHORT).show();
-//                Intent newEntryIntent = new Intent(DrawerLayoutActivity2.this, EntriesEditPad.class);
-//                startActivity(newEntryIntent);
-//                closeSubMenusFab();
-//
-//            }
-//        });
-//
-//        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
-//                Intent accountEntryIntent = new Intent(DrawerLayoutActivity2.this,AccountEntryActivity.class);
-//                startActivity(accountEntryIntent);
-//                closeSubMenusFab();
-//            }
-//        });
-//
-//        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(DrawerLayoutActivity2.this,"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
-//                Intent expenseEntryIntent = new Intent(DrawerLayoutActivity2.this,ExpenseEntryActivity.class);
-//                startActivity(expenseEntryIntent);
-//                closeSubMenusFab();
-//            }
-//        });
-
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -99,26 +53,7 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         fragmentTransaction.add(R.id.nav_host_fragment,homeFragment);
         fragmentTransaction.commit();
 
-
     }
-//    //closes FAB submenus
-//    private void closeSubMenusFab(){
-//        layoutEntryFab.setVisibility(View.INVISIBLE);
-//        layoutAccEntryFab.setVisibility(View.INVISIBLE);
-//        layoutExpEntryFab.setVisibility(View.INVISIBLE);
-//        add_fab.setImageResource(R.drawable.ic_plus_btn);
-//        fabExpanded = false;
-//    }
-//
-//    //Opens FAB submenus
-//    private void openSubMenusFab(){
-//        layoutEntryFab.setVisibility(View.VISIBLE);
-//        layoutAccEntryFab.setVisibility(View.VISIBLE);
-//        layoutExpEntryFab.setVisibility(View.VISIBLE);
-//        //Change settings icon to 'X' icon
-//        add_fab.setImageResource(R.drawable.ic_close_btn);
-//        fabExpanded = true;
-//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -137,6 +72,11 @@ public class DrawerLayoutActivity2 extends AppCompatActivity  implements Navigat
         {
             fragment = new ChartsFragment();
         }
+        else if(menuItem.getItemId() == R.id.nav_email)
+        {
+            fragment = new MailFragment();
+        }
+
         if (fragment != null){
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
