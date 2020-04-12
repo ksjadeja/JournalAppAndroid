@@ -167,12 +167,14 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp">
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/account_entry_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Enter name of person"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+                        android:completionThreshold="1"
+                        />
 
                 </com.google.android.material.card.MaterialCardView>
 
