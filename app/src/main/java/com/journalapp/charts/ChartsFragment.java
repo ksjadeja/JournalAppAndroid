@@ -382,6 +382,8 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             datewiseAccChart.getXAxis().setCenterAxisLabels(true);
             datewiseAccChart.getXAxis().setAxisMinimum(0);
             datewiseAccChart.getBarData().setBarWidth(.5f);
+            datewiseAccChart.setDoubleTapToZoomEnabled(false);
+            datewiseAccChart.setPinchZoom(false);
             datewiseAccChart.animateXY(2000, 2000);
             datewiseAccChart.setTouchEnabled(true);
             datewiseAccChart.setScaleEnabled(true);
@@ -427,7 +429,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 dataset.add(bar);
             }
             BarDataSet barDataSet = new BarDataSet(dataset, "Expense Entries");
-            barDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+            barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
             BarData data = new BarData(barDataSet);
             datewiseExpChart.setData(data);
             Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
@@ -441,7 +443,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 }
             });
 
-            datewiseExpChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+//            datewiseExpChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
 
 //            datewiseAccChart.getXAxis().setGranularity(1f);
             datewiseExpChart.getXAxis().setDrawLabels(true);
@@ -449,11 +451,12 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             datewiseExpChart.getBarData().setBarWidth(.5f);
             datewiseExpChart.animateXY(2000, 2000);
             datewiseExpChart.setTouchEnabled(true);
+            datewiseExpChart.setDoubleTapToZoomEnabled(false);
+            datewiseExpChart.setPinchZoom(false);
             datewiseExpChart.setScaleEnabled(true);
             datewiseExpChart.setFitBars(true);
             datewiseExpChart.fitScreen();
             datewiseExpChart.invalidate();
-
         }
         private ArrayList<String> getXAxisValues () {
             ArrayList<String> xAxis = new ArrayList<>();
