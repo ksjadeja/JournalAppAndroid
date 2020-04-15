@@ -236,7 +236,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        app:srcCompat="@drawable/ic_save" />
+        app:srcCompat="@drawable/ic_save"
+        style="@style/fab_material"/>
 
 
 </RelativeLayout>

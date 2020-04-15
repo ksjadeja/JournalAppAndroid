@@ -144,8 +144,8 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
             expenseBox.setDesc(descText.getText().toString());
             expenseBox.setDate(dateText.getText().toString());
             expenseBox.setTime(timeText.getText().toString());
-            ExpenseBoxDao accEntrybox = new ExpenseBoxDao(expenseBox);
-            expenseEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            ExpenseBoxDao expEntrybox = new ExpenseBoxDao(expenseBox);
+            expenseEntriesRef.document(USER).collection("entries").add(expEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     if (task.isSuccessful()){
@@ -167,14 +167,14 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
             expenseBox.setDesc(descText.getText().toString());
             expenseBox.setDate(dateText.getText().toString());
             expenseBox.setTime(timeText.getText().toString());
-            ExpenseBoxDao accEntryDao = new ExpenseBoxDao(expenseBox);
-            expenseEntriesRef.document(USER).collection("entries").document(expenseBox.getId()).set(accEntryDao).addOnCompleteListener(new OnCompleteListener<Void>() {
+            ExpenseBoxDao expEntryDao = new ExpenseBoxDao(expenseBox);
+            expenseEntriesRef.document(USER).collection("entries").document(expenseBox.getId()).set(expEntryDao).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
                         Toast.makeText(ExpenseEntryEditActivity.this,"Entry Updated..",Toast.LENGTH_SHORT).show();
                     }else {
-                        Log.i("Status:","db acc_entry update is not successful");
+                        Log.i("Status:","db exp_entry update is not successful");
                     }
                 }
             });
@@ -203,7 +203,7 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 expenseEntriesRef.document(USER).collection("entries").document(expenseBox.getId()).delete();
-                AccEntriesMap.delete(expenseBox.getId(), AccEntriesMap.AccEntriesIndex.get(expenseBox.getId()));
+                ExpEntriesMap.delete(expenseBox.getId(), ExpEntriesMap.ExpEntriesIndex.get(expenseBox.getId()));
                 finish();
             }
         });

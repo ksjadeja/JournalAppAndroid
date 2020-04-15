@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.journalapp.AccountEntryEditActivity;
 import com.journalapp.EntriesEditPad;
-import com.journalapp.ExpenseEntryActivity;
+import com.journalapp.ExpenseEntryNewActivity;
 import com.journalapp.R;
 import com.journalapp.utils.MyPagerAdapter;
 
@@ -26,8 +25,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     private TabLayout tabLayout;
     private ViewPager viewPager;
     MyPagerAdapter myPagerAdapter;
-    private LinearLayout layoutAccEntryFab, layoutEntryFab , layoutExpEntryFab;
-    private FloatingActionButton add_fab;
+    private FloatingActionButton add_fab,layoutAccEntryFab, layoutEntryFab , layoutExpEntryFab;
     private Boolean fabExpanded = false;
 
 
@@ -40,15 +38,15 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
         viewPager = root.findViewById(R.id.viewPager);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Journal Entries"));
-        tabLayout.addTab(tabLayout.newTab().setText("Account Entries"));
-        tabLayout.addTab(tabLayout.newTab().setText("Expense Entries"));
+        tabLayout.addTab(tabLayout.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         add_fab = root.findViewById(R.id.add_fab);
-        layoutEntryFab = root.findViewById(R.id.layoutEntry);
-        layoutAccEntryFab =root.findViewById(R.id.layoutAccEntry);
-        layoutExpEntryFab = root.findViewById(R.id.layoutExpEntry);
+        layoutEntryFab = root.findViewById(R.id.entries_fab);
+        layoutAccEntryFab =root.findViewById(R.id.acc_entry_fab);
+        layoutExpEntryFab = root.findViewById(R.id.exp_entry_fab);
         add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +61,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         layoutEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Entry",Toast.LENGTH_SHORT).show();
                 Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
                 startActivity(newEntryIntent);
                 closeSubMenusFab();
@@ -74,7 +71,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
                 Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
                 startActivity(accountEntryIntent);
                 closeSubMenusFab();
@@ -84,8 +80,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
-                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryActivity.class);
+                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
                 startActivity(expenseEntryIntent);
                 closeSubMenusFab();
             }

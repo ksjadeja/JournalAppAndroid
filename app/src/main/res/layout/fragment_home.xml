@@ -9,10 +9,10 @@
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:id="@+id/timelineTabs"
-        app:tabSelectedTextColor="#fff"
-        app:tabIndicatorColor="#fff">
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorPrimary">
 
     </com.google.android.material.tabs.TabLayout>
 
@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/timelineTabs"
-        android:id="@+id/viewPager" />
+        android:id="@+id/viewPager"
+        />
 
 
     <include layout="@layout/layout_fab_submenu"

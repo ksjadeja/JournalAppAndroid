@@ -210,8 +210,7 @@
                     android:scrollbars="vertical"
                     android:text="Hello world"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textFontWeight="1"
-                    android:textStyle="bold|italic"
+                    android:textStyle="italic"
                     app:fontFamily="sans-serif-black" />
                 <!--            android:background="@drawable/timeline_data_shape_rounded_square"-->
 
@@ -231,7 +230,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        app:srcCompat="@drawable/ic_edit" />
+        app:srcCompat="@drawable/ic_edit"
+        style="@style/fab_material"/>
 
 
 </RelativeLayout>

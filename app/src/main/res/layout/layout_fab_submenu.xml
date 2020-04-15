@@ -9,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/transparent">
 
     <LinearLayout
         android:id="@+id/layoutEntry"
@@ -20,37 +21,38 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="200dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/transparent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/cardview_light_background"
-            app:cardCornerRadius="@dimen/cardCornerRadius"
-            app:cardElevation="@dimen/cardElevation"
-            app:cardUseCompatPadding="true">
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardBackgroundColor="@color/transparent"-->
+<!--            app:cardCornerRadius="@dimen/cardCornerRadius"-->
+<!--            app:cardElevation="@dimen/cardElevation"-->
+<!--            app:cardUseCompatPadding="true">-->
 
-            <TextView
-                android:id="@+id/entries_fab_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/cardview_horizontal_padding"
-                android:paddingTop="@dimen/cardview_vertical_padding"
-                android:paddingRight="@dimen/cardview_horizontal_padding"
-                android:paddingBottom="@dimen/cardview_vertical_padding"
-                android:text="@string/entry"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+<!--            <TextView-->
+<!--                android:id="@+id/entries_fab_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingLeft="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingTop="@dimen/cardview_vertical_padding"-->
+<!--                android:paddingRight="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingBottom="@dimen/cardview_vertical_padding"-->
+<!--                android:text="@string/entry"-->
+<!--                android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                android:textStyle="bold" />-->
+<!--        </androidx.cardview.widget.CardView>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/entries_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/lightFab"
             app:fabSize="auto"
             app:maxImageSize="28dp"
-            app:srcCompat="@drawable/ic_entries_white" />
+            app:srcCompat="@drawable/ic_entries_white"
+            style="@style/fab_material"/>
 
     </LinearLayout>
 
@@ -63,37 +65,38 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="135dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/transparent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/cardview_light_background"
-            app:cardCornerRadius="@dimen/cardCornerRadius"
-            app:cardElevation="@dimen/cardElevation"
-            app:cardUseCompatPadding="true">
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardBackgroundColor="@color/cardview_light_background"-->
+<!--            app:cardCornerRadius="@dimen/cardCornerRadius"-->
+<!--            app:cardElevation="@dimen/cardElevation"-->
+<!--            app:cardUseCompatPadding="true">-->
 
-            <TextView
-                android:id="@+id/acc_entry_fab_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/cardview_horizontal_padding"
-                android:paddingTop="@dimen/cardview_vertical_padding"
-                android:paddingRight="@dimen/cardview_horizontal_padding"
-                android:paddingBottom="@dimen/cardview_vertical_padding"
-                android:text="@string/account_entry"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+<!--            <TextView-->
+<!--                android:id="@+id/acc_entry_fab_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingLeft="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingTop="@dimen/cardview_vertical_padding"-->
+<!--                android:paddingRight="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingBottom="@dimen/cardview_vertical_padding"-->
+<!--                android:text="@string/account_entry"-->
+<!--                android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                android:textStyle="bold" />-->
+<!--        </androidx.cardview.widget.CardView>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/acc_entry_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/lightFab"
             app:fabSize="auto"
             app:maxImageSize="28dp"
-            app:srcCompat="@drawable/ic_account_entries_white" />
+            app:srcCompat="@drawable/ic_account_entries_white"
+            style="@style/fab_material"/>
 
     </LinearLayout>
 
@@ -106,37 +109,38 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="65dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/transparent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/cardview_light_background"
-            app:cardCornerRadius="@dimen/cardCornerRadius"
-            app:cardElevation="@dimen/cardElevation"
-            app:cardUseCompatPadding="true">
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardBackgroundColor="@color/cardview_light_background"-->
+<!--            app:cardCornerRadius="@dimen/cardCornerRadius"-->
+<!--            app:cardElevation="@dimen/cardElevation"-->
+<!--            app:cardUseCompatPadding="true">-->
 
-            <TextView
-                android:id="@+id/exp_entry_fab_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/cardview_horizontal_padding"
-                android:paddingTop="@dimen/cardview_vertical_padding"
-                android:paddingRight="@dimen/cardview_horizontal_padding"
-                android:paddingBottom="@dimen/cardview_vertical_padding"
-                android:text="@string/expense_entry"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+<!--            <TextView-->
+<!--                android:id="@+id/exp_entry_fab_text"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingLeft="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingTop="@dimen/cardview_vertical_padding"-->
+<!--                android:paddingRight="@dimen/cardview_horizontal_padding"-->
+<!--                android:paddingBottom="@dimen/cardview_vertical_padding"-->
+<!--                android:text="@string/expense_entry"-->
+<!--                android:textAppearance="?android:attr/textAppearanceSmall"-->
+<!--                android:textStyle="bold" />-->
+<!--        </androidx.cardview.widget.CardView>-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/exp_entry_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundTint="@color/lightFab"
             app:fabSize="auto"
             app:maxImageSize="28dp"
-            app:srcCompat="@drawable/ic_expense_entries_white" />
+            app:srcCompat="@drawable/ic_expense_entries_white"
+            style="@style/fab_material"/>
 
     </LinearLayout>
 
@@ -146,6 +150,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_plus_btn" />
+        app:srcCompat="@drawable/ic_plus_btn"
+        style="@style/fab_material"
+        android:backgroundTint="@color/darkFab"
+        />
 
 </FrameLayout>

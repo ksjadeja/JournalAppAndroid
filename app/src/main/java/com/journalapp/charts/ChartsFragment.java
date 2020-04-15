@@ -108,7 +108,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year,month,day,0,0,0);
                         startAcc = calendar.getTime();
-                        startDate.setText(formatter.format(startAcc));
+                        startDate.setText(new SimpleDateFormat("dd/MM/YYYY").format(startAcc));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog.show();
@@ -122,7 +122,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         calendar.set(year,month,day,23,59,59);
                         endAcc = calendar.getTime();
 //                        Toast.makeText(getActivity(), "year endAcc "+year, Toast.LENGTH_SHORT).show();
-                        endDate.setText(formatter.format(endAcc));
+                        endDate.setText(new SimpleDateFormat("dd/MM/YYYY").format(endAcc));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
