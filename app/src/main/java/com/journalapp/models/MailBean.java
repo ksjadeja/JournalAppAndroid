@@ -4,7 +4,7 @@ import com.google.firebase.firestore.Exclude;
 
 public class MailBean {
 
-    @Exclude
+//    @Exclude
     private String key;
 
     private String personName;
@@ -12,7 +12,7 @@ public class MailBean {
     private boolean EmailEntered;
 
 
-
+    @Exclude
     public String getKey() {
         return key;
     }
