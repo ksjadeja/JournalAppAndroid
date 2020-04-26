@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.journalapp.AccountEntryEditActivity;
 import com.journalapp.EntriesEditPad;
-import com.journalapp.ExpenseEntryActivity;
+import com.journalapp.ExpenseEntryNewActivity;
 import com.journalapp.R;
 import com.journalapp.utils.CalendarTabPagerAdapter;
 
@@ -59,9 +60,9 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         calendarTabs = root.findViewById(R.id.calendarTabs);
         calendarViewPager = root.findViewById(R.id.calendarViewPager);
 
-        calendarTabs.addTab(calendarTabs.newTab().setText("Journal Entries"));
-        calendarTabs.addTab(calendarTabs.newTab().setText("Account Entries"));
-        calendarTabs.addTab(calendarTabs.newTab().setText("Expense Entries"));
+        calendarTabs.addTab(calendarTabs.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
         calendarTabs.setTabGravity(TabLayout.GRAVITY_FILL);
         calendarTabs.setOnTabSelectedListener(this);
 
@@ -83,7 +84,6 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         layoutEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Entry",Toast.LENGTH_SHORT).show();
                 Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
                 startActivity(newEntryIntent);
                 closeSubMenusFab();
@@ -94,7 +94,6 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Account Entry",Toast.LENGTH_SHORT).show();
                 Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
                 startActivity(accountEntryIntent);
                 closeSubMenusFab();
@@ -104,8 +103,7 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"You've tapped new Expense Entry",Toast.LENGTH_SHORT).show();
-                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryActivity.class);
+                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
                 startActivity(expenseEntryIntent);
                 closeSubMenusFab();
             }
@@ -122,24 +120,24 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
                 @Override
                 public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
                     date= (newDay<10?"0"+newDay:newDay) + "-" + (newMonth<9?"0"+(newMonth+1):(newMonth+1)) + "-" + newYear;
-                    Toast.makeText(getContext(), "date changed to "+date, Toast.LENGTH_SHORT).show();
+                    Log.i("Event    :::", "date changed to "+date);
                         if (jdatePickerSelectionListener != null) {
                             jdatePickerSelectionListener.onDatePickerSelection(date);
-                            Toast.makeText(getContext(), date+"  jour", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", date+"  jour");
                         } else {
-                            Toast.makeText(getContext(), "jour datelistener is null", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", "jour datelistener is null");
                         }
                         if (adatePickerSelectionListener != null) {
                         adatePickerSelectionListener.onDatePickerSelection(date);
-                        Toast.makeText(getContext(), date+"  acc", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", date+"  acc");
                         } else {
-                        Toast.makeText(getContext(), "acc datelistener is null", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", "acc datelistener is null");
                         }
                         if (edatePickerSelectionListener != null) {
                             edatePickerSelectionListener.onDatePickerSelection(date);
-                            Toast.makeText(getContext(), date+"  exp", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", date+"  exp");
                         } else {
-                            Toast.makeText(getContext(), "exp datelistener is null", Toast.LENGTH_SHORT).show();
+                            Log.i("Event    :::", "exp datelistener is null");
                         }
                 }
         });

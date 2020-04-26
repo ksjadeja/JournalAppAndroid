@@ -152,7 +152,7 @@
                                     android:layout_marginEnd="15dp"
                                     android:layout_marginRight="15dp"
                                     android:gravity="center_vertical"
-                                    android:maxLines="5"
+                                    android:maxLines="3"
                                     android:minLines="2"
                                     android:scrollbars="vertical"
                                     android:text="Birthday Party"
@@ -202,7 +202,8 @@
                                     android:text="850"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:textStyle="bold|italic"
-                                    app:fontFamily="sans-serif-black" />
+                                    app:fontFamily="sans-serif-black"
+                                    android:inputType="number"/>
 
                             </androidx.appcompat.widget.LinearLayoutCompat>
 

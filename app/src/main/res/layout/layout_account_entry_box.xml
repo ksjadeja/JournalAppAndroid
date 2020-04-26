@@ -131,6 +131,8 @@
                                     android:layout_marginLeft="5dp"
                                     android:layout_marginEnd="15dp"
                                     android:layout_marginRight="15dp"
+                                    android:minLines="1"
+                                    android:maxLines="2"
                                     android:text="Kiran Italiya"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:textStyle="bold|italic"

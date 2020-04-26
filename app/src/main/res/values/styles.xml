@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -68,6 +68,13 @@
 
     <style name="left_20_rounded_view" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/left_20_rounded_cut</item>
+    </style>
+
+    <style name="fab_material" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/lightFab</item>
+        <item name="borderWidth">3dp</item>
+        <item name="backgroundTint">#414141</item>
+        <item name="android:elevation" tools:targetApi="lollipop">0dp</item>
     </style>
     
     <style name="feedbox_data_rounded_cut" >
@@ -157,4 +164,5 @@
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">20dp</item>
     </style>
+
 </resources>

@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ExpenseEntryEditActivity"></activity>
-        <activity android:name=".ExpenseEntryActivity" />
+        <activity android:name=".ExpenseEntryNewActivity" />
         <activity android:name=".AccountEntryEditActivity"></activity> <!-- <activity android:name=".TimelineViewPad" /> -->
         <!-- <activity android:name=".TimelineEditPad" /> -->
         <activity android:name=".EntriesViewPad" />

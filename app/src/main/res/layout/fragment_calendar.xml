@@ -32,12 +32,10 @@
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:id="@+id/calendarTabs"
-        app:tabSelectedTextColor="#fff"
-        app:tabIndicatorColor="#fff">
-
-    </com.google.android.material.tabs.TabLayout>
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorPrimary" />
 
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
