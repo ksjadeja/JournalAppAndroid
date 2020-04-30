@@ -42,15 +42,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(final Context context, final ArrayList<Feedbox> entries){
         this.entries = entries;
         this.context=context;
-
-
-        if(entries.size()==0)
-        {
-            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(context, "visible...", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

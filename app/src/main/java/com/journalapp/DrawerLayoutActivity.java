@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.journalapp.calculate.CalculateFragment;
 import com.journalapp.calendar.CalendarFragment;
 import com.journalapp.charts.ChartsFragment;
 import com.journalapp.home.HomeFragment;
@@ -68,6 +69,10 @@ public class DrawerLayoutActivity extends AppCompatActivity  implements Navigati
         else if(menuItem.getItemId() == R.id.nav_charts)
         {
             fragment = new ChartsFragment();
+        }
+        else if(menuItem.getItemId() == R.id.nav_calculate)
+        {
+            fragment = new CalculateFragment();
         }
         else if(menuItem.getItemId() == R.id.nav_email)
         {
