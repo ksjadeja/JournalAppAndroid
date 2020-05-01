@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:layout_gravity="start"
-                android:id="@+id/avg_expense_date_time"
+                android:id="@+id/calculate_item_date_time"
                 android:text="04/05/2020 04:13:43 PM" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -37,15 +37,15 @@
                 android:maxLines="2"
                 android:layout_gravity="start"
                 android:paddingLeft="50dp"
-                android:id="@+id/avg_expense_desc"
-                android:text="description of the expense" />
+                android:id="@+id/calculate_item_desc"
+                android:text="description of something " />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:maxLines="1"
-                android:id="@+id/avg_expense_amount"
+                android:id="@+id/calculate_item_amount"
                 android:text="450 Rs." />
 
         </LinearLayout>
