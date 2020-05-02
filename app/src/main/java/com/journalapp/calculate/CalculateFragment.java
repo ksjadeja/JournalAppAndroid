@@ -137,6 +137,8 @@ public class CalculateFragment extends Fragment implements View.OnClickListener 
                     total = 0;
                     average = 0;
                     n= daysBetween(startAvgExp, endAvgExp);
+//                    n = Math.abs(startAvgExp.getTimeInMillis()-endAvgExp.getTimeInMillis());
+//                    n = n/(1000 * 60 * 60 * 24);
                     expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -211,7 +213,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener 
     public static int daysBetween(Calendar day1, Calendar day2){
         Calendar dayOne = (Calendar) day1.clone(),
                 dayTwo = (Calendar) day2.clone();
-
         if (dayOne.get(Calendar.YEAR) == dayTwo.get(Calendar.YEAR)) {
             return Math.abs(dayOne.get(Calendar.DAY_OF_YEAR) - dayTwo.get(Calendar.DAY_OF_YEAR));
         } else {
@@ -222,7 +223,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener 
                 dayTwo = temp;
             }
             int extraDays = 0;
-
             int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
 
             while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
@@ -230,8 +230,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener 
                 // getActualMaximum() important for leap years
                 extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
             }
-
-            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
+            return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
 
