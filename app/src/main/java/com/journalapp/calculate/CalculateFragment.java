@@ -520,14 +520,13 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                         if (task.isSuccessful()) {
                                             if (task.getResult().getDocuments().size() > 0) {
                                                 MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                if (!mailBean.getEmail().equals("")) {
+                                                if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
                                                     account_email_box.setText(mailBean.getEmail());
                                                     account_email_box.setEnabled(false);
                                                 }
                                             } else {
                                                 Log.i("LOG:", "no email found for: " + selected_name, task.getException());
                                             }
-
                                         } else {
                                             Log.i("EXCEPTION:", "email finding query failed", task.getException());
                                         }

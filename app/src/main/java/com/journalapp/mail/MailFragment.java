@@ -73,7 +73,6 @@ public class MailFragment extends Fragment {
                             mailBeanArrayList.add(mailBean);
                             mailListAdapter.notifyDataSetChanged();
                             break;
-
                         case MODIFIED:
                             key = dc.getDocument().getId();
                             mailBean = dc.getDocument().toObject(MailBean.class);

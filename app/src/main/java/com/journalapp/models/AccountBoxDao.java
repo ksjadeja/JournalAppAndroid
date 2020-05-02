@@ -6,7 +6,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.Date;
 
-public class AccountBoxDao {
+public class AccountBoxDao{
 
     private Timestamp timestamp;
     private String name;
