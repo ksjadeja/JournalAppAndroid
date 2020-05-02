@@ -2,6 +2,7 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +14,18 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.textview.MaterialTextView;
 import com.journalapp.R;
+import com.journalapp.models.AccountBox;
 import com.journalapp.models.ExpenseBox;
 
 import java.util.ArrayList;
 
-public class CalculateRecyclerViewAdapter extends RecyclerView.Adapter<CalculateRecyclerViewAdapter.Holder>{
+public class CalculateRecyclerViewAdapter<T> extends RecyclerView.Adapter<CalculateRecyclerViewAdapter.Holder>{
 
-    ArrayList<ExpenseBox> expense_list;
+    ArrayList<T> list;
     Context context;
 
-    public CalculateRecyclerViewAdapter(final Context context, final ArrayList<ExpenseBox> expense_list){
-        this.expense_list = expense_list;
+    public CalculateRecyclerViewAdapter(final Context context, final ArrayList<T> list){
+        this.list = list;
         this.context = context;
     }
 
@@ -37,15 +39,27 @@ public class CalculateRecyclerViewAdapter extends RecyclerView.Adapter<Calculate
 
     @Override
     public void onBindViewHolder(@NonNull final Holder holder, final int position) {
-        holder.date_time.setText(expense_list.get(position).getDate() + " " + expense_list.get(position).getTime());
-        holder.desc.setText(expense_list.get(position).getDesc());
-        holder.amount.setText(String.valueOf(expense_list.get(position).getAmount()));
-        holder.amount.setTextColor(Color.RED);
+        if(list.get(position) instanceof ExpenseBox){
+            holder.date_time.setText( (((ExpenseBox) list.get(position)).getDate() + " " + ((ExpenseBox) list.get(position)).getTime()));
+            holder.desc.setText(((ExpenseBox) list.get(position)).getDesc());
+            holder.amount.setText(String.valueOf(((ExpenseBox) list.get(position)).getAmount()));
+            holder.amount.setTextColor(Color.RED);
+        } else if (list.get(position) instanceof AccountBox){
+            holder.date_time.setText( (((AccountBox) list.get(position)).getDate() + " " + ((AccountBox) list.get(position)).getTime()));
+            holder.desc.setText(((AccountBox) list.get(position)).getDesc());
+            holder.amount.setText(String.valueOf(((AccountBox) list.get(position)).getAmount()));
+            if(((AccountBox) list.get(position)).getT_type().equals("0")){
+                holder.amount.setTextColor(Color.RED);
+            }else {
+                holder.amount.setTextColor(Color.GREEN);
+            }
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return expense_list.size();
+        return list.size();
     }
 
 
@@ -64,9 +78,9 @@ public class CalculateRecyclerViewAdapter extends RecyclerView.Adapter<Calculate
                             .setBottomRightCorner(CornerFamily.ROUNDED,radius)
                             .setBottomLeftCorner(CornerFamily.ROUNDED,radius)
                             .build());
-            date_time = itemView.findViewById(R.id.avg_expense_date_time);
-            desc = itemView.findViewById(R.id.avg_expense_desc);
-            amount = itemView.findViewById(R.id.avg_expense_amount);
+            date_time = itemView.findViewById(R.id.calculate_item_date_time);
+            desc = itemView.findViewById(R.id.calculate_item_desc);
+            amount = itemView.findViewById(R.id.calculate_item_amount);
         }
 
         public MaterialTextView getDate_time() {

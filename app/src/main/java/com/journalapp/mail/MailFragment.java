@@ -70,7 +70,6 @@ public class MailFragment extends Fragment {
                             key = dc.getDocument().getId();
                             mailBean = dc.getDocument().toObject(MailBean.class);
                             mailBean.setKey(key);
-                            Log.i("Mail AAA:","is entered  "+mailBean.getEmailEntered());
                             mailBeanArrayList.add(mailBean);
                             mailListAdapter.notifyDataSetChanged();
                             break;
@@ -79,7 +78,6 @@ public class MailFragment extends Fragment {
                             key = dc.getDocument().getId();
                             mailBean = dc.getDocument().toObject(MailBean.class);
                             int index;
-//                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
                             for(MailBean x: mailBeanArrayList)
                             {
                                 if(x.getKey().equals(key)){
