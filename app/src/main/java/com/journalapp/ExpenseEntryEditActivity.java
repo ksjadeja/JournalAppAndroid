@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +41,7 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
 
-    String USER= "Kiran1901";
+    String USER= FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
 
     ExpenseBox expenseBox;

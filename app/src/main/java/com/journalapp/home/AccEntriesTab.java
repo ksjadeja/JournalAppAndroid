@@ -70,8 +70,8 @@ public class AccEntriesTab extends Fragment {
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            Log.i("CntA:",(i++)+":::"+key);
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                            Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
                             accountEntryList.add(0,new AccountBox(accountBoxDao,key));
                             AccEntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();

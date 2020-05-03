@@ -78,7 +78,7 @@ public class EntriesTab extends Fragment {
                         case ADDED:
                             key = dc.getDocument().getId();
                             feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
+                            Log.i("DEBUG    :","ent: "+feedboxDao.getTimestamp().toDate());
                             feedboxesList.add(0,new Feedbox(feedboxDao,key));
                             EntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();
@@ -87,7 +87,6 @@ public class EntriesTab extends Fragment {
                         case MODIFIED:
                             key = dc.getDocument().getId();
                             feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
                             int index = EntriesIndex.get(key);
                             feedboxesList.set(index,new Feedbox(feedboxDao,key));
                             adapter.notifyDataSetChanged();

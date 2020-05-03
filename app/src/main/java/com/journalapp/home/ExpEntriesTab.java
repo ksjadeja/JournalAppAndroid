@@ -77,6 +77,7 @@ public class ExpEntriesTab extends Fragment {
                         case ADDED:
                             key = dc.getDocument().getId();
                             expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
+                            Log.i("DEBUG    :","exp: "+expenseBoxDao.getTimestamp().toDate());
                             expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
                             ExpEntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();

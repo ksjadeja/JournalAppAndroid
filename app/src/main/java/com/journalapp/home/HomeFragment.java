@@ -88,6 +88,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
         tabLayout.setOnTabSelectedListener(this);
          myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
+         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(myPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
