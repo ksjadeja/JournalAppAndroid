@@ -23,21 +23,56 @@
         android:label="Charts"
         tools:layout="@layout/fragment_charts" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_tools"-->
-<!--        android:name="com.example.myapplication.ui.tools.ToolsFragment"-->
-<!--        android:label="@string/menu_tools"-->
-<!--        tools:layout="@layout/fragment_tools" />-->
+    <fragment
+        android:id="@+id/nav_calculate"
+        android:name="com.journalapp.calculate.CalculateFragment"
+        android:label="Calculate"
+        tools:layout="@layout/fragment_calculate" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_share"-->
-<!--        android:name="com.example.myapplication.ui.share.ShareFragment"-->
-<!--        android:label="@string/menu_share"-->
-<!--        tools:layout="@layout/fragment_share" />-->
+    <fragment
+        android:id="@+id/nav_email"
+        android:name="com.journalapp.mail.MailFragment"
+        android:label="Mail"
+        tools:layout="@layout/fragment_mail" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_send"-->
-<!--        android:name="com.example.myapplication.ui.send.SendFragment"-->
-<!--        android:label="@string/menu_send"-->
-<!--        tools:layout="@layout/fragment_send" />-->
+    <fragment
+        android:id="@+id/nav_contact_us"
+        android:name="com.journalapp.contact_us.ContactUsFragment"
+        android:label="Contact Us"
+        tools:layout="@layout/fragment_contact_us" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.journalapp.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <activity
+        android:id="@+id/entriesViewPad"
+        android:name="com.journalapp.EntriesViewPad"
+        android:label="activity_timeline_view_pad"
+        tools:layout="@layout/activity_timeline_view_pad" />
+    <activity
+        android:id="@+id/entriesEditPad"
+        android:name="com.journalapp.EntriesEditPad"
+        android:label="EntriesEditPad" />
+    <activity
+        android:id="@+id/drawerLayoutActivity"
+        android:name="com.journalapp.DrawerLayoutActivity"
+        android:label="activity_drawer_layout"
+        tools:layout="@layout/activity_drawer_layout" />
+    <activity
+        android:id="@+id/accountEntryEditActivity"
+        android:name="com.journalapp.AccountEntryEditActivity"
+        android:label="activity_account_edit_pad"
+        tools:layout="@layout/activity_account_edit_pad" />
+    <activity
+        android:id="@+id/expenseEntryNewActivity"
+        android:name="com.journalapp.ExpenseEntryNewActivity"
+        android:label="activity_expense_entry"
+        tools:layout="@layout/activity_expense_entry" />
+    <activity
+        android:id="@+id/expenseEntryEditActivity"
+        android:name="com.journalapp.ExpenseEntryEditActivity"
+        android:label="activity_expense_entry_edit"
+        tools:layout="@layout/activity_expense_entry_edit" />
+
 </navigation>

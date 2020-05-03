@@ -1,9 +1,5 @@
 package com.journalapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +10,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -23,7 +23,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
-import com.journalapp.models.ExpenseBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,15 +31,13 @@ import java.util.regex.Pattern;
 
 public class ExpenseEntryEditActivity extends AppCompatActivity {
 
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
     TextView dateText;
     TextView timeText;
     EditText nameText,amountText,descText;
     MaterialButton discard_btn,save_btn;
     ImageButton delete_btn;
-
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
-
     String USER= FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
 
@@ -220,11 +217,9 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
 
     private boolean isChanged(){
         if(update){
-            if(nameText.getText().toString().equals(expenseBox.getItemName()) &&
-                    amountText.getText().toString().equals(String.valueOf(expenseBox.getAmount())) &&
-                    descText.getText().toString().equals(expenseBox.getDesc())){
-                return false;
-            }
+            return !nameText.getText().toString().equals(expenseBox.getItemName()) ||
+                    !amountText.getText().toString().equals(String.valueOf(expenseBox.getAmount())) ||
+                    !descText.getText().toString().equals(expenseBox.getDesc());
         }
         return true;
     }

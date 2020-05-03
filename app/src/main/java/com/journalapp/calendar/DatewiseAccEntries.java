@@ -39,14 +39,14 @@ import javax.annotation.Nullable;
 public class DatewiseAccEntries extends Fragment implements CalendarFragment.ADatePickerSelectionListener {
 
     private RecyclerView recyclerView;
-    private ArrayList<AccountBox> accountBoxList= new ArrayList<>();;
+    private ArrayList<AccountBox> accountBoxList= new ArrayList<>();
     private AccountRecyclerViewAdapter accountRecyclerViewAdapter;
 
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
 
     private String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());;
+    private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
     Context context;
     public DatewiseAccEntries(){}
 

@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -40,6 +43,13 @@ public class AccEntriesTab extends Fragment {
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     AccountRecyclerViewAdapter adapter;
     ListenerRegistration liveAccountEntries;
+
+
+    private boolean isScrolling = false;
+    private boolean isLastItemReached = false;
+    private int limit = 5;
+    private DocumentSnapshot lastVisible;
+
 
     public AccEntriesTab() { }
 
@@ -74,7 +84,6 @@ public class AccEntriesTab extends Fragment {
                             Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
                             accountEntryList.add(0,new AccountBox(accountBoxDao,key));
                             AccEntriesMap.addFirst(key);
-                            adapter.notifyDataSetChanged();
                             break;
 
                         case MODIFIED:
@@ -82,7 +91,6 @@ public class AccEntriesTab extends Fragment {
                             accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
                             accountEntryList.set(index,new AccountBox(accountBoxDao,key));
-                            adapter.notifyDataSetChanged();
                             break;
 
                         case REMOVED:
@@ -90,17 +98,97 @@ public class AccEntriesTab extends Fragment {
                                 if(ac.getId().equals(dc.getDocument().getId())){
                                     AccEntriesMap.delete(ac.getId(),accountEntryList.indexOf(ac));
                                     accountEntryList.remove(ac);
-                                    adapter.notifyDataSetChanged();
                                     break;
                                 }
                             }
                             break;
                     }
                 }
+                adapter.notifyDataSetChanged();
+                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
             }
         });
 
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+
+                if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
+                    isScrolling = false;
+
+                    accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot snapshots,
+                                            @Nullable FirebaseFirestoreException e) {
+
+                            if (e != null) {
+                                Log.i("ERROR:", "listen:error", e);
+                                return;
+                            }
+
+                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                                String key=null;
+                                AccountBoxDao accountBoxDao= null;
+
+                                switch (dc.getType()) {
+                                    case ADDED:
+                                        key = dc.getDocument().getId();
+                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                        Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
+                                        accountEntryList.add(new AccountBox(accountBoxDao,key));
+                                        AccEntriesMap.addFirst(key);
+                                        break;
+
+                                    case MODIFIED:
+                                        key = dc.getDocument().getId();
+                                        accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
+                                        int index = AccEntriesIndex.get(key);
+                                        accountEntryList.set(index,new AccountBox(accountBoxDao,key));
+                                        break;
+
+                                    case REMOVED:
+                                        for(AccountBox ac:accountEntryList){
+                                            if(ac.getId().equals(dc.getDocument().getId())){
+                                                AccEntriesMap.delete(ac.getId(),accountEntryList.indexOf(ac));
+                                                accountEntryList.remove(ac);
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+
+                            if(snapshots.size() != 0){
+                                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                            }
+
+                            if (snapshots.size() < limit) {
+                                isLastItemReached = true;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
 
         return rootView;
     }

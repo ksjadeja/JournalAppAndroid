@@ -118,6 +118,7 @@ public class ExpenseEntryNewActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             Log.i("Status:", "db exp entry is successful");
+                            finish();
                         } else {
                             Log.i("Status:", "db exp entry is not successful");
                         }

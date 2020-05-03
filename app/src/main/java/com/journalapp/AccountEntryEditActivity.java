@@ -295,12 +295,10 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     private boolean isChanged(){
         if(update){
-            if(nameText.getText().toString().equals(accountBox.getName()) &&
-                    amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) &&
-                    t_type==Integer.parseInt(accountBox.getT_type()) &&
-                    descText.getText().toString().equals(accountBox.getDesc())){
-                return false;
-            }
+            return !nameText.getText().toString().equals(accountBox.getName()) ||
+                    !amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) ||
+                    t_type != Integer.parseInt(accountBox.getT_type()) ||
+                    !descText.getText().toString().equals(accountBox.getDesc());
         }
         return true;
     }
