@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -36,7 +36,7 @@ import static com.journalapp.EntriesMap.EntriesIndex;
 
 public class EntriesTab extends Fragment {
 
-    String USER = "Kiran1901";
+    String USER =  FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     RecyclerView recyclerView;
     ArrayList<Feedbox> feedboxesList;

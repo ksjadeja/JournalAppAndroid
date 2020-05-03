@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,7 +46,7 @@ import static com.journalapp.ExpEntriesMap.ExpEntriesIndex;
 public class ExpEntriesTab extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ExpenseBox> expenseEntryList;
-    String USER= "Kiran1901";
+    String USER= FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
     ExpenseRecyclerViewAdapterView adapter;
     ListenerRegistration liveExpenseEntries;

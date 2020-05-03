@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.R;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 public class MailListAdapter extends BaseAdapter {
 
     Context context;
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     ArrayList<MailBean> mailList;
     CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
     public MailListAdapter(Context context, ArrayList<MailBean> mailList) {

@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -56,7 +57,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
     private Date startAcc, endAcc, startExp, endExp, startPerson, endPerson;
     private int dayy, monthh, yearr;
     static boolean firstTime = false;
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
 
     ArrayList<AccountBox> accountEntryList;
     ArrayList<AccountBox> accountEntryList2;

@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Journal App</string>
+    <string name="web_client_id">761989070621-ocet3uptrfrm45jcpcsjiu43icvhj22v.apps.googleusercontent.com</string>
+
+
     <string name="entry">Entry</string>
     <string name="account_entry">Account Entry</string>
     <string name="expense_entry">Expense Entry</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">User Display Name</string>
+    <string name="nav_header_subtitle">user@journalapp.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -17,6 +20,8 @@
     <string name="menu_calculate">Calculate</string>
     <string name="menu_mail">Mail</string>
     <string name="menu_contact_us">Contact Us</string>
-
+    <string name="menu_sign_out">Sign Out</string>
+    <string name="temp_email"><a href="google.com" target="_top">Journal App Support </a></string>
+    <string name="app_support_email">&lt;a href="mailto:chhotadon459@gmail.com" target="_top">Journal App Support&lt;/a></string>
 
 </resources>

@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -77,7 +78,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     private CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     private CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
 
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
 
 
     @Nullable
