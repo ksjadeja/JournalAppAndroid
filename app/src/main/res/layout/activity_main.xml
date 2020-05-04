@@ -19,11 +19,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="cursive"
-        android:text="JournalApp"
+        android:text="Journal App"
         android:layout_marginVertical="20dp"
         android:textSize="50dp"
         android:textColor="#ffffff"
         android:textStyle="bold|italic"
         />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_btn"
+        android:layout_marginTop="150dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

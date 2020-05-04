@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -63,7 +64,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     ListenerRegistration liveAccountEntries;
     ArrayList<String> accountNameList=new ArrayList<>();
     ArrayAdapter adapter;
-    String USER= "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountBox accountBox;
@@ -302,12 +303,10 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     private boolean isChanged(){
         if(update){
-            if(nameText.getText().toString().equals(accountBox.getName()) &&
-                    amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) &&
-                    t_type==Integer.parseInt(accountBox.getT_type()) &&
-                    descText.getText().toString().equals(accountBox.getDesc())){
-                return false;
-            }
+            return !nameText.getText().toString().equals(accountBox.getName()) ||
+                    !amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) ||
+                    t_type != Integer.parseInt(accountBox.getT_type()) ||
+                    !descText.getText().toString().equals(accountBox.getDesc());
         }
         return true;
     }

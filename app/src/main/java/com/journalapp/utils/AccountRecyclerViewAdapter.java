@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.AccountEntryEditActivity;
@@ -31,7 +32,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     ArrayList<AccountBox> entries;
     Context context;
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
 
     @NonNull
     @Override

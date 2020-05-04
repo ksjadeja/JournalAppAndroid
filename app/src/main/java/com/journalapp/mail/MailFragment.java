@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,7 +40,7 @@ public class MailFragment extends Fragment {
     CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
     ListenerRegistration liveMailEntries;
     ListView listView;
-    final String USER = "Kiran1901";
+    final String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     ArrayList<MailBean> mailBeanArrayList;
 //    Button btnMail;
     @Nullable
