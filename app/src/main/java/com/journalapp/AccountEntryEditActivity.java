@@ -236,26 +236,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                     }
                 }
             });
-//            accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentReference> task) {
-//                    if (task.isSuccessful()) {
-//                        Toast.makeText(AccountEntryEditActivity.this,"Entry Saved..",Toast.LENGTH_SHORT).show();
-////                            AccountBoxDao tmpAccBox = (AccountBoxDao) task.getResult(AccountBoxDao.class);
-//                        for (QueryDocumentSnapshot document : task.getResult()){
-//                            MailBean mailBean = new MailBean();
-//                            String name = (String)document.get("Name");
-//                            mailBean.setPersonName(name);
-//                            mailBean.setEmail(null);
-//                            mailBean.setEmailEntered(false);
-//                            mailEntriesRef.document(USER).collection("entries").add(mailBean).
-//                    }
-//
-//                }
-//                        Log.i("Status:","db entry is not successful");
-//
-//                }
-//            });
             finish();
         }
     }
