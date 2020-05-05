@@ -21,6 +21,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +40,8 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     DrawerLayout drawerLayout;
 
     FirebaseAuth mAuth;
+    GoogleSignInClient mGoogleSignInClient;
+
 
     ImageView user_profile_image;
     TextView user_display_name, user_email;
@@ -53,6 +58,14 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         setContentView(R.layout.activity_drawer_layout);
 
         View header = getLayoutInflater().inflate(R.layout.nav_header_main, null);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -117,6 +130,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     FirebaseAuth.getInstance().signOut();
+                    mGoogleSignInClient.signOut();
                     finish();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }

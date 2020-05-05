@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,7 +51,7 @@ import java.util.HashMap;
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
-    private MaterialTextView avg_expense_total, avg_expense_average, total_account_total;
+    private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
     private MaterialButton avg_expense_submit, total_account_submit, account_send_mail_btn;
 
     private RecyclerView avg_expense_recycler_view, total_account_recycler_view;
@@ -67,7 +68,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
     private String selected_name;
 
-    private Calendar startAvgExp, endAvgExp, startAvgExp2, endAvgExp2;
+    private Calendar startAvgExp, endAvgExp, startTotalAcc, endTotalAcc;
     private int dayy, monthh, yearr;
 
     private float average, total, n, account_total;
@@ -98,6 +99,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         avg_expense_end = view.findViewById(R.id.avg_expense_end);
         avg_expense_submit = view.findViewById(R.id.avg_expense_submit);
         average_n_total_bar = view.findViewById(R.id.average_n_total_bar);
+        avg_exp_message = view.findViewById(R.id.avg_exp_message);
 
         avg_expense_recycler_view = view.findViewById(R.id.avg_expense_recycler_view);
 
@@ -105,7 +107,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         avg_expense_average = view.findViewById(R.id.avg_expense_average);
 
 
-        average_n_total_bar.setVisibility(View.INVISIBLE);
+        average_n_total_bar.setVisibility(View.GONE);
 
         avg_expense_total.setTextColor(Color.RED);
         avg_expense_average.setTextColor(Color.RED);
@@ -130,14 +132,16 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         total_account_submit = view.findViewById(R.id.total_account_submit);
         total_account_bar = view.findViewById(R.id.total_account_bar);
         account_names = view.findViewById(R.id.account_names);
+        total_account_message = view.findViewById(R.id.total_account_message);
+
 
         account_mail_bar = view.findViewById(R.id.account_mail_bar);
-        account_mail_bar.setVisibility(View.INVISIBLE);
+        account_mail_bar.setVisibility(View.GONE);
         account_email_box = view.findViewById(R.id.account_email_box);
         account_send_mail_btn = view.findViewById(R.id.account_send_mail_btn);
 
         total_account_recycler_view = view.findViewById(R.id.total_account_recycler_view);
-        total_account_bar.setVisibility(View.INVISIBLE);
+        total_account_bar.setVisibility(View.GONE);
 
         total_account_total = view.findViewById(R.id.total_account_total);
 
@@ -212,7 +216,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 0, 0, 0);
                         startAvgExp = calendar;
-                        avg_expense_start.setText(new SimpleDateFormat("dd/MM/YYYY").format(startAvgExp.getTime()));
+                        avg_expense_start.setText(new SimpleDateFormat("dd/MM/yyyy").format(startAvgExp.getTime()));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog.show();
@@ -225,7 +229,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 23, 59, 59);
                         endAvgExp = calendar;
-                        avg_expense_end.setText(new SimpleDateFormat("dd/MM/YYYY").format(endAvgExp.getTime()));
+                        avg_expense_end.setText(new SimpleDateFormat("dd/MM/yyyy").format(endAvgExp.getTime()));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
@@ -238,71 +242,82 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     total = 0;
                     average = 0;
                     n = daysBetween(startAvgExp, endAvgExp);
-                    expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Log.i("ERROR:", "listen:error", e);
-                                return;
-                            }
-                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                                String key = null;
-                                ExpenseBoxDao expenseBoxDao = null;
-                                switch (dc.getType()) {
-                                    case ADDED:
+                    if(startAvgExp.compareTo(endAvgExp) <= 0){
+                        expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
+                                }
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    String key = null;
+                                    ExpenseBoxDao expenseBoxDao = null;
+                                    switch (dc.getType()) {
+                                        case ADDED:
 
-                                        key = dc.getDocument().getId();
-                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-                                        expense_list.add(0, new ExpenseBox(expenseBoxDao, key));
-                                        adapter.notifyDataSetChanged();
-                                        total += expenseBoxDao.getAmount();
-                                        average = total / n;
-
-                                        avg_expense_total.setText(String.valueOf(total));
-                                        avg_expense_average.setText(String.valueOf(average));
-                                        break;
-
-                                    case MODIFIED:
-                                        key = dc.getDocument().getId();
-                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-                                        for (ExpenseBox ex : expense_list) {
-                                            if (ex.getId().equals(key)) {
-                                                expense_list.set(expense_list.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
-                                                adapter.notifyDataSetChanged();
-                                                break;
-                                            }
-
-                                        }
-                                        total = 0;
-                                        for (ExpenseBox exp : expense_list) {
-                                            total += exp.getAmount();
-                                        }
-                                        average = total / n;
-                                        avg_expense_total.setText(String.valueOf(total));
-                                        avg_expense_average.setText(String.valueOf(average));
-                                        break;
-
-                                    case REMOVED:
-                                        for (ExpenseBox ex : expense_list) {
-                                            if (ex.getId().equals(dc.getDocument().getId())) {
-                                                ExpEntriesMap.delete(ex.getId(), expense_list.indexOf(ex));
-                                                expense_list.remove(ex);
-                                                adapter.notifyDataSetChanged();
-                                                break;
-                                            }
-                                            total -= expenseBoxDao.getAmount();
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            expense_list.add(0, new ExpenseBox(expenseBoxDao, key));
+                                            adapter.notifyDataSetChanged();
+                                            total += expenseBoxDao.getAmount();
                                             average = total / n;
 
                                             avg_expense_total.setText(String.valueOf(total));
                                             avg_expense_average.setText(String.valueOf(average));
-                                        }
-                                        break;
+                                            break;
+
+                                        case MODIFIED:
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            for (ExpenseBox ex : expense_list) {
+                                                if (ex.getId().equals(key)) {
+                                                    expense_list.set(expense_list.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
+                                                    adapter.notifyDataSetChanged();
+                                                    break;
+                                                }
+
+                                            }
+                                            total = 0;
+                                            for (ExpenseBox exp : expense_list) {
+                                                total += exp.getAmount();
+                                            }
+                                            average = total / n;
+                                            avg_expense_total.setText(String.valueOf(total));
+                                            avg_expense_average.setText(String.valueOf(average));
+                                            break;
+
+                                        case REMOVED:
+                                            for (ExpenseBox ex : expense_list) {
+                                                if (ex.getId().equals(dc.getDocument().getId())) {
+                                                    ExpEntriesMap.delete(ex.getId(), expense_list.indexOf(ex));
+                                                    expense_list.remove(ex);
+                                                    adapter.notifyDataSetChanged();
+                                                    break;
+                                                }
+                                                total -= expenseBoxDao.getAmount();
+                                                average = total / n;
+
+                                                avg_expense_total.setText(String.valueOf(total));
+                                                avg_expense_average.setText(String.valueOf(average));
+                                            }
+                                            break;
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                        avg_exp_message.setVisibility(View.GONE);
+                        average_n_total_bar.setVisibility(View.VISIBLE);
+                    }else{
+                        avg_exp_message.setVisibility(View.VISIBLE);
+                        average_n_total_bar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                    }
 
-                    average_n_total_bar.setVisibility(View.VISIBLE);
+                } else{
+                    avg_exp_message.setVisibility(View.VISIBLE);
+                    average_n_total_bar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -313,8 +328,8 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 0, 0, 0);
-                        startAvgExp2 = calendar;
-                        total_account_start.setText(new SimpleDateFormat("dd/MM/YYYY").format(startAvgExp2.getTime()));
+                        startTotalAcc = calendar;
+                        total_account_start.setText(new SimpleDateFormat("dd/MM/yyyy").format(startTotalAcc.getTime()));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog3.show();
@@ -326,8 +341,8 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 23, 59, 59);
-                        endAvgExp2 = calendar;
-                        total_account_end.setText(new SimpleDateFormat("dd/MM/YYYY").format(endAvgExp2.getTime()));
+                        endTotalAcc = calendar;
+                        total_account_end.setText(new SimpleDateFormat("dd/MM/yyyy").format(endTotalAcc.getTime()));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog4.show();
@@ -336,206 +351,218 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
             case R.id.total_account_submit:
 
-                if (startAvgExp2 != null && endAvgExp2 != null) {
-                    account_mail_bar.setVisibility(View.INVISIBLE);
+                if (startTotalAcc != null && endTotalAcc != null) {
+                    account_mail_bar.setVisibility(View.GONE);
                     account_email_box.setText("");
                     account_email_box.setEnabled(true);
                     account_list.clear();
                     account_total = 0;
-                    if (selected_name.equals("All")) {
-                        accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp2.getTime()).whereLessThan("timestamp", endAvgExp2.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if (e != null) {
-                                    Log.i("ERROR:", "listen:error", e);
-                                    return;
-                                }
-                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                                    String key = null;
-                                    AccountBoxDao accountBoxDao = null;
-                                    switch (dc.getType()) {
-                                        case ADDED:
-                                            key = dc.getDocument().getId();
-                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                            account_list.add(0, new AccountBox(accountBoxDao, key));
-                                            account_adapter.notifyDataSetChanged();
-                                            if (accountBoxDao.getT_type().equals("0")) {
-                                                account_total -= accountBoxDao.getAmount();
-                                            } else {
-                                                account_total += accountBoxDao.getAmount();
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
-
-                                        case MODIFIED:
-                                            key = dc.getDocument().getId();
-                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                            for (AccountBox ex : account_list) {
-                                                if (ex.getId().equals(key)) {
-                                                    account_list.set(account_list.indexOf(ex), new AccountBox(accountBoxDao, key));
-                                                    account_adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-
-                                            }
-                                            account_total = 0;
-                                            for (AccountBox exp : account_list) {
-                                                if (exp.getT_type().equals("0")) {
-                                                    account_total -= exp.getAmount();
-                                                } else {
-                                                    account_total += exp.getAmount();
-                                                }
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
-
-                                        case REMOVED:
-                                            for (AccountBox ex : account_list) {
-                                                if (ex.getId().equals(dc.getDocument().getId())) {
-                                                    if (ex.getT_type().equals("0")) {
-                                                        account_total += ex.getAmount();
-                                                    } else {
-                                                        account_total -= ex.getAmount();
-                                                    }
-                                                    account_list.remove(ex);
-                                                    account_adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
+                    if(startTotalAcc.compareTo(endTotalAcc) <= 0){
+                        if (selected_name.equals("All")) {
+                            accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Log.i("ERROR:", "listen:error", e);
+                                        return;
                                     }
-                                }
-                            }
-                        });
-                    } else {
-                        Log.i("TEMP", selected_name);
-                        accountEntriesRef.document(USER).collection("entries").whereEqualTo("name", selected_name).whereGreaterThanOrEqualTo("timestamp", startAvgExp2.getTime()).whereLessThan("timestamp", endAvgExp2.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if (e != null) {
-                                    Log.i("ERROR:", "listen:error", e);
-                                    return;
-                                }
-                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                                    String key = null;
-                                    AccountBoxDao accountBoxDao = null;
-                                    switch (dc.getType()) {
-                                        case ADDED:
-                                            key = dc.getDocument().getId();
-                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                            account_list.add(0, new AccountBox(accountBoxDao, key));
-                                            account_adapter.notifyDataSetChanged();
-                                            if (accountBoxDao.getT_type().equals("0")) {
-                                                account_total -= accountBoxDao.getAmount();
-                                            } else {
-                                                account_total += accountBoxDao.getAmount();
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
-
-                                        case MODIFIED:
-                                            key = dc.getDocument().getId();
-                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                            for (AccountBox ex : account_list) {
-                                                if (ex.getId().equals(key)) {
-                                                    account_list.set(account_list.indexOf(ex), new AccountBox(accountBoxDao, key));
-                                                    account_adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-
-                                            }
-                                            account_total = 0;
-                                            for (AccountBox exp : account_list) {
-                                                if (exp.getT_type().equals("0")) {
-                                                    account_total -= exp.getAmount();
+                                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                        String key = null;
+                                        AccountBoxDao accountBoxDao = null;
+                                        switch (dc.getType()) {
+                                            case ADDED:
+                                                key = dc.getDocument().getId();
+                                                accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                                account_list.add(0, new AccountBox(accountBoxDao, key));
+                                                account_adapter.notifyDataSetChanged();
+                                                if (accountBoxDao.getT_type().equals("0")) {
+                                                    account_total -= accountBoxDao.getAmount();
                                                 } else {
-                                                    account_total += exp.getAmount();
+                                                    account_total += accountBoxDao.getAmount();
                                                 }
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
 
-                                        case REMOVED:
-                                            for (AccountBox ex : account_list) {
-                                                if (ex.getId().equals(dc.getDocument().getId())) {
-                                                    if (ex.getT_type().equals("0")) {
-                                                        account_total += ex.getAmount();
-                                                    } else {
-                                                        account_total -= ex.getAmount();
+                                            case MODIFIED:
+                                                key = dc.getDocument().getId();
+                                                accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                                for (AccountBox ex : account_list) {
+                                                    if (ex.getId().equals(key)) {
+                                                        account_list.set(account_list.indexOf(ex), new AccountBox(accountBoxDao, key));
+                                                        account_adapter.notifyDataSetChanged();
+                                                        break;
                                                     }
-                                                    account_list.remove(ex);
-                                                    account_adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-                                            }
-                                            if (account_total >= 0) {
-                                                total_account_total.setTextColor(Color.GREEN);
-                                                total_account_total.setText(String.valueOf(account_total));
-                                            } else {
-                                                total_account_total.setTextColor(Color.RED);
-                                                total_account_total.setText(String.valueOf(Math.abs(account_total)));
-                                            }
-                                            break;
-                                    }
-                                }
-                            }
-                        });
 
-                        mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            if (task.getResult().getDocuments().size() > 0) {
-                                                MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                if (!mailBean.getEmail().equals("")) {
-                                                    account_email_box.setText(mailBean.getEmail());
-                                                    account_email_box.setEnabled(false);
                                                 }
-                                            } else {
-                                                Log.i("LOG:", "no email found for: " + selected_name, task.getException());
-                                            }
+                                                account_total = 0;
+                                                for (AccountBox exp : account_list) {
+                                                    if (exp.getT_type().equals("0")) {
+                                                        account_total -= exp.getAmount();
+                                                    } else {
+                                                        account_total += exp.getAmount();
+                                                    }
+                                                }
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
 
-                                        } else {
-                                            Log.i("EXCEPTION:", "email finding query failed", task.getException());
+                                            case REMOVED:
+                                                for (AccountBox ex : account_list) {
+                                                    if (ex.getId().equals(dc.getDocument().getId())) {
+                                                        if (ex.getT_type().equals("0")) {
+                                                            account_total += ex.getAmount();
+                                                        } else {
+                                                            account_total -= ex.getAmount();
+                                                        }
+                                                        account_list.remove(ex);
+                                                        account_adapter.notifyDataSetChanged();
+                                                        break;
+                                                    }
+                                                }
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
                                         }
                                     }
-                                });
+                                }
+                            });
+                        } else {
+                            Log.i("TEMP", selected_name);
+                            accountEntriesRef.document(USER).collection("entries").whereEqualTo("name", selected_name).whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Log.i("ERROR:", "listen:error", e);
+                                        return;
+                                    }
+                                    for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                        String key = null;
+                                        AccountBoxDao accountBoxDao = null;
+                                        switch (dc.getType()) {
+                                            case ADDED:
+                                                key = dc.getDocument().getId();
+                                                accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                                account_list.add(0, new AccountBox(accountBoxDao, key));
+                                                account_adapter.notifyDataSetChanged();
+                                                if (accountBoxDao.getT_type().equals("0")) {
+                                                    account_total -= accountBoxDao.getAmount();
+                                                } else {
+                                                    account_total += accountBoxDao.getAmount();
+                                                }
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
 
-                        account_mail_bar.setVisibility(View.VISIBLE);
+                                            case MODIFIED:
+                                                key = dc.getDocument().getId();
+                                                accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                                for (AccountBox ex : account_list) {
+                                                    if (ex.getId().equals(key)) {
+                                                        account_list.set(account_list.indexOf(ex), new AccountBox(accountBoxDao, key));
+                                                        account_adapter.notifyDataSetChanged();
+                                                        break;
+                                                    }
+
+                                                }
+                                                account_total = 0;
+                                                for (AccountBox exp : account_list) {
+                                                    if (exp.getT_type().equals("0")) {
+                                                        account_total -= exp.getAmount();
+                                                    } else {
+                                                        account_total += exp.getAmount();
+                                                    }
+                                                }
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
+
+                                            case REMOVED:
+                                                for (AccountBox ex : account_list) {
+                                                    if (ex.getId().equals(dc.getDocument().getId())) {
+                                                        if (ex.getT_type().equals("0")) {
+                                                            account_total += ex.getAmount();
+                                                        } else {
+                                                            account_total -= ex.getAmount();
+                                                        }
+                                                        account_list.remove(ex);
+                                                        account_adapter.notifyDataSetChanged();
+                                                        break;
+                                                    }
+                                                }
+                                                if (account_total >= 0) {
+                                                    total_account_total.setTextColor(Color.GREEN);
+                                                    total_account_total.setText(String.valueOf(account_total));
+                                                } else {
+                                                    total_account_total.setTextColor(Color.RED);
+                                                    total_account_total.setText(String.valueOf(Math.abs(account_total)));
+                                                }
+                                                break;
+                                        }
+                                    }
+                                }
+                            });
+
+                            mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                if (task.getResult().getDocuments().size() > 0) {
+                                                    MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
+                                                    if (!mailBean.getEmail().equals("")) {
+                                                        account_email_box.setText(mailBean.getEmail());
+                                                        account_email_box.setEnabled(false);
+                                                    }
+                                                } else {
+                                                    Log.i("LOG:", "no email found for: " + selected_name, task.getException());
+                                                }
+
+                                            } else {
+                                                Log.i("EXCEPTION:", "email finding query failed", task.getException());
+                                            }
+                                        }
+                                    });
+
+                            account_mail_bar.setVisibility(View.VISIBLE);
+                        }
+                        total_account_message.setVisibility(View.GONE);
+                        total_account_bar.setVisibility(View.VISIBLE);
+                    }else{
+                        total_account_message.setVisibility(View.VISIBLE);
+                        total_account_bar.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                     }
-                    total_account_bar.setVisibility(View.VISIBLE);
+
+                }else{
+                    total_account_message.setVisibility(View.VISIBLE);
+                    total_account_bar.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
         }

@@ -117,7 +117,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 0, 0, 0);
                         startAcc = calendar.getTime();
-                        startDate.setText(new SimpleDateFormat("dd/MM/YYYY").format(startAcc));
+                        startDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(startAcc));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog.show();
@@ -132,77 +132,78 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         calendar.set(year, month, day, 23, 59, 59);
                         endAcc = calendar.getTime();
 //                        Toast.makeText(getActivity(), "year endAcc "+year, Toast.LENGTH_SHORT).show();
-                        endDate.setText(new SimpleDateFormat("dd/MM/YYYY").format(endAcc));
+                        endDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(endAcc));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
                 break;
-
-
             case R.id.submit:
                 if (startAcc != null && endAcc != null) {
-                    System.out.println("  startAcc::" + startAcc + "  endAcc::" + endAcc + "  today::" + new Date());
-                    Toast.makeText(getActivity(), "button clicked", Toast.LENGTH_LONG).show();
-                    accountEntryList = new ArrayList<>();
-                    accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAcc).whereLessThan("timestamp", endAcc).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
-                                Log.i("ERROR:", "listen:error", e);
-                                return;
-                            }
-//                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
-                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-//                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
-                                String key = null;
-                                AccountBoxDao accountBoxDao = null;
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        System.out.println("in the add::::");
-
-                                        key = dc.getDocument().getId();
-                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-//                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
-                                        accountEntryList.add(0, new AccountBox(accountBoxDao, key));
-                                        break;
-
-                                    case MODIFIED:
-                                        key = dc.getDocument().getId();
-                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                        for (AccountBox ac : accountEntryList) {
-                                            if (ac.getId().equals(key)) {
-                                                accountEntryList.set(accountEntryList.indexOf(ac), new AccountBox(accountBoxDao, key));
-                                                break;
-                                            }
-                                        }
-                                        break;
-
-                                    case REMOVED:
-                                        for (AccountBox ac : accountEntryList) {
-                                            if (ac.getId().equals(dc.getDocument().getId())) {
-                                                AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
-                                                accountEntryList.remove(ac);
-                                                break;
-                                            }
-                                        }
-                                        break;
+                    if (startAcc.compareTo(endAcc) <= 0) {
+                        accountEntryList = new ArrayList<>();
+                        accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAcc).whereLessThan("timestamp", endAcc).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
                                 }
-                            }
+//                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+//                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
+                                    String key = null;
+                                    AccountBoxDao accountBoxDao = null;
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            System.out.println("in the add::::");
+
+                                            key = dc.getDocument().getId();
+                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+//                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
+                                            accountEntryList.add(0, new AccountBox(accountBoxDao, key));
+                                            break;
+
+                                        case MODIFIED:
+                                            key = dc.getDocument().getId();
+                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                            for (AccountBox ac : accountEntryList) {
+                                                if (ac.getId().equals(key)) {
+                                                    accountEntryList.set(accountEntryList.indexOf(ac), new AccountBox(accountBoxDao, key));
+                                                    break;
+                                                }
+                                            }
+                                            break;
+
+                                        case REMOVED:
+                                            for (AccountBox ac : accountEntryList) {
+                                                if (ac.getId().equals(dc.getDocument().getId())) {
+                                                    AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
+                                                    accountEntryList.remove(ac);
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
 //                            Toast.makeText(getActivity(), "list  "+accountEntryList, Toast.LENGTH_SHORT).show();
-                            drawAccountBarChart(accountEntryList);
-                        }
-                    });
-
-                    System.out.println("myList::::" + accountEntryList);
-
+                                drawAccountBarChart(accountEntryList);
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
+
+
             case R.id.start_date_exp:
                 DatePickerDialog datePickerDialog3 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 0, 0, 0);
                         startExp = calendar.getTime();
@@ -215,7 +216,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 DatePickerDialog datePickerDialog4 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 23, 59, 59);
                         endExp = calendar.getTime();
@@ -229,60 +230,57 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 
             case R.id.submit_exp:
                 if (startExp != null && endExp != null) {
-                    System.out.println("  start ::" + startExp + "  endAcc::" + endExp + "  today::" + new Date());
-//                    Toast.makeText(getActivity(),"button clicked",Toast.LENGTH_LONG).show();
-                    expenseEntryList = new ArrayList<>();
-                    expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startExp).whereLessThan("timestamp", endExp).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-//                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
-                                Log.i("ERROR:", "listen:error", e);
-                                return;
-                            }
-//                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
-                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-//                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
-                                String key = null;
-                                ExpenseBoxDao expenseBoxDao = null;
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        System.out.println("in the add::::");
-
-                                        key = dc.getDocument().getId();
-                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-//                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
-                                        expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
-                                        break;
-
-                                    case MODIFIED:
-                                        key = dc.getDocument().getId();
-                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-                                        for (ExpenseBox ex : expenseEntryList) {
-                                            if (ex.getId().equals(key)) {
-                                                expenseEntryList.set(expenseEntryList.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
-                                                break;
-                                            }
-                                        }
-                                        break;
-
-                                    case REMOVED:
-                                        for (ExpenseBox ex : expenseEntryList) {
-                                            if (ex.getId().equals(dc.getDocument().getId())) {
-                                                ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
-                                                expenseEntryList.remove(ex);
-                                                break;
-                                            }
-                                        }
-                                        break;
+                    if (startExp.compareTo(endExp) <= 0) {
+                        expenseEntryList = new ArrayList<>();
+                        expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startExp).whereLessThan("timestamp", endExp).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    //                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
                                 }
-                            }
-//                            Toast.makeText(getActivity(), "list  "+expenseEntryList, Toast.LENGTH_SHORT).show();
-                            drawExpenseChart(expenseEntryList);
-                        }
-                    });
+                                //                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    //                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
+                                    String key = null;
+                                    ExpenseBoxDao expenseBoxDao = null;
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            System.out.println("in the add::::");
 
-                    System.out.println("myList::::" + expenseEntryList.toString());
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            //                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
+                                            expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
+                                            break;
+
+                                        case MODIFIED:
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            for (ExpenseBox ex : expenseEntryList) {
+                                                if (ex.getId().equals(key)) {
+                                                    expenseEntryList.set(expenseEntryList.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
+                                                    break;
+                                                }
+                                            }
+                                            break;
+
+                                        case REMOVED:
+                                            for (ExpenseBox ex : expenseEntryList) {
+                                                if (ex.getId().equals(dc.getDocument().getId())) {
+                                                    ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
+                                                    expenseEntryList.remove(ex);
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
+                                drawExpenseChart(expenseEntryList);
+                            }
+                        });
+
 //                    ArrayList<BarDataSet> dataSets = null;
 //
 ////                    datewiseAccChart.getXAxis().
@@ -321,6 +319,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 //                    datewiseAccChart.setFitBars(true);
 //
 //                    datewiseAccChart.invalidate();
+                    } else {
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.start_date_person:
@@ -331,7 +334,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 0, 0, 0);
                         startPerson = calendar.getTime();
-                        startDatePerson.setText(new SimpleDateFormat("dd/MM/YYYY").format(startPerson));
+                        startDatePerson.setText(new SimpleDateFormat("dd/MM/yyyy").format(startPerson));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog5.show();
@@ -344,8 +347,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, day, 23, 59, 59);
                         endPerson = calendar.getTime();
-//                        Toast.makeText(getActivity(), "year endAcc "+year, Toast.LENGTH_SHORT).show();
-                        endDatePerson.setText(new SimpleDateFormat("dd/MM/YYYY").format(endPerson));
+                        endDatePerson.setText(new SimpleDateFormat("dd/MM/yyyy").format(endPerson));
                     }
                 }, yearr, monthh, dayy);
                 datePickerDialog6.show();
@@ -354,60 +356,58 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 
             case R.id.submit_person:
                 if (startPerson != null && endPerson != null) {
-                    System.out.println("  startAcc::" + startPerson + "  endAcc::" + endPerson + "  today::" + new Date());
-                    Toast.makeText(getActivity(), "button clicked", Toast.LENGTH_LONG).show();
-                    accountEntryList2 = new ArrayList<>();
-                    accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startPerson).whereLessThan("timestamp", endPerson).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-//                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
-                                Log.i("ERROR:", "listen:error", e);
-                                return;
-                            }
-//                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
-                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-//                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
-                                String key = null;
-                                AccountBoxDao accountBoxDao = null;
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        System.out.println("in the add::::");
-
-                                        key = dc.getDocument().getId();
-                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                        accountEntryList2.add(0, new AccountBox(accountBoxDao, key));
-                                        break;
-
-                                    case MODIFIED:
-                                        key = dc.getDocument().getId();
-                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                        for (AccountBox ac : accountEntryList2) {
-                                            if (ac.getId().equals(key)) {
-                                                accountEntryList2.set(accountEntryList2.indexOf(ac), new AccountBox(accountBoxDao, key));
-                                                break;
-                                            }
-                                        }
-                                        break;
-
-                                    case REMOVED:
-                                        for (AccountBox ac : accountEntryList2) {
-                                            if (ac.getId().equals(dc.getDocument().getId())) {
-                                                AccEntriesMap.delete(ac.getId(), accountEntryList2.indexOf(ac));
-                                                accountEntryList2.remove(ac);
-                                                break;
-                                            }
-                                        }
-                                        break;
+                    if (startPerson.compareTo(endPerson) <= 0) {
+                        accountEntryList2 = new ArrayList<>();
+                        accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startPerson).whereLessThan("timestamp", endPerson).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
                                 }
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    String key = null;
+                                    AccountBoxDao accountBoxDao = null;
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            System.out.println("in the add::::");
+
+                                            key = dc.getDocument().getId();
+                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                            accountEntryList2.add(0, new AccountBox(accountBoxDao, key));
+                                            break;
+
+                                        case MODIFIED:
+                                            key = dc.getDocument().getId();
+                                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                                            for (AccountBox ac : accountEntryList2) {
+                                                if (ac.getId().equals(key)) {
+                                                    accountEntryList2.set(accountEntryList2.indexOf(ac), new AccountBox(accountBoxDao, key));
+                                                    break;
+                                                }
+                                            }
+                                            break;
+
+                                        case REMOVED:
+                                            for (AccountBox ac : accountEntryList2) {
+                                                if (ac.getId().equals(dc.getDocument().getId())) {
+                                                    AccEntriesMap.delete(ac.getId(), accountEntryList2.indexOf(ac));
+                                                    accountEntryList2.remove(ac);
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
+                                drawAccountBarChartPerson(accountEntryList2);
                             }
-//                            Toast.makeText(getActivity(), "list  "+accountEntryList, Toast.LENGTH_SHORT).show();
-                            drawAccountBarChartPerson(accountEntryList2);
-                        }
-                    });
+                        });
 
-                    System.out.println("myList::::" + accountEntryList2);
-
+                    } else {
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -609,14 +609,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         final HashMap<String, ValueAndLabel<Float, String>> map = new HashMap<>();
         ValueAndLabel<Float, String> vl;
         for (ExpenseBox ex : expenseEntryList) {
-//                Toast.makeText(getActivity(), "date "+ex.getDate(), Toast.LENGTH_SHORT).show();
             if (map.containsKey(ex.getDate())) {
-//                    Toast.makeText(getActivity(), "same date ", Toast.LENGTH_SHORT).show();
                 vl = map.get(ex.getDate());
                 vl.values.add(((float) ex.getAmount()));
                 vl.labels.add(ex.getItemName());
             } else {
-//                    Toast.makeText(getActivity(), "different date ", Toast.LENGTH_SHORT).show();
                 map.put(ex.getDate(), new ValueAndLabel<>(((float) ex.getAmount()), ex.getItemName()));
             }
         }
@@ -627,7 +624,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         float i = 0.5f;
         for (Map.Entry<String, ValueAndLabel<Float, String>> mapEntry : map.entrySet()) {
             if (mapEntry.getValue().values.size() > 1) {
-//                    Toast.makeText(getActivity(), "multiple entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
                 values = new float[mapEntry.getValue().values.size()];
                 for (int p = 0; p < mapEntry.getValue().values.size(); p++) {
                     values[p] = mapEntry.getValue().values.get(p);
@@ -635,7 +631,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 bar = new BarEntry(i, values, mapEntry.getValue().labels);
                 i += 1;
             } else if (mapEntry.getValue().values.size() == 1) {
-//                    Toast.makeText(getActivity(), "single entry on  "+mapEntry.getKey(), Toast.LENGTH_SHORT).show();
                 bar = new BarEntry(i, mapEntry.getValue().values.get(0), mapEntry.getValue().labels.get(0));
                 i += 1;
             }
@@ -645,7 +640,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         BarData data = new BarData(barDataSet);
         datewiseExpChart.setData(data);
-//            Toast.makeText(getActivity(), "keys are "+map.keySet().toString(), Toast.LENGTH_SHORT).show();
 
         datewiseExpChart.getXAxis().setLabelCount(map.keySet().size());
 
