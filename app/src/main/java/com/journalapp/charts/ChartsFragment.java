@@ -496,7 +496,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewisePersonAccChart.setPinchZoom(false);
         datewisePersonAccChart.animateXY(2000, 2000);
 //            datewisePersonAccChart.setTouchEnabled(false);
-        datewisePersonAccChart.setScaleEnabled(true);
+//        datewisePersonAccChart.setScaleEnabled(true);
 //            datewisePersonAccChart.setFitBars(true);
 
         datewisePersonAccChart.fitScreen();
@@ -588,7 +588,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseAccChart.setPinchZoom(false);
         datewiseAccChart.animateXY(2000, 2000);
 //            datewiseAccChart.setTouchEnabled(false);
-        datewiseAccChart.setScaleEnabled(true);
+//        datewiseAccChart.setScaleEnabled(true);
         datewiseAccChart.setFitBars(true);
 
         datewiseAccChart.fitScreen();
@@ -655,7 +655,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 return super.getFormattedValue(value, axis);
             }
         });
-
 //            datewiseExpChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
 
 //            datewiseAccChart.getXAxis().setGranularity(1f);
@@ -666,12 +665,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseExpChart.setTouchEnabled(true);
         datewiseExpChart.setDoubleTapToZoomEnabled(false);
         datewiseExpChart.setPinchZoom(false);
-        datewiseExpChart.setScaleEnabled(true);
+//        datewiseExpChart.setScaleEnabled(true);
         datewiseExpChart.setFitBars(true);
         datewiseExpChart.fitScreen();
         datewiseExpChart.invalidate();
     }
-
     private ArrayList<String> getXAxisValues() {
         ArrayList<String> xAxis = new ArrayList<>();
         xAxis.add("JAN");
@@ -682,7 +680,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         xAxis.add("JUN");
         return xAxis;
     }
-
 }
 
 class ValueAndLabel<V, L> {
@@ -695,7 +692,6 @@ class ValueAndLabel<V, L> {
         this.labels = new ArrayList<>();
         labels.add(label);
     }
-
     public ValueAndLabel(ArrayList<V> values, ArrayList<L> labels) {
         this.values = values;
         this.labels = labels;

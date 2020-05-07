@@ -12,7 +12,9 @@
         android:background="@color/white"
         android:id="@+id/timelineTabs"
         app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabIndicatorColor="@color/colorPrimary">
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorFullWidth="true"
+        >
 
     </com.google.android.material.tabs.TabLayout>
 
