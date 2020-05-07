@@ -2,6 +2,9 @@ package com.journalapp.charts;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +17,26 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -46,15 +60,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ChartsFragment extends Fragment implements View.OnClickListener {
 
     private BarChart datewiseAccChart, datewiseExpChart, datewisePersonAccChart;
-    private EditText startDate, endDate, startDateExp, endDateExp, startDatePerson, endDatePerson;
+    private LineChart expenseChart;
+
+    private EditText startDate, endDate, startDateExp, endDateExp, startDatePerson, endDatePerson,startDateExpense,endDateExpense;
     private CollectionReference accountEntriesRef;
     private CollectionReference expenseEntriesRef;
-    private Button submit, submitExp, submitPerson;
-    private Date startAcc, endAcc, startExp, endExp, startPerson, endPerson;
+    private Button submit, submitExp, submitPerson,submitExpense;
+    private Date startAcc, endAcc, startExp, endExp, startPerson, endPerson,startExpense,endExpense;
     private int dayy, monthh, yearr;
     static boolean firstTime = false;
     String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
@@ -62,7 +79,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
     ArrayList<AccountBox> accountEntryList;
     ArrayList<AccountBox> accountEntryList2;
     ArrayList<ExpenseBox> expenseEntryList;
-
+    MyMarkerView myMarkerView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,6 +87,8 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
         firstTime = false;
         View rootView = inflater.inflate(R.layout.fragment_charts, container, false);
+        myMarkerView = new MyMarkerView(rootView.getContext(), R.layout.custom_marker_view);
+
 
         datewiseAccChart = rootView.findViewById(R.id.datewiseAccChart);
         startDate = rootView.findViewById(R.id.start_date);
@@ -85,6 +104,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         startDatePerson = rootView.findViewById(R.id.start_date_person);
         endDatePerson = rootView.findViewById(R.id.end_date_person);
         submitPerson = rootView.findViewById(R.id.submit_person);
+
+        expenseChart = rootView.findViewById(R.id.expense_chart);
+        startDateExpense = rootView.findViewById(R.id.start_date_expense);
+        endDateExpense = rootView.findViewById(R.id.end_date_expense);
+        submitExpense = rootView.findViewById(R.id.submit_expense);
 
         Calendar calendar = Calendar.getInstance();
         dayy = calendar.get(Calendar.DAY_OF_MONTH);
@@ -102,6 +126,11 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         startDatePerson.setOnClickListener(this);
         endDatePerson.setOnClickListener(this);
         submitPerson.setOnClickListener(this);
+
+        startDateExpense.setOnClickListener(this);
+        endDateExpense.setOnClickListener(this);
+        submitExpense.setOnClickListener(this);
+
         return rootView;
 
     }
@@ -410,6 +439,220 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.start_date_expense:
+                DatePickerDialog datePickerDialog7 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, month, day, 0, 0, 0);
+                        startExpense = calendar.getTime();
+                        startDateExpense.setText(formatter.format(startExpense));
+                    }
+                }, yearr, monthh, dayy);
+                datePickerDialog7.show();
+                break;
+            case R.id.end_date_expense:
+                DatePickerDialog datePickerDialog8 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, month, day, 23, 59, 59);
+                        endExpense = calendar.getTime();
+                        endDateExpense.setText(formatter.format(endExpense));
+                    }
+                }, yearr, monthh, dayy);
+                datePickerDialog8.show();
+                break;
+
+
+            case R.id.submit_expense:
+                if (startExpense != null && endExpense != null) {
+                    if (startExpense.compareTo(endExpense) <= 0) {
+                        expenseEntryList = new ArrayList<>();
+                        expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startExpense).whereLessThan("timestamp", endExpense).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    //                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
+                                }
+                                //                            Toast.makeText(getActivity(),"inside listener",Toast.LENGTH_LONG).show();
+                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    //                                Toast.makeText(getActivity(),"inside listener type "+dc.getType(),Toast.LENGTH_LONG).show();
+                                    String key = null;
+                                    ExpenseBoxDao expenseBoxDao = null;
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            System.out.println("in the add::::");
+
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            //                                        Toast.makeText(getActivity(), "in add with "+key, Toast.LENGTH_SHORT).show();
+                                            expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
+                                            break;
+
+                                        case MODIFIED:
+                                            key = dc.getDocument().getId();
+                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                            for (ExpenseBox ex : expenseEntryList) {
+                                                if (ex.getId().equals(key)) {
+                                                    expenseEntryList.set(expenseEntryList.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
+                                                    break;
+                                                }
+                                            }
+                                            break;
+
+                                        case REMOVED:
+                                            for (ExpenseBox ex : expenseEntryList) {
+                                                if (ex.getId().equals(dc.getDocument().getId())) {
+                                                    ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
+                                                    expenseEntryList.remove(ex);
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                    }
+                                }
+                                drawExpenseLineChart(expenseEntryList);
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                    }
+                }else {
+                    Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private void drawExpenseLineChart(ArrayList<ExpenseBox> expenseEntryList) {
+        myMarkerView.setChartView(expenseChart);
+        expenseChart.setMarker(myMarkerView);
+
+        LimitLine llXAxis = new LimitLine(10f, "Index 10");
+        llXAxis.setLineWidth(4f);
+        llXAxis.enableDashedLine(10f, 10f, 0f);
+        llXAxis.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        llXAxis.setTextSize(10f);
+
+        XAxis xAxis = expenseChart.getXAxis();
+        xAxis.enableGridDashedLine(10f, 10f, 0f);
+        xAxis.setAxisMaximum(10f);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setDrawLimitLinesBehindData(true);
+
+        LimitLine ll1 = new LimitLine(215f, "Maximum Limit");
+        ll1.setLineWidth(4f);
+        ll1.enableDashedLine(10f, 10f, 0f);
+        ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+        ll1.setTextSize(10f);
+
+        LimitLine ll2 = new LimitLine(70f, "Minimum Limit");
+        ll2.setLineWidth(4f);
+        ll2.enableDashedLine(10f, 10f, 0f);
+        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        ll2.setTextSize(10f);
+
+        YAxis leftAxis = expenseChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.addLimitLine(ll1);
+        leftAxis.addLimitLine(ll2);
+        leftAxis.setAxisMaximum(350f);
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawZeroLine(false);
+        leftAxis.setDrawLimitLinesBehindData(false);
+
+        expenseChart.getAxisRight().setEnabled(false);
+//        add
+
+
+
+        final TreeMap<String, ValueAndLabel<Float, String>> map = new TreeMap<>();
+        ValueAndLabel<Float, String> vl;
+        for (ExpenseBox ex : expenseEntryList) {
+            if (map.containsKey(ex.getDate())) {
+                vl = map.get(ex.getDate());
+                float tmpAmt2 = vl.values.get(0);
+                tmpAmt2+=((float) ex.getAmount());
+                vl.values.set(0,tmpAmt2);
+            } else {
+                map.put(ex.getDate(), new ValueAndLabel<>(((float) ex.getAmount()), ex.getItemName()));
+            }
+        }
+        float[] values3;
+//        float i = 0.5f;
+        int i=1;
+        ArrayList<Entry> values = new ArrayList<>();
+        for (Map.Entry<String, ValueAndLabel<Float, String>> mapEntry : map.entrySet()) {
+            if (mapEntry.getValue().values.size() == 1) {
+                values.add(new Entry(i,mapEntry.getValue().values.get(0)));
+                i += 1;
+            }
+        }
+//        values.add(new Entry(1, 50));
+//        values.add(new Entry(2, 100));
+//        values.add(new Entry(3, 80));
+//        values.add(new Entry(4, 120));
+//        values.add(new Entry(5, 110));
+//        values.add(new Entry(7, 150));
+//        values.add(new Entry(8, 250));
+//        values.add(new Entry(9, 190));
+
+        LineDataSet set1;
+        if (expenseChart.getData() != null &&
+                expenseChart.getData().getDataSetCount() > 0) {
+            set1 = (LineDataSet) expenseChart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            expenseChart.getData().notifyDataChanged();
+            expenseChart.notifyDataSetChanged();
+        } else {
+            set1 = new LineDataSet(values, "Sample Data");
+            set1.setDrawIcons(false);
+            set1.enableDashedLine(10f, 5f, 0f);
+            set1.enableDashedHighlightLine(10f, 5f, 0f);
+            set1.setColor(Color.DKGRAY);
+            set1.setCircleColor(Color.DKGRAY);
+            set1.setLineWidth(1f);
+            set1.setCircleRadius(3f);
+            set1.setDrawCircleHole(false);
+            set1.setValueTextSize(9f);
+            set1.setDrawFilled(true);
+            set1.setFormLineWidth(1f);
+            set1.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+            set1.setFormSize(15.f);
+
+            if (Utils.getSDKInt() >= 18) {
+                Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fade_blue);
+                set1.setFillDrawable(drawable);
+            } else {
+                set1.setFillColor(Color.DKGRAY);
+            }
+            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+            LineData data = new LineData(dataSets);
+
+            expenseChart.setData(data);
+//            expenseChart.getXAxis().setLabelCount(map.keySet().size());
+            expenseChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    return super.getFormattedValue(value, axis);
+//                    return
+                }
+            });
+            Toast.makeText(getContext(), "keys "+map.keySet(), Toast.LENGTH_SHORT).show();
+//
+//            expenseChart.getXAxis().setLabelCount(map.keySet().size());
+//            expenseChart.getXAxis().setDrawLabels(true);
+            expenseChart.getXAxis().setCenterAxisLabels(true);
+//            expenseChart.getXAxis().setXOffset(1f);
+            expenseChart.getXAxis().setAxisMinimum(0.7f);
+            expenseChart.invalidate();
         }
     }
 
@@ -592,8 +835,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseAccChart.setFitBars(true);
 
         datewiseAccChart.fitScreen();
-
-
         datewiseAccChart.setDragEnabled(true);
 //            datewiseAccChart.setVisibleXRangeMaximum(3f);
 //            datewiseAccChart.setVisibleXRange(2,4);
@@ -622,6 +863,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         BarEntry bar = null;
         float[] values;
         float i = 0.5f;
+
         for (Map.Entry<String, ValueAndLabel<Float, String>> mapEntry : map.entrySet()) {
             if (mapEntry.getValue().values.size() > 1) {
                 values = new float[mapEntry.getValue().values.size()];
