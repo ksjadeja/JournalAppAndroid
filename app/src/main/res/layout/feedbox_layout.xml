@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
 
-    android:layout_marginTop="5dp"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginBottom="5dp"
     android:minHeight="150dp"
-    android:id="@+id/card_view"
+    app:cardBackgroundColor="#BBBBBB"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp"
     app:cardPreventCornerOverlap="false"
-    app:cardBackgroundColor="#BBBBBB"
     app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut"
-            android:id="@+id/header"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="right">
+                android:gravity="right"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/dateField"
                     android:layout_width="wrap_content"
@@ -51,7 +53,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:layout_toRightOf="@+id/dateField"
                     android:text="12:30:24 pm"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                     android:textSize="14dp"
@@ -62,41 +63,38 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/data_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/data_card_view"
-            android:layout_below="@+id/header"
-            app:cardPreventCornerOverlap="false"
-            style="@style/feedbox_data_cardview"
-            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            app:shapeAppearanceOverlay="@style/feedbox_data_rounded_cut"
+            app:cardElevation="0dp"
             app:cardUseCompatPadding="true">
 
             <TextView
                 android:id="@+id/dataField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:freezesText="false"
-                android:minLines="5"
-                android:maxLines="5"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:freezesText="false"
+                android:maxLines="5"
+                android:minLines="5"
+                android:scrollbars="none"
                 android:text="Card content that is taller than the maximum card height is truncated and does not scroll, but can be displayed by expanding the height of a card. A card can expand beyond the maximum height of the screen, in which case the card scrolls within the screen."
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="14dp"
                 android:textStyle="italic"
-                app:fontFamily="sans-serif-medium"
-                android:scrollbars="none"
-                />
-
+                app:fontFamily="sans-serif-medium" />
 
         </com.google.android.material.card.MaterialCardView>
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
