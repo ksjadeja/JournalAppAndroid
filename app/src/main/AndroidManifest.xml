@@ -17,21 +17,28 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".ExpenseEntryEditActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ExpenseEntryNewActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ExpenseEntryNewActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".AccountEntryEditActivity"
-            android:windowSoftInputMode="adjustPan" /> <!-- <activity android:name=".TimelineViewPad" /> -->
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|screenSize"
+            /> <!-- <activity android:name=".TimelineViewPad" /> -->
         <!-- <activity android:name=".TimelineEditPad" /> -->
-        <activity android:name=".EntriesViewPad" />
-        <activity android:name=".EntriesEditPad" />
-        <activity android:name=".DrawerLayoutActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".EntriesViewPad"/>
+        <activity android:name=".EntriesEditPad"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".DrawerLayoutActivity"
+            android:configChanges="orientation|screenSize"
+            />
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
                     android:theme="@style/AppTheme.NoActionBar" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
