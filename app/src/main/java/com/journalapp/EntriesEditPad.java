@@ -112,6 +112,8 @@ public class EntriesEditPad extends AppCompatActivity {
                 }
             });
             saveAlert.show();
+        }else{
+            finish();
         }
     }
 

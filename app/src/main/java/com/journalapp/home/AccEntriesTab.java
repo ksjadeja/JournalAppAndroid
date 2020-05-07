@@ -65,7 +65,7 @@ public class AccEntriesTab extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AccountRecyclerViewAdapter(getContext(), accountEntryList);
-        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
@@ -82,7 +82,11 @@ public class AccEntriesTab extends Fragment {
                             key = dc.getDocument().getId();
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
-                            accountEntryList.add(0,new AccountBox(accountBoxDao,key));
+                            if(accountEntryList.size()>0 &&  accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0 ){
+                                accountEntryList.add(0, new AccountBox(accountBoxDao, key));
+                            }else{
+                                accountEntryList.add(new AccountBox(accountBoxDao, key));
+                            }
                             AccEntriesMap.addFirst(key);
                             break;
 
@@ -136,7 +140,7 @@ public class AccEntriesTab extends Fragment {
                 if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
                     isScrolling = false;
 
-                    accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot snapshots,
                                             @Nullable FirebaseFirestoreException e) {

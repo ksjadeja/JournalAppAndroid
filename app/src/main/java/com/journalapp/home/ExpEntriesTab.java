@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,24 +23,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.AccEntriesMap;
-import com.journalapp.EntriesMap;
 import com.journalapp.ExpEntriesMap;
 import com.journalapp.R;
-import com.journalapp.models.AccountBox;
-import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
-import com.journalapp.models.Feedbox;
-import com.journalapp.models.FeedboxDao;
-import com.journalapp.utils.AccountRecyclerViewAdapter;
-import com.journalapp.utils.ExpenseRecyclerViewAdapter;
 import com.journalapp.utils.ExpenseRecyclerViewAdapterView;
 
 import java.util.ArrayList;
 
-import static com.journalapp.AccEntriesMap.AccEntriesIndex;
-import static com.journalapp.EntriesMap.EntriesIndex;
 import static com.journalapp.ExpEntriesMap.ExpEntriesIndex;
 
 public class ExpEntriesTab extends Fragment {
@@ -74,7 +58,7 @@ public class ExpEntriesTab extends Fragment {
         expenseEntryList= new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseEntryList);
-        liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
                                 @Nullable FirebaseFirestoreException e) {
@@ -91,7 +75,11 @@ public class ExpEntriesTab extends Fragment {
                             key = dc.getDocument().getId();
                             expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
                             Log.i("DEBUG    :","exp: "+expenseBoxDao.getTimestamp().toDate());
-                            expenseEntryList.add(0,new ExpenseBox(expenseBoxDao,key));
+                            if(expenseEntryList.size()>0 &&  expenseEntryList.get(0).getTimestamp().compareTo(expenseBoxDao.getTimestamp().toDate()) < 0 ){
+                                expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
+                            }else{
+                                expenseEntryList.add(new ExpenseBox(expenseBoxDao, key));
+                            }
                             ExpEntriesMap.addFirst(key);
                             break;
 
@@ -143,7 +131,7 @@ public class ExpEntriesTab extends Fragment {
                 if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
                     isScrolling = false;
 
-                    expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot snapshots,
                                             @Nullable FirebaseFirestoreException e) {

@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="30dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
@@ -75,6 +76,14 @@
                 android:layout_marginRight="5dp"
                 android:text="Submit" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/avg_exp_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Data Available"
+                android:layout_margin="15dp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/avg_expense_recycler_view"
                 android:layout_width="match_parent"
@@ -127,7 +136,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="30dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
@@ -201,6 +211,14 @@
                     android:layout_marginRight="5dp"
                     android:text="Submit" />
             </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/total_account_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="No Data Available"
+                android:layout_margin="15dp" />
 
 
             <androidx.recyclerview.widget.RecyclerView
