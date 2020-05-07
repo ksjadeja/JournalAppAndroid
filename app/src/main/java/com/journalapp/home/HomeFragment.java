@@ -38,11 +38,12 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
 
         viewPager = root.findViewById(R.id.viewPager);
 
-        tabLayout.addTab(tabLayout.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.addTab(tabLayout.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white).setText("Journal Entries"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Account Entries"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Expense Entries"));
 
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         add_fab = root.findViewById(R.id.add_fab);
         layoutEntryFab = root.findViewById(R.id.entries_fab);
         layoutAccEntryFab =root.findViewById(R.id.acc_entry_fab);

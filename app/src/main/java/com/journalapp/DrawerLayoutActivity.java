@@ -38,7 +38,6 @@ import com.journalapp.mail.MailFragment;
 public class DrawerLayoutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     NavigationView navigationView;
     DrawerLayout drawerLayout;
-
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
 
@@ -47,16 +46,11 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     TextView user_display_name, user_email;
 
     public static CalendarFragment calendarFragment;
-    //    public static DatewiseEntries datewiseEntries;
-    private Boolean fabExpanded = false;
-    private LinearLayout layoutAccEntryFab, layoutEntryFab, layoutExpEntryFab;
-    private FloatingActionButton add_fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer_layout);
-
         View header = getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -150,8 +144,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
             fragmentTransaction.commit();
         }
-
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

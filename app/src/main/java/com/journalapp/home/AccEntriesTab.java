@@ -109,7 +109,10 @@ public class AccEntriesTab extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                if(snapshots.size()!=0)
+                    lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+//                else
+//                    lastVisible = snapshots.getDocuments().get(snapshots.size());
             }
         });
 

@@ -48,7 +48,6 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     public interface EDatePickerSelectionListener {
         void onDatePickerSelection(String date);
     }
-
     JDatePickerSelectionListener jdatePickerSelectionListener;
     ADatePickerSelectionListener adatePickerSelectionListener;
     EDatePickerSelectionListener edatePickerSelectionListener;
@@ -63,10 +62,11 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         calendarTabs = root.findViewById(R.id.calendarTabs);
         calendarViewPager = root.findViewById(R.id.calendarViewPager);
 
-        calendarTabs.addTab(calendarTabs.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white));
-        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
-        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
+        calendarTabs.addTab(calendarTabs.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white).setText("Journal Entries"));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Account Entries"));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Expense Entries"));
         calendarTabs.setTabGravity(TabLayout.GRAVITY_FILL);
+        calendarTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
         calendarTabs.setOnTabSelectedListener(this);
 
         add_fab = root.findViewById(R.id.add_fab);
