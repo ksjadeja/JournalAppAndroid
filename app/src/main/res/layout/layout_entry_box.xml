@@ -3,18 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="5dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="10dp"
     android:minHeight="150dp"
     app:cardBackgroundColor="#BBBBBB"
     app:cardCornerRadius="20dp"
-    app:cardElevation="5dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true">
+    app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="7dp"
             android:layout_marginBottom="5dp"
             app:cardUseCompatPadding="true"
             app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut">
@@ -64,33 +61,40 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/data_card_view"
+            style="@style/feedbox_data_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            app:shapeAppearanceOverlay="@style/feedbox_data_rounded_cut"
-            app:cardElevation="0dp"
-            app:cardUseCompatPadding="true">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardElevation="0dp">
 
-            <TextView
-                android:id="@+id/dataField"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:ellipsize="end"
-                android:freezesText="false"
-                android:maxLines="5"
-                android:minLines="5"
-                android:scrollbars="none"
-                android:text="Card content that is taller than the maximum card height is truncated and does not scroll, but can be displayed by expanding the height of a card. A card can expand beyond the maximum height of the screen, in which case the card scrolls within the screen."
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="14dp"
-                android:textStyle="italic"
-                app:fontFamily="sans-serif-medium" />
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/dataField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:freezesText="false"
+                    android:maxLines="5"
+                    android:minLines="5"
+                    android:scrollbars="none"
+                    android:text="Card content that is taller than the maximum card height is truncated and does not scroll, but can be displayed by expanding the height of a card. A card can expand beyond the maximum height of the screen, in which case the card scrolls within the screen. and no more"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14dp"
+                    android:textStyle="italic"
+                    app:fontFamily="sans-serif-medium" />
+
+            </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 

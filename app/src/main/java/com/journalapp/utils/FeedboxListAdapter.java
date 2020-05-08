@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
 
@@ -42,7 +40,7 @@ public class FeedboxListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = layoutInflater.inflate(R.layout.feedbox_layout,null);
+        view = layoutInflater.inflate(R.layout.layout_entry_box,null);
 
 
         TextView dateText = view.findViewById(R.id.dateField);
