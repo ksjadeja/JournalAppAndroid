@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void launchApp(){
         Intent intent = new Intent(MainActivity.this, DrawerLayoutActivity.class);
         startActivity(intent);
