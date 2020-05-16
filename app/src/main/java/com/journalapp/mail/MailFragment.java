@@ -24,16 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.EntriesMap;
 import com.journalapp.R;
-import com.journalapp.models.Feedbox;
-import com.journalapp.models.FeedboxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.MailListAdapter;
 
 import java.util.ArrayList;
 
-import static com.journalapp.EntriesMap.EntriesIndex;
 
 public class MailFragment extends Fragment {
 

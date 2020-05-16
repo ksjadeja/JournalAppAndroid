@@ -2,7 +2,6 @@ package com.journalapp.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.inputmethodservice.KeyboardView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,13 +20,14 @@ import com.journalapp.R;
 import com.journalapp.models.MailBean;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MailListAdapter extends BaseAdapter {
 
-    Context context;
-    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
-    ArrayList<MailBean> mailList;
-    CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
+    private Context context;
+    private String USER = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();           //"Kiran1901";
+    private ArrayList<MailBean> mailList;
+    private CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
     public MailListAdapter(Context context, ArrayList<MailBean> mailList) {
         this.context=context;
         this.mailList=mailList;
@@ -54,6 +52,7 @@ public class MailListAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
         view = layoutInflater.inflate(R.layout.mail_entry_layout,null,false);
         TextView personName = view.findViewById(R.id.tv_person_name);
         final EditText email = view.findViewById(R.id.edt_mail_id);
@@ -61,7 +60,6 @@ public class MailListAdapter extends BaseAdapter {
         final ImageButton saveButton = view.findViewById(R.id.saveEntryButton);
         final MaterialCardView saveCard = view.findViewById(R.id.saveCard);
         final MaterialCardView editCard = view.findViewById(R.id.editCard);
-//        getItem(i);
         personName.setText(mailList.get(i).getPersonName());
         Log.i("MailAA","name "+personName.getText());
         Log.i("MailAA","name "+mailList.get(i).getEmailEntered());
@@ -73,9 +71,7 @@ public class MailListAdapter extends BaseAdapter {
             saveCard.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.VISIBLE);
 
-//            email.setFocusable(true);
-//            email.setFocusableInTouchMode(true);
-//            email.setEnabled(true);
+            email.setEnabled(true);
             email.setInputType(InputType.TYPE_CLASS_TEXT);
 
             mailList.get(i).setEmail(email.getText().toString());
@@ -94,26 +90,23 @@ public class MailListAdapter extends BaseAdapter {
             mailList.get(i).setEmail(mail);
             mailList.get(i).setEmailEntered(true);
 
-//            email.setEnabled(false);
+            email.setEnabled(false);
             email.setInputType(InputType.TYPE_NULL);
-//            email.setFocusable(false);
 
             mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
         });
         if(mailList.get(i).getEmailEntered())
         {
-//            email.setEnabled(false);
+            email.setEnabled(false);
             email.setInputType(InputType.TYPE_NULL);
-//            email.setFocusable(false);
 
             saveButton.setVisibility(View.GONE);
             saveCard.setVisibility(View.GONE);
             editCard.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
         }else{
-//            email.setEnabled(true);
+            email.setEnabled(true);
             email.setInputType(InputType.TYPE_CLASS_TEXT);
-//            email.setFocusable(true);
 
             saveCard.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.VISIBLE);
