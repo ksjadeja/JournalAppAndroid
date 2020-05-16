@@ -39,7 +39,7 @@ public class AccEntriesTab extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<AccountBox> accountEntryList;
-    String USER= FirebaseAuth.getInstance().getCurrentUser().getUid();       // "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();       // "Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     AccountRecyclerViewAdapter adapter;
     ListenerRegistration liveAccountEntries;
@@ -51,7 +51,8 @@ public class AccEntriesTab extends Fragment {
     private DocumentSnapshot lastVisible;
 
 
-    public AccEntriesTab() { }
+    public AccEntriesTab() {
+    }
 
 
     @Override
@@ -59,8 +60,8 @@ public class AccEntriesTab extends Fragment {
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_home_acc_entries, container, false);
-        recyclerView=rootView.findViewById(R.id.acc_recycler_view);
-        accountEntryList= new ArrayList<>();
+        recyclerView = rootView.findViewById(R.id.acc_recycler_view);
+        accountEntryList = new ArrayList<>();
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -73,34 +74,35 @@ public class AccEntriesTab extends Fragment {
                     Log.i("ERROR:", "listen:error", e);
                     return;
                 }
-                int i=0;
+                int i = 0;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    String key=null;
-                    AccountBoxDao accountBoxDao= null;
+                    String key = null;
+                    AccountBoxDao accountBoxDao = null;
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
-                            if(accountEntryList.size()>0 &&  accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0 ){
+                            Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
+                            if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
                                 accountEntryList.add(0, new AccountBox(accountBoxDao, key));
-                            }else{
+                                AccEntriesMap.addFirst(key);
+                            } else {
                                 accountEntryList.add(new AccountBox(accountBoxDao, key));
+                                AccEntriesIndex.put(key, accountEntryList.size() - 1);
                             }
-                            AccEntriesMap.addFirst(key);
                             break;
 
                         case MODIFIED:
                             key = dc.getDocument().getId();
-                            accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
+                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
-                            accountEntryList.set(index,new AccountBox(accountBoxDao,key));
+                            accountEntryList.set(index, new AccountBox(accountBoxDao, key));
                             break;
 
                         case REMOVED:
-                            for(AccountBox ac:accountEntryList){
-                                if(ac.getId().equals(dc.getDocument().getId())){
-                                    AccEntriesMap.delete(ac.getId(),accountEntryList.indexOf(ac));
+                            for (AccountBox ac : accountEntryList) {
+                                if (ac.getId().equals(dc.getDocument().getId())) {
+                                    AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
                                     accountEntryList.remove(ac);
                                     break;
                                 }
@@ -109,8 +111,8 @@ public class AccEntriesTab extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                if(snapshots.size()!=0)
-                    lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                if (snapshots.size() != 0)
+                    lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
 //                else
 //                    lastVisible = snapshots.getDocuments().get(snapshots.size());
             }
@@ -151,29 +153,34 @@ public class AccEntriesTab extends Fragment {
                             }
 
                             for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                                String key=null;
-                                AccountBoxDao accountBoxDao= null;
+                                String key = null;
+                                AccountBoxDao accountBoxDao = null;
 
                                 switch (dc.getType()) {
                                     case ADDED:
                                         key = dc.getDocument().getId();
                                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                        Log.i("DEBUG    :","acc: "+accountBoxDao.getTimestamp().toDate());
-                                        accountEntryList.add(new AccountBox(accountBoxDao,key));
-                                        AccEntriesMap.addFirst(key);
+                                        Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
+                                        if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
+                                            accountEntryList.add(0, new AccountBox(accountBoxDao, key));
+                                            AccEntriesMap.addFirst(key);
+                                        } else {
+                                            accountEntryList.add(new AccountBox(accountBoxDao, key));
+                                            AccEntriesIndex.put(key, accountEntryList.size() - 1);
+                                        }
                                         break;
 
                                     case MODIFIED:
                                         key = dc.getDocument().getId();
-                                        accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
+                                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                                         int index = AccEntriesIndex.get(key);
-                                        accountEntryList.set(index,new AccountBox(accountBoxDao,key));
+                                        accountEntryList.set(index, new AccountBox(accountBoxDao, key));
                                         break;
 
                                     case REMOVED:
-                                        for(AccountBox ac:accountEntryList){
-                                            if(ac.getId().equals(dc.getDocument().getId())){
-                                                AccEntriesMap.delete(ac.getId(),accountEntryList.indexOf(ac));
+                                        for (AccountBox ac : accountEntryList) {
+                                            if (ac.getId().equals(dc.getDocument().getId())) {
+                                                AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
                                                 accountEntryList.remove(ac);
                                                 break;
                                             }
@@ -183,8 +190,8 @@ public class AccEntriesTab extends Fragment {
                             }
                             adapter.notifyDataSetChanged();
 
-                            if(snapshots.size() != 0){
-                                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                            if (snapshots.size() != 0) {
+                                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
                             }
 
                             if (snapshots.size() < limit) {
@@ -199,6 +206,7 @@ public class AccEntriesTab extends Fragment {
 
         return rootView;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

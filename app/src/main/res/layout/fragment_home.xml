@@ -14,7 +14,7 @@
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabIndicatorFullWidth="true"
-        >
+        app:tabMaxWidth="0dp">
 
     </com.google.android.material.tabs.TabLayout>
 

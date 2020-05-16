@@ -1,7 +1,9 @@
 package com.journalapp.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.inputmethodservice.KeyboardView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +50,11 @@ public class MailListAdapter extends BaseAdapter {
         return i;
     }
 
+    @SuppressLint("ViewHolder")
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = layoutInflater.inflate(R.layout.mail_entry_layout,null);
+        view = layoutInflater.inflate(R.layout.mail_entry_layout,null,false);
         TextView personName = view.findViewById(R.id.tv_person_name);
         final EditText email = view.findViewById(R.id.edt_mail_id);
         final ImageButton editButton = view.findViewById(R.id.editEntryButton);
@@ -64,102 +67,59 @@ public class MailListAdapter extends BaseAdapter {
         Log.i("MailAA","name "+mailList.get(i).getEmailEntered());
         email.setText(mailList.get(i).getEmail());
 
+        editButton.setOnClickListener(view1 -> {
+            editButton.setVisibility(View.GONE);
+            editCard.setVisibility(View.GONE);
+            saveCard.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.VISIBLE);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editButton.setVisibility(View.GONE);
-                editCard.setVisibility(View.GONE);
-                saveCard.setVisibility(View.VISIBLE);
-                saveButton.setVisibility(View.VISIBLE);
-                mailList.get(i).setEmail(email.getText().toString());
-                mailList.get(i).setEmailEntered(false);
-//                    email.setEnabled(true);
-                email.setFocusableInTouchMode(true);
-                email.setFocusable(true);
-                email.setClickable(true);
-                Log.i("Mail Edit","mail "+email.isInEditMode());
-            }
+//            email.setFocusable(true);
+//            email.setFocusableInTouchMode(true);
+//            email.setEnabled(true);
+            email.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            mailList.get(i).setEmail(email.getText().toString());
+            mailList.get(i).setEmailEntered(false);
+
+            Log.i("Mail Edit","mail "+email.isInEditMode());
         });
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editButton.setVisibility(View.VISIBLE);
-                editCard.setVisibility(View.VISIBLE);
-                saveCard.setVisibility(View.GONE);
-                saveButton.setVisibility(View.GONE);
+        saveButton.setOnClickListener(view12 -> {
+            editButton.setVisibility(View.VISIBLE);
+            editCard.setVisibility(View.VISIBLE);
+            saveCard.setVisibility(View.GONE);
+            saveButton.setVisibility(View.GONE);
 
-                Log.i("Mail Save ","mail "+email.getText().toString());
-                String mail = email.getText().toString();
-                mailList.get(i).setEmail(mail);
-                mailList.get(i).setEmailEntered(true);
-                email.setFocusable(false);
-                email.setClickable(false);
-                email.setFocusableInTouchMode(true);
-                mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
-            }
+            Log.i("Mail Save ","mail "+email.getText().toString());
+            String mail = email.getText().toString();
+            mailList.get(i).setEmail(mail);
+            mailList.get(i).setEmailEntered(true);
+
+//            email.setEnabled(false);
+            email.setInputType(InputType.TYPE_NULL);
+//            email.setFocusable(false);
+
+            mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
         });
         if(mailList.get(i).getEmailEntered())
         {
-            email.setClickable(false);
-            email.setFocusable(false);
 //            email.setEnabled(false);
+            email.setInputType(InputType.TYPE_NULL);
+//            email.setFocusable(false);
+
             saveButton.setVisibility(View.GONE);
             saveCard.setVisibility(View.GONE);
             editCard.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.VISIBLE);
         }else{
-            email.setClickable(true);
-            email.setFocusable(true);
+//            email.setEnabled(true);
+            email.setInputType(InputType.TYPE_CLASS_TEXT);
+//            email.setFocusable(true);
+
             saveCard.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.VISIBLE);
             editButton.setVisibility(View.GONE);
             editCard.setVisibility(View.GONE);
         }
-//        if(saveButton.getVisibility()==View.VISIBLE)
-//        {
-//            saveButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.i("Mail Save ","mail "+email.getText().toString());
-//                    String mail = email.getText().toString();
-//                    mailList.get(i).setEmail(mail);
-//                    mailList.get(i).setEmailEntered(true);
-//                    notifyDataSetChanged();
-//                    mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
-//                }
-//            });
-//        }
-//        if(editButton.getVisibility()==View.VISIBLE)
-//        {
-//            editButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    editButton.setVisibility(View.GONE);
-//                    editCard.setVisibility(View.GONE);
-//                    saveCard.setVisibility(View.VISIBLE);
-//                    saveButton.setVisibility(View.VISIBLE);
-//                    mailList.get(i).setEmail(email.getText().toString());
-//                    mailList.get(i).setEmailEntered(false);
-////                    email.setEnabled(true);
-//                    email.setFocusableInTouchMode(true);
-//                    email.setClickable(true);
-//                    Log.i("Mail Edit","mail "+email.isInEditMode());
-//                }
-//            });
-//            saveButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.i("Mail Save ","mail "+email.getText().toString());
-//                    String mail = email.getText().toString();
-//                    mailList.get(i).setEmail(mail);
-//                    mailList.get(i).setEmailEntered(true);
-//                    mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
-//                    email.setFocusable(false);
-//                    email.setClickable(false);
-//                }
-//            });
-//        }
         return view;
     }
 }

@@ -36,7 +36,7 @@ import static com.journalapp.ExpEntriesMap.ExpEntriesIndex;
 public class ExpEntriesTab extends Fragment {
     RecyclerView recyclerView;
     ArrayList<ExpenseBox> expenseEntryList;
-    String USER= FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
     ExpenseRecyclerViewAdapterView adapter;
     ListenerRegistration liveExpenseEntries;
@@ -47,15 +47,16 @@ public class ExpEntriesTab extends Fragment {
     private DocumentSnapshot lastVisible;
 
 
-    public ExpEntriesTab (){}
+    public ExpEntriesTab() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home_expense_entries, container, false);
-        recyclerView=rootView.findViewById(R.id.exp_recycler_view);
+        recyclerView = rootView.findViewById(R.id.exp_recycler_view);
 
-        expenseEntryList= new ArrayList<>();
+        expenseEntryList = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ExpenseRecyclerViewAdapterView(getContext(), expenseEntryList);
         liveExpenseEntries = expenseEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -66,34 +67,35 @@ public class ExpEntriesTab extends Fragment {
                     Log.i("ERROR:", "listen:error", e);
                     return;
                 }
-                int i=0;
+                int i = 0;
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    String key=null;
-                    ExpenseBoxDao expenseBoxDao= null;
+                    String key = null;
+                    ExpenseBoxDao expenseBoxDao = null;
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
-                            Log.i("DEBUG    :","exp: "+expenseBoxDao.getTimestamp().toDate());
-                            if(expenseEntryList.size()>0 &&  expenseEntryList.get(0).getTimestamp().compareTo(expenseBoxDao.getTimestamp().toDate()) < 0 ){
+                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                            Log.i("DEBUG    :", "exp: " + expenseBoxDao.getTimestamp().toDate());
+                            if (expenseEntryList.size() > 0 && expenseEntryList.get(0).getTimestamp().compareTo(expenseBoxDao.getTimestamp().toDate()) < 0) {
                                 expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
-                            }else{
+                                ExpEntriesMap.addFirst(key);
+                            } else {
                                 expenseEntryList.add(new ExpenseBox(expenseBoxDao, key));
+                                ExpEntriesIndex.put(key, expenseEntryList.size() - 1);
                             }
-                            ExpEntriesMap.addFirst(key);
                             break;
 
                         case MODIFIED:
                             key = dc.getDocument().getId();
-                            expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
+                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
                             int index = ExpEntriesIndex.get(key);
-                            expenseEntryList.set(index,new ExpenseBox(expenseBoxDao,key));
+                            expenseEntryList.set(index, new ExpenseBox(expenseBoxDao, key));
                             break;
 
                         case REMOVED:
-                            for(ExpenseBox ex:expenseEntryList){            //TODO optimize it futher
-                                if(ex.getId().equals(dc.getDocument().getId())){
-                                    ExpEntriesMap.delete(ex.getId(),expenseEntryList.indexOf(ex));
+                            for (ExpenseBox ex : expenseEntryList) {            //TODO optimize it futher
+                                if (ex.getId().equals(dc.getDocument().getId())) {
+                                    ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
                                     expenseEntryList.remove(ex);
                                     break;
                                 }
@@ -102,8 +104,8 @@ public class ExpEntriesTab extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                if(snapshots.size()!=0)
-                    lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                if (snapshots.size() != 0)
+                    lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
             }
         });
 
@@ -142,28 +144,33 @@ public class ExpEntriesTab extends Fragment {
                             }
 
                             for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                                String key=null;
-                                ExpenseBoxDao expenseBoxDao= null;
+                                String key = null;
+                                ExpenseBoxDao expenseBoxDao = null;
                                 switch (dc.getType()) {
                                     case ADDED:
                                         key = dc.getDocument().getId();
-                                        expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
-                                        Log.i("DEBUG    :","exp: "+expenseBoxDao.getTimestamp().toDate());
-                                        expenseEntryList.add(new ExpenseBox(expenseBoxDao,key));
-                                        ExpEntriesMap.addFirst(key);
+                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                        Log.i("DEBUG    :", "exp: " + expenseBoxDao.getTimestamp().toDate());
+                                        if (expenseEntryList.size() > 0 && expenseEntryList.get(0).getTimestamp().compareTo(expenseBoxDao.getTimestamp().toDate()) < 0) {
+                                            expenseEntryList.add(0, new ExpenseBox(expenseBoxDao, key));
+                                            ExpEntriesMap.addFirst(key);
+                                        } else {
+                                            expenseEntryList.add(new ExpenseBox(expenseBoxDao, key));
+                                            ExpEntriesIndex.put(key, expenseEntryList.size() - 1);
+                                        }
                                         break;
 
                                     case MODIFIED:
                                         key = dc.getDocument().getId();
-                                        expenseBoxDao= dc.getDocument().toObject(ExpenseBoxDao.class);
+                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
                                         int index = ExpEntriesIndex.get(key);
-                                        expenseEntryList.set(index,new ExpenseBox(expenseBoxDao,key));
+                                        expenseEntryList.set(index, new ExpenseBox(expenseBoxDao, key));
                                         break;
 
                                     case REMOVED:
-                                        for(ExpenseBox ex:expenseEntryList){            //TODO optimize it futher
-                                            if(ex.getId().equals(dc.getDocument().getId())){
-                                                ExpEntriesMap.delete(ex.getId(),expenseEntryList.indexOf(ex));
+                                        for (ExpenseBox ex : expenseEntryList) {            //TODO optimize it futher
+                                            if (ex.getId().equals(dc.getDocument().getId())) {
+                                                ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
                                                 expenseEntryList.remove(ex);
                                                 break;
                                             }
@@ -173,8 +180,8 @@ public class ExpEntriesTab extends Fragment {
                             }
                             adapter.notifyDataSetChanged();
 
-                            if(snapshots.size() != 0){
-                                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                            if (snapshots.size() != 0) {
+                                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
                             }
 
                             if (snapshots.size() < limit) {
@@ -188,6 +195,7 @@ public class ExpEntriesTab extends Fragment {
 
         return rootView;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

@@ -3,12 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:src="@drawable/raw_divider" />
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -16,45 +12,68 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
         android:id="@+id/card_view">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:padding="5dp">
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="100dp"
+                android:layout_width="0dp"
+                android:layout_weight="3"
                 android:layout_height="wrap_content"
+                android:maxWidth="110dp"
                 android:maxLines="2"
                 android:layout_gravity="start"
                 android:id="@+id/calculate_item_date_time"
-                android:text="04/05/2020 04:13:43 PM" />
+                android:layout_marginRight="10dp"
+                android:text="04/05/2020 04:13:43 PM"
+                android:gravity="center"
+                android:layout_marginEnd="10dp" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="200dp"
+                android:layout_width="0dp"
+                android:layout_weight="4"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:layout_gravity="start"
-                android:paddingLeft="50dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
                 android:id="@+id/calculate_item_desc"
-                android:text="description of something " />
+                android:text="description of dede ede de"
+                android:gravity="center"
+                android:paddingStart="5dp"
+                android:paddingEnd="10dp" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:maxLines="1"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/calculate_item_amount"
-                android:text="450 Rs." />
+                android:text="450 Rs."
+                android:gravity="center"
+                android:layout_marginStart="10dp" />
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <!--<androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:src="@drawable/raw_divider" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/raw_divider" />-->
 
 </LinearLayout>

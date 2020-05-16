@@ -79,27 +79,29 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    app:boxStrokeColor="@color/colorPrimary"
-                    android:hint="email id"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:startIconDrawable="@drawable/ic_mail"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1" >
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    app:boxStrokeColor="@color/colorPrimary"-->
+<!--                    android:hint="email id"-->
+<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:startIconDrawable="@drawable/ic_mail"-->
+<!--                    android:layout_marginLeft="5dp"-->
+<!--                    android:layout_marginRight="5dp"-->
+<!--                    android:layout_weight="1" >-->
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_mail_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
+                        android:hint="Email Id"
                         android:textStyle="bold"
+                        android:textAlignment="center"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         />
-                </com.google.android.material.textfield.TextInputLayout>
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 

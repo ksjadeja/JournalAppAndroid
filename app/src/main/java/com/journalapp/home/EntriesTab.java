@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -90,12 +89,13 @@ public class EntriesTab extends Fragment {
                             key = dc.getDocument().getId();
                             feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
                             Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
-                            if(feedboxesList.size()>0 &&  feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0 ){
+                            if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
                                 feedboxesList.add(0, new Feedbox(feedboxDao, key));
-                            }else{
+                                EntriesMap.addFirst(key);
+                            } else {
                                 feedboxesList.add(new Feedbox(feedboxDao, key));
+                                EntriesIndex.put(key, feedboxesList.size() - 1);
                             }
-                            EntriesMap.addFirst(key);
                             break;
 
                         case MODIFIED:
@@ -117,8 +117,8 @@ public class EntriesTab extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                if(snapshots.size()!=0)
-                    lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                if (snapshots.size() != 0)
+                    lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -163,8 +163,13 @@ public class EntriesTab extends Fragment {
                                         key = dc.getDocument().getId();
                                         feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
                                         Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
-                                        feedboxesList.add(new Feedbox(feedboxDao, key));
-                                        EntriesMap.addFirst(key);
+                                        if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
+                                            feedboxesList.add(0, new Feedbox(feedboxDao, key));
+                                            EntriesMap.addFirst(key);
+                                        } else {
+                                            feedboxesList.add(new Feedbox(feedboxDao, key));
+                                            EntriesIndex.put(key, feedboxesList.size() - 1);
+                                        }
                                         break;
 
                                     case MODIFIED:
@@ -187,8 +192,8 @@ public class EntriesTab extends Fragment {
                             }
                             adapter.notifyDataSetChanged();
 
-                            if(snapshots.size() != 0){
-                                lastVisible = snapshots.getDocuments().get(snapshots.size()-1);
+                            if (snapshots.size() != 0) {
+                                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
                             }
 
                             if (snapshots.size() < limit) {

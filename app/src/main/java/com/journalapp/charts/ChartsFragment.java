@@ -89,7 +89,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         View rootView = inflater.inflate(R.layout.fragment_charts, container, false);
         myMarkerView = new MyMarkerView(rootView.getContext(), R.layout.custom_marker_view);
 
-
         datewiseAccChart = rootView.findViewById(R.id.datewiseAccChart);
         startDate = rootView.findViewById(R.id.start_date);
         endDate = rootView.findViewById(R.id.end_date);
@@ -561,17 +560,15 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         leftAxis.removeAllLimitLines();
         leftAxis.addLimitLine(ll1);
         leftAxis.addLimitLine(ll2);
-        leftAxis.setAxisMaximum(350f);
+//        leftAxis.setAxisMaximum(350f);
         leftAxis.setAxisMinimum(0f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setDrawZeroLine(false);
+        leftAxis.setDrawZeroLine(true);
+        leftAxis.setGranularityEnabled(true);
         leftAxis.setDrawLimitLinesBehindData(false);
 
         expenseChart.getAxisRight().setEnabled(false);
 //        add
-
-
-
         final TreeMap<String, ValueAndLabel<Float, String>> map = new TreeMap<>();
         ValueAndLabel<Float, String> vl;
         for (ExpenseBox ex : expenseEntryList) {
@@ -594,15 +591,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 i += 1;
             }
         }
-//        values.add(new Entry(1, 50));
-//        values.add(new Entry(2, 100));
-//        values.add(new Entry(3, 80));
-//        values.add(new Entry(4, 120));
-//        values.add(new Entry(5, 110));
-//        values.add(new Entry(7, 150));
-//        values.add(new Entry(8, 250));
-//        values.add(new Entry(9, 190));
-
         LineDataSet set1;
         if (expenseChart.getData() != null &&
                 expenseChart.getData().getDataSetCount() > 0) {
@@ -611,12 +599,13 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             expenseChart.getData().notifyDataChanged();
             expenseChart.notifyDataSetChanged();
         } else {
-            set1 = new LineDataSet(values, "Sample Data");
-            set1.setDrawIcons(false);
+            set1 = new LineDataSet(values, "Daily Expenses");
+            set1.setDrawIcons(true);
             set1.enableDashedLine(10f, 5f, 0f);
             set1.enableDashedHighlightLine(10f, 5f, 0f);
             set1.setColor(Color.DKGRAY);
             set1.setCircleColor(Color.DKGRAY);
+
             set1.setLineWidth(1f);
             set1.setCircleRadius(3f);
             set1.setDrawCircleHole(false);
@@ -637,25 +626,24 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             LineData data = new LineData(dataSets);
 
             expenseChart.setData(data);
-//            expenseChart.getXAxis().setLabelCount(map.keySet().size());
+            expenseChart.getXAxis().setLabelCount(map.keySet().size());
             expenseChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
                     return super.getFormattedValue(value, axis);
-//                    return
                 }
             });
             Toast.makeText(getContext(), "keys "+map.keySet(), Toast.LENGTH_SHORT).show();
 //
-//            expenseChart.getXAxis().setLabelCount(map.keySet().size());
-//            expenseChart.getXAxis().setDrawLabels(true);
-            expenseChart.getXAxis().setCenterAxisLabels(true);
+            expenseChart.getXAxis().setAvoidFirstLastClipping(true);
+            expenseChart.getXAxis().setLabelCount(map.keySet().size());
+            expenseChart.getXAxis().setDrawLabels(true);
+//            expenseChart.getXAxis().setCenterAxisLabels(true);
 //            expenseChart.getXAxis().setXOffset(1f);
             expenseChart.getXAxis().setAxisMinimum(0.7f);
             expenseChart.invalidate();
         }
     }
-
     private void drawAccountBarChartPerson(ArrayList<AccountBox> accountEntryList2) {
         final HashMap<String, ValueAndLabel<Float, String>> map = new HashMap<>();
         ValueAndLabel<Float, String> vl;
