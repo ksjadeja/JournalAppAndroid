@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,7 +34,7 @@ public class ExpenseEntryNewActivity extends AppCompatActivity {
     RecyclerView expenseRecyclerView;
     ExpenseRecyclerViewAdapter expenseRecyclerViewAdapter;
     ArrayList<ExpenseBoxDao> expenseList;
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference expenseEntriesRef = FirebaseFirestore.getInstance().collection("expense_entries");
 
     @Override
@@ -117,6 +118,7 @@ public class ExpenseEntryNewActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         if (task.isSuccessful()) {
                             Log.i("Status:", "db exp entry is successful");
+                            finish();
                         } else {
                             Log.i("Status:", "db exp entry is not successful");
                         }

@@ -28,7 +28,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             app:cardUseCompatPadding="true"
             app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut">
 
@@ -72,6 +71,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_margin="5dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true">
 
@@ -79,18 +79,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingRight="3dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     app:cardUseCompatPadding="true"
                     app:cardElevation="0dp"
-                    android:layout_weight="3">
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="4">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
@@ -99,41 +103,43 @@
                             android:layout_height="wrap_content"
                             style="@style/aacountbox_left_cardview_component"
                             app:cardElevation="3dp"
-                            app:cardUseCompatPadding="true">
+                            android:layout_margin="5dp">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="left">
+                                android:gravity="left|center_vertical"
+                                android:orientation="horizontal">
 
                                 <TextView
-                                    android:gravity="center_vertical"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginEnd="5dp"
+                                    android:layout_marginRight="5dp"
                                     android:ellipsize="end"
                                     android:freezesText="false"
+                                    android:gravity="center_vertical"
                                     android:maxLines="1"
                                     android:minLines="1"
                                     android:scrollbars="none"
                                     android:text="Label: "
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="5dp" />
+                                    android:textSize="14dp" />
 
                                 <TextView
-                                    android:gravity="center_vertical"
                                     android:id="@+id/exp_tv_item_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="0dp"
+                                    android:layout_marginStart="5dp"
                                     android:layout_marginLeft="5dp"
-                                    android:layout_marginEnd="15dp"
-                                    android:layout_marginRight="15dp"
-                                    android:maxLines="2"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:gravity="center_vertical"
+                                    android:maxLines="3"
                                     android:minLines="1"
+                                    android:ellipsize="end"
                                     android:text="Birthday Party"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:textStyle="bold|italic"
@@ -150,23 +156,24 @@
                             android:layout_height="wrap_content"
                             style="@style/aacountbox_left_cardview_component"
                             app:cardElevation="3dp"
-                            app:cardUseCompatPadding="true">
+                            android:layout_margin="5dp">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:gravity="left">
+                                android:gravity="left|center_vertical">
 
                                 <TextView
                                     android:gravity="center_vertical"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
+                                    android:layout_marginStart="10dp"
                                     android:layout_marginEnd="5dp"
                                     android:text="Amount: "
+                                    android:textSize="14dp"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginRight="5dp" />
 
                                 <TextView
@@ -176,8 +183,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="5dp"
                                     android:layout_marginLeft="5dp"
-                                    android:layout_marginEnd="15dp"
-                                    android:layout_marginRight="15dp"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
                                     android:text="850"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:textStyle="bold|italic"
@@ -195,11 +202,11 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     app:cardUseCompatPadding="true"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="3dp"
-                    android:layout_weight="2">
+                    android:layout_weight="4">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -216,9 +223,8 @@
                             android:freezesText="false"
                             android:scrollbars="none"
                             android:text="Desc:"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textSize="14dp"
-                            app:fontFamily="sans-serif-medium" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textSize="14dp" />
 
                         <TextView
                             android:id="@+id/exp_tv_desc"
@@ -228,7 +234,7 @@
                             android:ellipsize="end"
                             android:freezesText="false"
                             android:maxLines="5"
-                            android:minLines="5"
+                            android:minLines="4"
                             android:scrollbars="none"
                             android:text="Card content that is taller than the maximum card"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"

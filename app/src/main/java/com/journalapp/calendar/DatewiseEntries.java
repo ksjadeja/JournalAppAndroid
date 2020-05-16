@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -40,7 +41,7 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
     private ArrayList<Feedbox> feedboxesList= new ArrayList<>();
     private RecyclerViewAdapter recyclerViewAdapter;
 
-    private String USER = "Kiran1901";
+    private String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String selectedDate = dateFormat.format(Calendar.getInstance().getTime());
 

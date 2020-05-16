@@ -18,9 +18,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.models.AccountBox;
@@ -61,7 +64,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     ListenerRegistration liveAccountEntries;
     ArrayList<String> accountNameList=new ArrayList<>();
     ArrayAdapter adapter;
-    String USER= "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountBox accountBox;
@@ -207,25 +210,31 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             accountBox.setT_type(String.valueOf(t_type));
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
-            AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
+            final AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
             accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
-//                    if (task.isSuccessful()) {
-//                        Toast.makeText(AccountEntryEditActivity.this,"Entry Saved..",Toast.LENGTH_SHORT).show();
-////                            AccountBoxDao tmpAccBox = (AccountBoxDao) task.getResult(AccountBoxDao.class);
-//                        for (QueryDocumentSnapshot document : task.getResult()){
-//                            MailBean mailBean = new MailBean();
-//                            String name = (String)document.get("Name");
-//                            mailBean.setPersonName(name);
-//                            mailBean.setEmail(null);
-//                            mailBean.setEmailEntered(false);
-//                            mailEntriesRef.document(USER).collection("entries").add(mailBean).
-//                    }
-
-//                }
-//                        Log.i("Status:","db entry is not successful");
-
+                    if (task.isSuccessful()) {
+                        Log.i("Status:", "db acc entry is successful");
+                        MailBean mailBean = new MailBean();
+                        String name = accEntrybox.getName();
+                        mailBean.setPersonName(name);
+                        mailBean.setEmail(null);
+                        mailBean.setEmailEntered(false);
+                        mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if(task.isSuccessful())
+                                {
+                                    Log.i("Status:", "db mail list entry is successful");
+                                }else{
+                                    Log.i("Status:", "db mail list entry is not successful");
+                                }
+                            }
+                        });
+                    } else {
+                        Log.i("Status:", "db acc entry is not successful");
+                    }
                 }
             });
             finish();
@@ -294,12 +303,10 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     private boolean isChanged(){
         if(update){
-            if(nameText.getText().toString().equals(accountBox.getName()) &&
-                    amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) &&
-                    t_type==Integer.parseInt(accountBox.getT_type()) &&
-                    descText.getText().toString().equals(accountBox.getDesc())){
-                return false;
-            }
+            return !nameText.getText().toString().equals(accountBox.getName()) ||
+                    !amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) ||
+                    t_type != Integer.parseInt(accountBox.getT_type()) ||
+                    !descText.getText().toString().equals(accountBox.getDesc());
         }
         return true;
     }

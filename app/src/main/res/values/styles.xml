@@ -27,6 +27,11 @@
         <item name="cardElevation">0dp</item>
     </style>
 
+    <style name="account_data_cardview" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/account_data_rounded_cut</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
     <style name="aacountbox_left_cardview_component" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearance">@style/aacountbox_single_cardview_component</item>
         <item name="cardElevation">3dp</item>
@@ -80,16 +85,24 @@
     <style name="feedbox_data_rounded_cut" >
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerSizeBottomRight">20dp</item>
-        <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
     </style>
 
     <style name="feedbox_header_rounded_cut" >
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeTopRight">15dp</item>
         <item name="cornerSizeTopLeft">15dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+
+    <style name="account_data_rounded_cut" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
         <item name="cornerSizeBottomLeft">15dp</item>
     </style>
 

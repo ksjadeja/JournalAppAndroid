@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,23 +24,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.journalapp.EntriesMap;
 import com.journalapp.R;
-import com.journalapp.models.Feedbox;
-import com.journalapp.models.FeedboxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.MailListAdapter;
 
 import java.util.ArrayList;
 
-import static com.journalapp.EntriesMap.EntriesIndex;
 
 public class MailFragment extends Fragment {
 
     CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
     ListenerRegistration liveMailEntries;
     ListView listView;
-    final String USER = "Kiran1901";
+    final String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     ArrayList<MailBean> mailBeanArrayList;
 //    Button btnMail;
     @Nullable
@@ -70,16 +67,13 @@ public class MailFragment extends Fragment {
                             key = dc.getDocument().getId();
                             mailBean = dc.getDocument().toObject(MailBean.class);
                             mailBean.setKey(key);
-                            Log.i("Mail AAA:","is entered  "+mailBean.getEmailEntered());
                             mailBeanArrayList.add(mailBean);
                             mailListAdapter.notifyDataSetChanged();
                             break;
-
                         case MODIFIED:
                             key = dc.getDocument().getId();
                             mailBean = dc.getDocument().toObject(MailBean.class);
                             int index;
-//                            Log.i("DEBUG    :","Timestamp:::"+feedboxDao.getTimestamp().toDate());
                             for(MailBean x: mailBeanArrayList)
                             {
                                 if(x.getKey().equals(key)){

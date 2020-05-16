@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journalapp.models.Feedbox;
@@ -18,7 +19,7 @@ public class EntriesViewPad extends AppCompatActivity {
 
     FloatingActionButton editFab;
 
-    String USER = "Kiran1901";
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
 
     TextView dateField,timeField,dataField;
     Feedbox feedbox;

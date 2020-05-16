@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.shape.CornerFamily;
-import com.google.android.material.shape.ShapeAppearanceModel;
 import com.journalapp.EntriesViewPad;
 import com.journalapp.R;
 import com.journalapp.models.Feedbox;
@@ -34,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public EntryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.feedbox_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_entry_box, parent, false);
         EntryHolder pvh = new EntryHolder(v);
         return pvh;
     }
@@ -42,15 +41,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(final Context context, final ArrayList<Feedbox> entries){
         this.entries = entries;
         this.context=context;
-
-
-        if(entries.size()==0)
-        {
-            Toast.makeText(context, "Keep patience...", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(context, "visible...", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
