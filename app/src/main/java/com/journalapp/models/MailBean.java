@@ -9,7 +9,7 @@ public class MailBean {
 
     private String personName;
     private String email;
-    private boolean EmailEntered;
+    private boolean emailEntered;
 
 
     @Exclude
@@ -21,11 +21,11 @@ public class MailBean {
         this.key = key;
     }
     public boolean getEmailEntered() {
-        return EmailEntered;
+        return emailEntered;
     }
 
     public void setEmailEntered(boolean emailEntered) {
-        EmailEntered = emailEntered;
+        this.emailEntered = emailEntered;
     }
 
     public String getPersonName() {
