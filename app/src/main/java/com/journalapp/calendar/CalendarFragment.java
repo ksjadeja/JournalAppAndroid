@@ -73,43 +73,31 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         layoutEntryFab = root.findViewById(R.id.layoutEntry);
         layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
         layoutExpEntryFab = root.findViewById(R.id.layoutExpEntry);
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fabExpanded) {
-                    closeSubMenusFab();
-                } else {
-                    openSubMenusFab();
-                }
+        add_fab.setOnClickListener(v -> {
+            if (fabExpanded) {
+                closeSubMenusFab();
+            } else {
+                openSubMenusFab();
             }
         });
 
-        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
-                startActivity(newEntryIntent);
-                closeSubMenusFab();
+        layoutEntryFab.setOnClickListener(v -> {
+            Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
+            startActivity(newEntryIntent);
+            closeSubMenusFab();
 
-            }
         });
 
-        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
-                startActivity(accountEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutAccEntryFab.setOnClickListener(v -> {
+            Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
+            startActivity(accountEntryIntent);
+            closeSubMenusFab();
         });
 
-        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
-                startActivity(expenseEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutExpEntryFab.setOnClickListener(v -> {
+            Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
+            startActivity(expenseEntryIntent);
+            closeSubMenusFab();
         });
 
         calendarPagerAdapter = new CalendarTabPagerAdapter(getActivity().getSupportFragmentManager(), calendarTabs.getTabCount());
@@ -120,29 +108,26 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
 
         datePicker = root.findViewById(R.id.datePicker);
         Calendar c = Calendar.getInstance();
-        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                date = (newDay < 10 ? "0" + newDay : newDay) + "-" + (newMonth < 9 ? "0" + (newMonth + 1) : (newMonth + 1)) + "-" + newYear;
-                Log.i("Event    :::", "date changed to " + date);
-                if (jdatePickerSelectionListener != null) {
-                    jdatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  jour");
-                } else {
-                    Log.i("Event    :::", "jour datelistener is null");
-                }
-                if (adatePickerSelectionListener != null) {
-                    adatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  acc");
-                } else {
-                    Log.i("Event    :::", "acc datelistener is null");
-                }
-                if (edatePickerSelectionListener != null) {
-                    edatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  exp");
-                } else {
-                    Log.i("Event    :::", "exp datelistener is null");
-                }
+        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), (view, newYear, newMonth, newDay) -> {
+            date = (newDay < 10 ? "0" + newDay : newDay) + "-" + (newMonth < 9 ? "0" + (newMonth + 1) : (newMonth + 1)) + "-" + newYear;
+            Log.i("Event    :::", "date changed to " + date);
+            if (jdatePickerSelectionListener != null) {
+                jdatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  jour");
+            } else {
+                Log.i("Event    :::", "jour datelistener is null");
+            }
+            if (adatePickerSelectionListener != null) {
+                adatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  acc");
+            } else {
+                Log.i("Event    :::", "acc datelistener is null");
+            }
+            if (edatePickerSelectionListener != null) {
+                edatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  exp");
+            } else {
+                Log.i("Event    :::", "exp datelistener is null");
             }
         });
 

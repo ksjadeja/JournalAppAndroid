@@ -66,56 +66,50 @@ public class AccEntriesTab extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AccountRecyclerViewAdapter(getContext(), accountEntryList);
-        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.i("ERROR:", "listen:error", e);
-                    return;
-                }
-                int i = 0;
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    String key = null;
-                    AccountBoxDao accountBoxDao = null;
-                    switch (dc.getType()) {
-                        case ADDED:
-                            key = dc.getDocument().getId();
-                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
-                            if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
-                                accountEntryList.add(0, new AccountBox(accountBoxDao, key));
-                                AccEntriesMap.addFirst(key);
-                            } else {
-                                accountEntryList.add(new AccountBox(accountBoxDao, key));
-                                AccEntriesIndex.put(key, accountEntryList.size() - 1);
-                            }
-                            break;
-
-                        case MODIFIED:
-                            key = dc.getDocument().getId();
-                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            int index = AccEntriesIndex.get(key);
-                            accountEntryList.set(index, new AccountBox(accountBoxDao, key));
-                            break;
-
-                        case REMOVED:
-                            for (AccountBox ac : accountEntryList) {
-                                if (ac.getId().equals(dc.getDocument().getId())) {
-                                    AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
-                                    accountEntryList.remove(ac);
-                                    break;
-                                }
-                            }
-                            break;
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                if (snapshots.size() != 0)
-                    lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
-//                else
-//                    lastVisible = snapshots.getDocuments().get(snapshots.size());
+        liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.i("ERROR:", "listen:error", e);
+                return;
             }
+            int i = 0;
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                String key = null;
+                AccountBoxDao accountBoxDao = null;
+                switch (dc.getType()) {
+                    case ADDED:
+                        key = dc.getDocument().getId();
+                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                        Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
+                        if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
+                            accountEntryList.add(0, new AccountBox(accountBoxDao, key));
+                            AccEntriesMap.addFirst(key);
+                        } else {
+                            accountEntryList.add(new AccountBox(accountBoxDao, key));
+                            AccEntriesIndex.put(key, accountEntryList.size() - 1);
+                        }
+                        break;
+
+                    case MODIFIED:
+                        key = dc.getDocument().getId();
+                        accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+                        int index = AccEntriesIndex.get(key);
+                        accountEntryList.set(index, new AccountBox(accountBoxDao, key));
+                        break;
+
+                    case REMOVED:
+                        for (AccountBox ac : accountEntryList) {
+                            if (ac.getId().equals(dc.getDocument().getId())) {
+                                AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
+                                accountEntryList.remove(ac);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+            adapter.notifyDataSetChanged();
+            if (snapshots.size() != 0)
+                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
         });
 
         recyclerView.setAdapter(adapter);
@@ -202,8 +196,6 @@ public class AccEntriesTab extends Fragment {
                 }
             }
         });
-
-
         return rootView;
     }
 

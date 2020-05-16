@@ -43,12 +43,7 @@ public class EntriesViewPad extends AppCompatActivity {
 
         deleteEntryButton = findViewById(R.id.deleteEntryButton);
 
-        deleteEntryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEntry();
-            }
-        });
+        deleteEntryButton.setOnClickListener(v -> deleteEntry());
 
         Intent intent = getIntent();
         feedbox = ((Feedbox) intent.getSerializableExtra("feedbox"));
@@ -57,12 +52,7 @@ public class EntriesViewPad extends AppCompatActivity {
         timeField.setText(feedbox.getTime());
         dataField.setText(feedbox.getData());
 
-        editFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editEntry();
-            }
-        });
+        editFab.setOnClickListener(v -> editEntry());
 
     }
 

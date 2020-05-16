@@ -48,43 +48,31 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         layoutEntryFab = root.findViewById(R.id.entries_fab);
         layoutAccEntryFab =root.findViewById(R.id.acc_entry_fab);
         layoutExpEntryFab = root.findViewById(R.id.exp_entry_fab);
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(fabExpanded){
-                    closeSubMenusFab();
-                }else {
-                    openSubMenusFab();
-                }
+        add_fab.setOnClickListener(v -> {
+            if(fabExpanded){
+                closeSubMenusFab();
+            }else {
+                openSubMenusFab();
             }
         });
 
-        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
-                startActivity(newEntryIntent);
-                closeSubMenusFab();
+        layoutEntryFab.setOnClickListener(v -> {
+            Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
+            startActivity(newEntryIntent);
+            closeSubMenusFab();
 
-            }
         });
 
-        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
-                startActivity(accountEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutAccEntryFab.setOnClickListener(v -> {
+            Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
+            startActivity(accountEntryIntent);
+            closeSubMenusFab();
         });
 
-        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
-                startActivity(expenseEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutExpEntryFab.setOnClickListener(v -> {
+            Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
+            startActivity(expenseEntryIntent);
+            closeSubMenusFab();
         });
 
         tabLayout.setOnTabSelectedListener(this);

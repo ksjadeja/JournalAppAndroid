@@ -45,13 +45,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     public AccountRecyclerViewAdapter(final Context context, final ArrayList<AccountBox> entries){
         this.entries = entries;
         this.context=context;
-//        if(entries.size()==0)
-//        {
-//            Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            Toast.makeText(context, "list is not empty", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     @Override
@@ -69,16 +62,13 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             holder.type.setText("TAKE");
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, AccountEntryEditActivity.class);
-                AccountBox accountBox = new AccountBox();
-                accountBox.setId(entries.get(holder.getAdapterPosition()).getId());
-                intent.putExtra("accountbox",entries.get(holder.getAdapterPosition()));
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, AccountEntryEditActivity.class);
+            AccountBox accountBox = new AccountBox();
+            accountBox.setId(entries.get(holder.getAdapterPosition()).getId());
+            intent.putExtra("accountbox",entries.get(holder.getAdapterPosition()));
+            context.startActivity(intent);
         });
     }
 

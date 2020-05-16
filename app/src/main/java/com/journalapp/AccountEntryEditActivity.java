@@ -119,43 +119,25 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             update=false;
         }
 
-        save_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(update){
-                    updateEntry();
-                }else {
-                    saveEntry();
-                }
-
+        save_btn.setOnClickListener(v -> {
+            if(update){
+                updateEntry();
+            }else {
+                saveEntry();
             }
+
         });
 
-        discard_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEntry();
-            }
-        });
+        discard_btn.setOnClickListener(v -> finish());
+        delete_btn.setOnClickListener(v -> deleteEntry());
 
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_item,accountNameList);
         fillUserSeggestions();
         nameText.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
-        nameText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String item = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
-            }
+        nameText.setOnItemClickListener((adapterView, view, i, l) -> {
+            String item = adapterView.getItemAtPosition(i).toString();
+            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
 
     }
@@ -182,18 +164,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveEntry();
-                }
-            });
-            saveAlert.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
+            saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
+            saveAlert.setNegativeButton("Discard", (dialog, which) -> finish());
             saveAlert.show();
         }else {
             finish();
@@ -283,19 +255,13 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         final AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
         saveAlert.setTitle("Do you really want to Delete?");
         saveAlert.setCancelable(false);
-        saveAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
-                AccEntriesMap.delete(accountBox.getId(), AccEntriesIndex.get(accountBox.getId()));
-                finish();
-            }
+        saveAlert.setPositiveButton("Yes", (dialog, which) -> {
+            accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
+            AccEntriesMap.delete(accountBox.getId(), AccEntriesIndex.get(accountBox.getId()));
+            finish();
         });
-        saveAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
+        saveAlert.setNegativeButton("No", (dialog, which) -> {
+            return;
         });
         saveAlert.show();
 

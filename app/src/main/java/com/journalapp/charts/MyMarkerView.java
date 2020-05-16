@@ -1,5 +1,6 @@
 package com.journalapp.charts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 import com.journalapp.R;
 
+@SuppressLint("ViewConstructor")
 public class MyMarkerView extends MarkerView {
 
     private TextView tvContent;

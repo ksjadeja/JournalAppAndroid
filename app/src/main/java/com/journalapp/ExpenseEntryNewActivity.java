@@ -51,21 +51,8 @@ public class ExpenseEntryNewActivity extends AppCompatActivity {
         expenseRecyclerView.setAdapter(expenseRecyclerViewAdapter);
         expenseRecyclerViewAdapter.addNewData();
 
-        addExpenseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                expenseRecyclerViewAdapter.addNewData();
-            }
-        });
-
-
-        expSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveEntry();
-            }
-        });
-
+        addExpenseButton.setOnClickListener(view -> expenseRecyclerViewAdapter.addNewData());
+        expSaveButton.setOnClickListener(view -> saveEntry());
     }
 
     private boolean validateInput() {
@@ -89,18 +76,8 @@ public class ExpenseEntryNewActivity extends AppCompatActivity {
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(ExpenseEntryNewActivity.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveEntry();
-                }
-            });
-            saveAlert.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
+            saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
+            saveAlert.setNegativeButton("Discard", (dialog, which) -> finish());
             saveAlert.show();
         }else {
             finish();

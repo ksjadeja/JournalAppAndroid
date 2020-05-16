@@ -73,23 +73,18 @@ public class EntriesEditPad extends AppCompatActivity {
             dataText.setText("Write here..");
         }
 
-        saveFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(dataText.getText())){
-                    Toast.makeText(EntriesEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
+        saveFab.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(dataText.getText())){
+                Toast.makeText(EntriesEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
+            }else{
+                feedbox.setData(dataText.getText().toString());
+                if(update){
+                    updateEntry();
                 }else{
-                    feedbox.setData(dataText.getText().toString());
-                    if(update){
-                        updateEntry();
-                    }else{
-                        saveEntry();
-                    }
+                    saveEntry();
                 }
             }
         });
-
-
     }
 
     @Override
@@ -98,18 +93,10 @@ public class EntriesEditPad extends AppCompatActivity {
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(EntriesEditPad.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveEntry();
-                }
-            });
-            saveAlert.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(EntriesEditPad.this,"Closing Activity",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+            saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
+            saveAlert.setNegativeButton("Discard", (dialog, which) -> {
+                Toast.makeText(EntriesEditPad.this,"Closing Activity",Toast.LENGTH_SHORT).show();
+                finish();
             });
             saveAlert.show();
         }else{
@@ -121,15 +108,12 @@ public class EntriesEditPad extends AppCompatActivity {
 
         FeedboxDao feedboxDao = new FeedboxDao(feedbox);
 
-        journalEntriesRef.document(USER).collection("entries").add(feedboxDao).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                if (task.isSuccessful()){
-                    Log.i("Status:","Entry added successfully");
-                    Toast.makeText(EntriesEditPad.this,"Entry Saved",Toast.LENGTH_SHORT).show();
-                }else {
-                    Log.i("Status:","db entry is not successful");
-                }
+        journalEntriesRef.document(USER).collection("entries").add(feedboxDao).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.i("Status:","Entry added successfully");
+                Toast.makeText(EntriesEditPad.this,"Entry Saved",Toast.LENGTH_SHORT).show();
+            }else {
+                Log.i("Status:","db entry is not successful");
             }
         });
         finish();

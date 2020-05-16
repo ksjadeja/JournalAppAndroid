@@ -49,16 +49,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.timeField.setText(entries.get(position).getTime());
         holder.dataField.setText(entries.get(position).getData());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, EntriesViewPad.class);
-                Feedbox feedbox = new Feedbox();
-                feedbox.setId(entries.get(holder.getAdapterPosition()).getId());
-                intent.putExtra("feedbox",entries.get(holder.getAdapterPosition()));
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, EntriesViewPad.class);
+            Feedbox feedbox = new Feedbox();
+            feedbox.setId(entries.get(holder.getAdapterPosition()).getId());
+            intent.putExtra("feedbox",entries.get(holder.getAdapterPosition()));
+            context.startActivity(intent);
         });
     }
 
@@ -71,7 +68,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
-
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
@@ -107,7 +103,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return dataField;
         }
     }
-
-
 
 }
