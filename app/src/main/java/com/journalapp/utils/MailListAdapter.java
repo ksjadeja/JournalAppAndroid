@@ -53,7 +53,7 @@ public class MailListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
-        view = layoutInflater.inflate(R.layout.mail_entry_layout,null,false);
+        view = layoutInflater.inflate(R.layout.layout_mail_entry,null,false);
         TextView personName = view.findViewById(R.id.tv_person_name);
         final EditText email = view.findViewById(R.id.edt_mail_id);
         final ImageButton editButton = view.findViewById(R.id.editEntryButton);
