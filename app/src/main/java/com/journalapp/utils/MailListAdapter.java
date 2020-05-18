@@ -53,7 +53,7 @@ public class MailListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert layoutInflater != null;
-        view = layoutInflater.inflate(R.layout.mail_entry_layout,null,false);
+        view = layoutInflater.inflate(R.layout.layout_mail_entry,null,false);
         TextView personName = view.findViewById(R.id.tv_person_name);
         final EditText email = view.findViewById(R.id.edt_mail_id);
         final ImageButton editButton = view.findViewById(R.id.editEntryButton);
@@ -61,8 +61,6 @@ public class MailListAdapter extends BaseAdapter {
         final MaterialCardView saveCard = view.findViewById(R.id.saveCard);
         final MaterialCardView editCard = view.findViewById(R.id.editCard);
         personName.setText(mailList.get(i).getPersonName());
-        Log.i("MailAA","name "+personName.getText());
-        Log.i("MailAA","name "+mailList.get(i).getEmailEntered());
         email.setText(mailList.get(i).getEmail());
 
         editButton.setOnClickListener(view1 -> {
@@ -77,7 +75,6 @@ public class MailListAdapter extends BaseAdapter {
             mailList.get(i).setEmail(email.getText().toString());
             mailList.get(i).setEmailEntered(false);
 
-            Log.i("Mail Edit","mail "+email.isInEditMode());
         });
         saveButton.setOnClickListener(view12 -> {
             editButton.setVisibility(View.VISIBLE);
@@ -85,7 +82,6 @@ public class MailListAdapter extends BaseAdapter {
             saveCard.setVisibility(View.GONE);
             saveButton.setVisibility(View.GONE);
 
-            Log.i("Mail Save ","mail "+email.getText().toString());
             String mail = email.getText().toString();
             mailList.get(i).setEmail(mail);
             mailList.get(i).setEmailEntered(true);

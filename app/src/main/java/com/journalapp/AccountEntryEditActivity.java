@@ -187,7 +187,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     if (task.isSuccessful()) {
-                        Log.i("Status:", "db acc entry is successful");
                         MailBean mailBean = new MailBean();
                         String name = accEntrybox.getName();
                         mailBean.setPersonName(name);
@@ -294,10 +293,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            Log.i("CntAAA:",(i++)+":::"+key);
-
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            Log.i("CntAAA:",(i++)+":::"+accountBoxDao.getName());
                             accountNameList.add(accountBoxDao.getName());
                             AccEntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();
@@ -307,10 +303,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             key = dc.getDocument().getId();
                             accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
-                            Log.i("CntAAA:",(i++)+"Modified :::"+accountBoxDao.getName()+"index  "+index);
-                            Log.i("CntAAA:",(i++)+"Old :::"+accountNameList.get(index)+"index  "+index);
                             accountNameList.set(index,accountBoxDao.getName());
-                            Log.i("CntAAA:",(i++)+"Modified :::"+accountNameList.get(index)+"index  "+index);
                             adapter.notifyDataSetChanged();
                             break;
 

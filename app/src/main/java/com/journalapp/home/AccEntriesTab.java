@@ -79,7 +79,6 @@ public class AccEntriesTab extends Fragment {
                     case ADDED:
                         key = dc.getDocument().getId();
                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                        Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
                         if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
                             accountEntryList.add(0, new AccountBox(accountBoxDao, key));
                             AccEntriesMap.addFirst(key);
@@ -154,7 +153,6 @@ public class AccEntriesTab extends Fragment {
                                     case ADDED:
                                         key = dc.getDocument().getId();
                                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                                        Log.i("DEBUG    :", "acc: " + accountBoxDao.getTimestamp().toDate());
                                         if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
                                             accountEntryList.add(0, new AccountBox(accountBoxDao, key));
                                             AccEntriesMap.addFirst(key);
