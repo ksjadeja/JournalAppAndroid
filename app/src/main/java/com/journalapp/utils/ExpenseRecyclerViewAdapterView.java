@@ -52,13 +52,14 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         holder.amount.setText(String.valueOf(entries.get(position).getAmount()));
         holder.description.setText(entries.get(position).getDesc());
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnLongClickListener(v -> {
             Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, ExpenseEntryEditActivity.class);
             ExpenseBox expensebox = new ExpenseBox();
             expensebox.setId(entries.get(holder.getAdapterPosition()).getId());
             intent.putExtra("expensebox",entries.get(holder.getAdapterPosition()));
             context.startActivity(intent);
+            return true;
         });
 
     }

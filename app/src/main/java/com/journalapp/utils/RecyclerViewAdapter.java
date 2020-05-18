@@ -2,6 +2,7 @@ package com.journalapp.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +50,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.timeField.setText(entries.get(position).getTime());
         holder.dataField.setText(entries.get(position).getData());
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnLongClickListener(v -> {
             Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, EntriesViewPad.class);
             Feedbox feedbox = new Feedbox();
             feedbox.setId(entries.get(holder.getAdapterPosition()).getId());
             intent.putExtra("feedbox",entries.get(holder.getAdapterPosition()));
             context.startActivity(intent);
+            return true;
         });
     }
 
@@ -92,6 +94,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             dateField = itemView.findViewById(R.id.dateField);
             timeField = itemView.findViewById(R.id.timeField);
             dataField = itemView.findViewById(R.id.dataField);
+//            cv.setCardBackgroundColor(Color.rgb(100,100,200));
         }
         public TextView getDateField() {
             return dateField;
@@ -103,5 +106,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             return dataField;
         }
     }
-
 }

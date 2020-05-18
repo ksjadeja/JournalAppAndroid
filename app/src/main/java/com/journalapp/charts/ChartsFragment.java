@@ -459,22 +459,25 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         xAxis.setAxisMinimum(0f);
         xAxis.setDrawLimitLinesBehindData(true);
 
-        LimitLine ll1 = new LimitLine(215f, "Maximum Limit");
-        ll1.setLineWidth(4f);
+        LimitLine ll1 = new LimitLine(215f, "Daily Expense Limit");
+        ll1.setLineWidth(3f);
         ll1.enableDashedLine(10f, 10f, 0f);
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
 
-        LimitLine ll2 = new LimitLine(70f, "Minimum Limit");
-        ll2.setLineWidth(4f);
-        ll2.enableDashedLine(10f, 10f, 0f);
-        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        ll2.setTextSize(10f);
+
+//        LimitLine ll2 = new LimitLine(70f, "Minimum Limit");
+//        ll2.setLineWidth(4f);
+//        ll2.enableDashedLine(10f, 10f, 0f);
+//        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+//        ll2.setTextSize(10f);
 
         YAxis leftAxis = expenseChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
         leftAxis.addLimitLine(ll1);
-        leftAxis.addLimitLine(ll2);
+//        leftAxis.addLimitLine(ll2);
+
+
         leftAxis.setAxisMinimum(0f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(true);
