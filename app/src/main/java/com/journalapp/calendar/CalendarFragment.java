@@ -140,7 +140,6 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 date = (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth) + "-" + (month < 9 ? "0" + (month + 1) : (month + 1)) + "-" + year;
 
-                Log.i("KIRAN : ", "date : "+date);
 
                 if (jdatePickerSelectionListener != null) {
                     jdatePickerSelectionListener.onDatePickerSelection(date);

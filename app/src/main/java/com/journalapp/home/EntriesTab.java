@@ -63,6 +63,8 @@ public class EntriesTab extends Fragment {
                              Bundle savedInstanceState) {
 
         View entriesView = inflater.inflate(R.layout.fragment_home_entries, container, false);
+        setRetainInstance(true);
+
         recyclerView = entriesView.findViewById(R.id.recycler_view);
 
         feedboxesList = new ArrayList<>();
@@ -85,7 +87,6 @@ public class EntriesTab extends Fragment {
                     case ADDED:
                         key = dc.getDocument().getId();
                         feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                        Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
                         if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
                             feedboxesList.add(0, new Feedbox(feedboxDao, key));
                             EntriesMap.addFirst(key);
@@ -155,7 +156,6 @@ public class EntriesTab extends Fragment {
                                 case ADDED:
                                     key = dc.getDocument().getId();
                                     feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                                    Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
                                     if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
                                         feedboxesList.add(0, new Feedbox(feedboxDao, key));
                                         EntriesMap.addFirst(key);
@@ -203,6 +203,6 @@ public class EntriesTab extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        liveJournalEntries.remove();
+//        liveJournalEntries.remove();
     }
 }

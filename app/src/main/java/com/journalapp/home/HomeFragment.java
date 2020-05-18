@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        setRetainInstance(true);
 
         tabLayout= root.findViewById(R.id.timelineTabs);
 
@@ -125,6 +126,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         add_fab.setImageResource(R.drawable.ic_close_btn);
         fabExpanded = true;
     }
+
 
 
 }

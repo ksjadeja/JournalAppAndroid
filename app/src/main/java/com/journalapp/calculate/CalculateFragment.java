@@ -443,7 +443,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                 }
                             });
                         } else {
-                            Log.i("TEMP", selected_name);
                             accountEntriesRef.document(USER).collection("entries").whereEqualTo("name", selected_name).whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {

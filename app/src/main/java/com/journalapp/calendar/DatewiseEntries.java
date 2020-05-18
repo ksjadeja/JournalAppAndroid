@@ -82,7 +82,6 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                             case ADDED:
                                 key = dc.getDocument().getId();
                                 feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                                Log.i("DEBUG    :","added ::"+feedboxDao.getData());
                                 feedboxesList.add(0,new Feedbox(feedboxDao,key));
                                 recyclerViewAdapter.notifyDataSetChanged();
                                 break;
@@ -90,7 +89,6 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                             case MODIFIED:
                                 key = dc.getDocument().getId();
                                 feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                                Log.i("DEBUG    :","modified to::"+feedboxDao.getData());
                                 for(Feedbox fb:feedboxesList) {
                                     if (fb.getId().equals(key)) {
                                         feedboxesList.set(feedboxesList.indexOf(fb),new Feedbox(feedboxDao, key));
@@ -102,7 +100,6 @@ public class DatewiseEntries extends Fragment implements CalendarFragment.JDateP
                             case REMOVED:
                                 for(Feedbox fb:feedboxesList){
                                     if(fb.getId().equals(dc.getDocument().getId())){
-                                        Log.i("DEBUG    :","deleted ::"+fb.getData());
                                         feedboxesList.remove(fb);
                                         recyclerViewAdapter.notifyDataSetChanged();
                                         break;
