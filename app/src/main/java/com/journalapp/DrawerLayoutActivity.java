@@ -137,7 +137,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             });
             saveAlert.show();
         }
-
         if (fragment != null) {
             fragment.setRetainInstance(true);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
