@@ -590,8 +590,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 //            expenseChart.setPinchZoom(false);
             xAxis.setAxisMinimum(0.8f);
             xAxis.setXOffset(-1f);
-            xAxis.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
-            leftAxis.setAxisMaximum(map.lastEntry().getValue().values.get(0)+100f);
+            expenseChart.setExtraTopOffset(70f);
             expenseChart.animateXY(2000, 2000);
             expenseChart.invalidate();
         }
@@ -734,7 +733,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         BarData data = new BarData(barDataSet);
         datewiseAccChart.setData(data);
         datewiseAccChart.getXAxis().setLabelCount(map.keySet().size());
-        datewiseAccChart.getAxisLeft().setAxisMaximum(map.lastEntry().getValue().values.get(0)+100f);
+
         datewiseAccChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -751,7 +750,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseAccChart.setPinchZoom(false);
         datewiseAccChart.animateXY(2000, 2000);
         datewiseAccChart.setFitBars(true);
-        datewiseAccChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP_INSIDE);
+        datewiseAccChart.setExtraTopOffset(70f);
         datewiseAccChart.fitScreen();
         datewiseAccChart.setDragEnabled(true);
         datewiseAccChart.invalidate();
@@ -811,8 +810,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseExpChart.setPinchZoom(false);
         datewiseExpChart.setFitBars(true);
         datewiseExpChart.fitScreen();
-        datewiseExpChart.getXAxis().setPosition(XAxis.XAxisPosition.TOP_INSIDE);
-        datewiseExpChart.getAxisLeft().setAxisMaximum(map.lastEntry().getValue().values.get(0)+100f);
+        datewiseExpChart.setExtraTopOffset(70f);
         datewiseExpChart.invalidate();
     }
 
