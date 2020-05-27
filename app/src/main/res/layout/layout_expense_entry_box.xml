@@ -11,7 +11,7 @@
     android:layout_marginRight="5dp"
     android:layout_marginBottom="5dp"
     android:minHeight="150dp"
-    app:cardBackgroundColor="#BBBBBB"
+    app:cardBackgroundColor="@color/exp_entry_card_background"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp"
     app:cardPreventCornerOverlap="false"
@@ -29,7 +29,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             app:cardUseCompatPadding="true"
-            app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut">
+            app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut"
+            app:cardBackgroundColor="@color/exp_entry_card_header">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,7 +74,8 @@
             android:layout_marginBottom="5dp"
             android:layout_margin="5dp"
             app:cardPreventCornerOverlap="false"
-            app:cardUseCompatPadding="true">
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/exp_entry_card_body">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,7 +92,8 @@
                     app:cardUseCompatPadding="true"
                     app:cardElevation="0dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="4">
+                    android:layout_weight="4"
+                    app:cardBackgroundColor="@color/exp_entry_card_body">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -103,7 +106,8 @@
                             android:layout_height="wrap_content"
                             style="@style/aacountbox_left_cardview_component"
                             app:cardElevation="3dp"
-                            android:layout_margin="5dp">
+                            android:layout_margin="5dp"
+                            app:cardBackgroundColor="@color/exp_entry_card_body_data_left">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
@@ -156,7 +160,8 @@
                             android:layout_height="wrap_content"
                             style="@style/aacountbox_left_cardview_component"
                             app:cardElevation="3dp"
-                            android:layout_margin="5dp">
+                            android:layout_margin="5dp"
+                            app:cardBackgroundColor="@color/exp_entry_card_body_data_left">
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
@@ -206,7 +211,8 @@
                     app:cardUseCompatPadding="true"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="3dp"
-                    android:layout_weight="4">
+                    android:layout_weight="4"
+                    app:cardBackgroundColor="@color/exp_entry_card_body_data_right">
 
                     <LinearLayout
                         android:layout_width="match_parent"

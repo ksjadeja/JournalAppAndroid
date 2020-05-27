@@ -9,7 +9,7 @@
     android:layout_marginRight="5dp"
     android:layout_marginBottom="10dp"
     android:minHeight="150dp"
-    app:cardBackgroundColor="#BBBBBB"
+    app:cardBackgroundColor="@color/entry_card_background"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp">
 
@@ -27,6 +27,7 @@
             android:layout_marginRight="7dp"
             android:layout_marginBottom="5dp"
             app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/entry_card_header"
             app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut">
 
             <LinearLayout
@@ -68,7 +69,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             app:cardPreventCornerOverlap="true"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/entry_card_body">
 
             <LinearLayout
                 android:layout_width="match_parent"

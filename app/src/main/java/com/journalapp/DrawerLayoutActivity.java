@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +38,8 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
+
+    Fragment last_fragment;
 
 
     ImageView user_profile_image;
@@ -93,8 +93,10 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         actionBarDrawerToggle.syncState();
 
         HomeFragment homeFragment = new HomeFragment();
+        homeFragment.setRetainInstance(true);
+        last_fragment = homeFragment;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.nav_host_fragment, homeFragment);
+        fragmentTransaction.add(R.id.nav_host_fragment, homeFragment, "home");
         fragmentTransaction.commit();
 
     }
@@ -104,18 +106,72 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         Fragment fragment = null;
 
         if (menuItem.getItemId() == R.id.nav_calendar) {
-            fragment = new CalendarFragment();
-            calendarFragment = ((CalendarFragment) fragment);
+            if (getSupportFragmentManager().findFragmentByTag("calendar") == null) {
+                fragment = new CalendarFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "calendar").commit();
+                calendarFragment = ((CalendarFragment) fragment);
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("calendar")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("calendar");
+            }
+            this.setTitle("Calendar");
         } else if (menuItem.getItemId() == R.id.nav_home) {
-            fragment = new HomeFragment();
+            if (getSupportFragmentManager().findFragmentByTag("home") == null) {
+                fragment = new HomeFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().add(R.id.nav_host_fragment, fragment, "home").commit();
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("home")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("home");
+            }
+            this.setTitle("Timeline");
         } else if (menuItem.getItemId() == R.id.nav_charts) {
-            fragment = new ChartsFragment();
+            if (getSupportFragmentManager().findFragmentByTag("chart") == null) {
+                fragment = new ChartsFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "chart").commit();
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("chart")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("chart");
+            }
+            this.setTitle("Charts");
         } else if (menuItem.getItemId() == R.id.nav_calculate) {
-            fragment = new CalculateFragment();
+            if (getSupportFragmentManager().findFragmentByTag("calculate") == null) {
+                fragment = new CalculateFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "calculate").commit();
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("calculate")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("calculate");
+            }
+            this.setTitle("Calculate");
         } else if (menuItem.getItemId() == R.id.nav_email) {
-            fragment = new MailFragment();
+            if (getSupportFragmentManager().findFragmentByTag("mail") == null) {
+                fragment = new MailFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "mail").commit();
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("mail")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("mail");
+            }
+            this.setTitle("Mail");
         } else if (menuItem.getItemId() == R.id.nav_contact_us) {
-            fragment = new ContactUsFragment();
+            if (getSupportFragmentManager().findFragmentByTag("contact") == null) {
+                fragment = new ContactUsFragment();
+                fragment.setRetainInstance(true);
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "contact").commit();
+                last_fragment = fragment;
+            } else {
+                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("contact")).commit();
+                last_fragment = getSupportFragmentManager().findFragmentByTag("contact");
+            }
+            this.setTitle("Contact");
         } else if (menuItem.getItemId() == R.id.nav_sign_out) {
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(this);
             saveAlert.setTitle("Do you really want to Sign Out?");
@@ -138,12 +194,12 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             saveAlert.show();
         }
 
-        if (fragment != null) {
+       /* if (fragment != null) {
             fragment.setRetainInstance(true);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
             fragmentTransaction.commit();
-        }
+        }*/
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

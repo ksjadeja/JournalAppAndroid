@@ -2,6 +2,7 @@ package com.journalapp.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,13 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     private FloatingActionButton add_fab,layoutAccEntryFab, layoutEntryFab , layoutExpEntryFab;
     private Boolean fabExpanded = false;
 
+    private static String TAG = "DEB    :";
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        setRetainInstance(true);
 
         tabLayout= root.findViewById(R.id.timelineTabs);
 
@@ -83,6 +85,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         closeSubMenusFab();
+        Log.w(TAG, "fragment onCreateView() ");
 
         return root;
     }
@@ -91,6 +94,8 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Timeline");
+        Log.w(TAG, "fragment onViewCreated() ");
+
     }
 
     @Override
@@ -127,6 +132,51 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         fabExpanded = true;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.w(TAG, "fragment onStart() ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.w(TAG, "fragment onResume() ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.w(TAG, "fragment onPause() ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.w(TAG, "fragment onStop() ");
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.w(TAG, "fragment onDestroyView() ");
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.w(TAG, "fragment onDestroy() ");
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.w(TAG, "fragment onDetach() ");
+
+    }
 
 
 }

@@ -3,37 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fragment_background"
     android:orientation="vertical">
 
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/timelineTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:id="@+id/timelineTabs"
-        app:tabSelectedTextColor="@color/colorPrimary"
+        android:background="@color/home_tab_background"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabIndicatorFullWidth="true"
-        app:tabMaxWidth="0dp">
+        app:tabMaxWidth="0dp"
+        app:tabSelectedTextColor="@color/home_tab_item_selected">
 
     </com.google.android.material.tabs.TabLayout>
 
 
-
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/timelineTabs"
-        android:id="@+id/viewPager"
-        />
+        android:layout_below="@+id/timelineTabs" />
 
 
-    <include layout="@layout/layout_fab_submenu"
-        android:layout_height="wrap_content"
+    <include
+        layout="@layout/layout_fab_submenu"
         android:layout_width="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
 
