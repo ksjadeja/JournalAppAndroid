@@ -65,7 +65,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 //            holder.cv.setCardBackgroundColor(Color.rgb(119,221,119));
         }
         holder.itemView.setOnLongClickListener(view -> {
-            Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, AccountEntryEditActivity.class);
             AccountBox accountBox = new AccountBox();
             accountBox.setId(entries.get(holder.getAdapterPosition()).getId());

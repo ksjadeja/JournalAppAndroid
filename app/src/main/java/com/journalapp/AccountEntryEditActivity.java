@@ -137,7 +137,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         adapter.setNotifyOnChange(true);
         nameText.setOnItemClickListener((adapterView, view, i, l) -> {
             String item = adapterView.getItemAtPosition(i).toString();
-            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
+//            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
 
     }

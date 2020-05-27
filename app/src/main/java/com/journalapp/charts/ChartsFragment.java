@@ -157,7 +157,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, day, 23, 59, 59);
                     endAcc = calendar.getTime();
-//                        Toast.makeText(getActivity(), "year endAcc "+year, Toast.LENGTH_SHORT).show();
                     endDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(endAcc));
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
@@ -168,7 +167,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         accountEntryList = new ArrayList<>();
                         accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAcc).whereLessThan("timestamp", endAcc).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener((queryDocumentSnapshots, e) -> {
                             if (e != null) {
-                                Toast.makeText(getActivity(), "listener error", Toast.LENGTH_SHORT).show();
                                 Log.i("ERROR:", "listen:error", e);
                                 return;
                             }
@@ -556,7 +554,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 //            expenseChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
 //                @Override
 //                public String getFormattedValue(float value, AxisBase axis) {
-//                    Toast.makeText(getContext(), "label "+keys[(int)value].toString(), Toast.LENGTH_SHORT).show();
 //                    Log.i("Labeliiiii","label "+keys[(int)value].toString());
 //                    return keys[(int)value].toString();
 //                }

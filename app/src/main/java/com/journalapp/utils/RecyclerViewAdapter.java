@@ -51,7 +51,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.dataField.setText(entries.get(position).getData());
 
         holder.itemView.setOnLongClickListener(v -> {
-            Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, EntriesViewPad.class);
             Feedbox feedbox = new Feedbox();
             feedbox.setId(entries.get(holder.getAdapterPosition()).getId());

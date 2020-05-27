@@ -100,7 +100,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
-        Toast.makeText(getActivity(), "Tab selected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

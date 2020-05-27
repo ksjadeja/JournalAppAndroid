@@ -95,7 +95,6 @@ public class EntriesEditPad extends AppCompatActivity {
             saveAlert.setCancelable(false);
             saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
             saveAlert.setNegativeButton("Discard", (dialog, which) -> {
-                Toast.makeText(EntriesEditPad.this,"Closing Activity",Toast.LENGTH_SHORT).show();
                 finish();
             });
             saveAlert.show();
