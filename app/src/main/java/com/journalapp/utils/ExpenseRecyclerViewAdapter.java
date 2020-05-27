@@ -101,12 +101,9 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         holder.getAmount().setText(String.valueOf(expenseBoxDao.getAmount()));
         holder.getDescription().setText(expenseBoxDao.getDesc());
 
-        holder.deleteExpenseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                entries.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-            }
+        holder.deleteExpenseButton.setOnClickListener(view -> {
+            entries.remove(holder.getAdapterPosition());
+            notifyItemRemoved(holder.getAdapterPosition());
         });
 
     }
@@ -138,7 +135,6 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
         expenseboxDao.setDesc("");
         entries.add(expenseboxDao);
         notifyItemInserted(getItemCount() - 1);
-
     }
 
     public static class EntryHolder extends RecyclerView.ViewHolder {

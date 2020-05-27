@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 
@@ -37,6 +38,8 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     private FloatingActionButton add_fab;
     private Boolean fabExpanded = false;
 
+    private CalendarView calendarView;
+
     public interface JDatePickerSelectionListener {
         void onDatePickerSelection(String date);
     }
@@ -62,54 +65,42 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
         calendarTabs = root.findViewById(R.id.calendarTabs);
         calendarViewPager = root.findViewById(R.id.calendarViewPager);
 
-        calendarTabs.addTab(calendarTabs.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white).setText("Journal Entries"));
-        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Account Entries"));
-        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setText("Expense Entries"));
+        calendarTabs.addTab(calendarTabs.newTab().setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED).setIcon(R.drawable.ic_entries_white));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_account_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
+        calendarTabs.addTab(calendarTabs.newTab().setIcon(R.drawable.ic_expense_entries_white).setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_LABELED));
         calendarTabs.setTabGravity(TabLayout.GRAVITY_FILL);
-        calendarTabs.setTabMode(TabLayout.MODE_SCROLLABLE);
+        calendarTabs.setTabMode(TabLayout.MODE_FIXED);
         calendarTabs.setOnTabSelectedListener(this);
 
         add_fab = root.findViewById(R.id.add_fab);
         layoutEntryFab = root.findViewById(R.id.layoutEntry);
         layoutAccEntryFab = root.findViewById(R.id.layoutAccEntry);
         layoutExpEntryFab = root.findViewById(R.id.layoutExpEntry);
-        add_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fabExpanded) {
-                    closeSubMenusFab();
-                } else {
-                    openSubMenusFab();
-                }
+        add_fab.setOnClickListener(v -> {
+            if (fabExpanded) {
+                closeSubMenusFab();
+            } else {
+                openSubMenusFab();
             }
         });
 
-        layoutEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
-                startActivity(newEntryIntent);
-                closeSubMenusFab();
+        layoutEntryFab.setOnClickListener(v -> {
+            Intent newEntryIntent = new Intent(getContext(), EntriesEditPad.class);
+            startActivity(newEntryIntent);
+            closeSubMenusFab();
 
-            }
         });
 
-        layoutAccEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
-                startActivity(accountEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutAccEntryFab.setOnClickListener(v -> {
+            Intent accountEntryIntent = new Intent(getContext(), AccountEntryEditActivity.class);
+            startActivity(accountEntryIntent);
+            closeSubMenusFab();
         });
 
-        layoutExpEntryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
-                startActivity(expenseEntryIntent);
-                closeSubMenusFab();
-            }
+        layoutExpEntryFab.setOnClickListener(v -> {
+            Intent expenseEntryIntent = new Intent(getContext(), ExpenseEntryNewActivity.class);
+            startActivity(expenseEntryIntent);
+            closeSubMenusFab();
         });
 
         calendarPagerAdapter = new CalendarTabPagerAdapter(getActivity().getSupportFragmentManager(), calendarTabs.getTabCount());
@@ -118,13 +109,38 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
 
         calendarViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(calendarTabs));
 
-        datePicker = root.findViewById(R.id.datePicker);
+        /*datePicker = root.findViewById(R.id.datePicker);
         Calendar c = Calendar.getInstance();
-        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), (view, newYear, newMonth, newDay) -> {
+            date = (newDay < 10 ? "0" + newDay : newDay) + "-" + (newMonth < 9 ? "0" + (newMonth + 1) : (newMonth + 1)) + "-" + newYear;
+
+            if (jdatePickerSelectionListener != null) {
+                jdatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  jour");
+            } else {
+                Log.i("Event    :::", "jour datelistener is null");
+            }
+            if (adatePickerSelectionListener != null) {
+                adatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  acc");
+            } else {
+                Log.i("Event    :::", "acc datelistener is null");
+            }
+            if (edatePickerSelectionListener != null) {
+                edatePickerSelectionListener.onDatePickerSelection(date);
+                Log.i("Event    :::", date + "  exp");
+            } else {
+                Log.i("Event    :::", "exp datelistener is null");
+            }
+        });*/
+
+        calendarView = root.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onDateChanged(DatePicker view, int newYear, int newMonth, int newDay) {
-                date = (newDay < 10 ? "0" + newDay : newDay) + "-" + (newMonth < 9 ? "0" + (newMonth + 1) : (newMonth + 1)) + "-" + newYear;
-                Log.i("Event    :::", "date changed to " + date);
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                date = (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth) + "-" + (month < 9 ? "0" + (month + 1) : (month + 1)) + "-" + year;
+
+
                 if (jdatePickerSelectionListener != null) {
                     jdatePickerSelectionListener.onDatePickerSelection(date);
                     Log.i("Event    :::", date + "  jour");

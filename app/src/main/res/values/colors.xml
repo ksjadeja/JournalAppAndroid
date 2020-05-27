@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#0082E0</color>
-    <color name="colorPrimaryDark">#2243F5</color>
-    <color name="colorAccent">#7755EC</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="colorPrimary">#3F8EFC</color>
+    <color name="colorPrimaryDark">#2667FF</color>
+    <color name="colorAccent">#3B28CC</color>
+
+    <color name="transparent">#00000000</color>
 
     <color name="bgColor">#1F8FF1</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="darkFab">#9349FA</color>
     <color name="lightFab">#AE80F3</color>
-    <color name="transparent">#00000000</color>
+
+    <color name="edit_pencil_color">#FF7474</color>
+    <color name="save_file_color">#3F8EFC</color>
+
+    <color name="fragment_background" tools:ignore="ReferenceType">@drawable/background_gradient_2</color>
+
+    <color name="home_tab_background">#ffffff</color>
+    <color name="home_tab_item_selected">#3949AB</color>
+
+    <color name="entry_card_background">#ffffff</color>
+    <color name="entry_card_header" tools:ignore="ReferenceType">#87BFFF</color>
+    <color name="entry_card_body" tools:ignore="ReferenceType">#87BFFF</color>
+
+    <color name="acc_entry_card_background">#ffffff</color>
+    <color name="acc_entry_card_header">#87BFFF</color>
+    <color name="acc_entry_card_body">#87BFFF</color>
+    <color name="acc_entry_card_body_data_left">#ffffff</color>
+    <color name="acc_entry_card_body_data_right">#ffffff</color>
+
+    <color name="exp_entry_card_background">#ffffff</color>
+    <color name="exp_entry_card_header">#87BFFF</color>
+    <color name="exp_entry_card_body">#87BFFF</color>
+    <color name="exp_entry_card_body_data_left">#ffffff</color>
+    <color name="exp_entry_card_body_data_right">#ffffff</color>
+
+    <color name="mail_main_card_background">#A1C3FB</color>
+    <color name="mail_name_background">#2B79FA</color>
+
 
 </resources>

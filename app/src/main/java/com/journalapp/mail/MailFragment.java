@@ -38,64 +38,58 @@ public class MailFragment extends Fragment {
     ListView listView;
     final String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
     ArrayList<MailBean> mailBeanArrayList;
-//    Button btnMail;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mail, container, false);
-//        btnMail = root.findViewById(R.id.btn_send_mail);
         listView = root.findViewById(R.id.mail_list);
         mailBeanArrayList = new ArrayList<>();
         final MailListAdapter mailListAdapter = new MailListAdapter(getContext(),mailBeanArrayList);
         listView.setAdapter(mailListAdapter);
 
-        liveMailEntries = mailRef.document(USER).collection("entries").orderBy("personName", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.i("ERROR:", "listen:error", e);
-                    return;
-                }
+        liveMailEntries = mailRef.document(USER).collection("entries").orderBy("personName", Query.Direction.ASCENDING).addSnapshotListener((snapshots, e) -> {
+            if (e != null) {
+                Log.i("ERROR:", "listen:error", e);
+                return;
+            }
 
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    String key=null;
-                    MailBean mailBean;
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                String key=null;
+                MailBean mailBean;
 
-                    switch (dc.getType()) {
-                        case ADDED:
-                            key = dc.getDocument().getId();
-                            mailBean = dc.getDocument().toObject(MailBean.class);
-                            mailBean.setKey(key);
-                            mailBeanArrayList.add(mailBean);
-                            mailListAdapter.notifyDataSetChanged();
-                            break;
-                        case MODIFIED:
-                            key = dc.getDocument().getId();
-                            mailBean = dc.getDocument().toObject(MailBean.class);
-                            int index;
-                            for(MailBean x: mailBeanArrayList)
-                            {
-                                if(x.getKey().equals(key)){
-                                    mailBean.setKey(key);
-                                    mailBeanArrayList.set(mailBeanArrayList.indexOf(x),mailBean);
-                                    break;
-                                }
-
+                switch (dc.getType()) {
+                    case ADDED:
+                        key = dc.getDocument().getId();
+                        mailBean = dc.getDocument().toObject(MailBean.class);
+                        mailBean.setKey(key);
+                        mailBeanArrayList.add(mailBean);
+                        mailListAdapter.notifyDataSetChanged();
+                        break;
+                    case MODIFIED:
+                        key = dc.getDocument().getId();
+                        mailBean = dc.getDocument().toObject(MailBean.class);
+                        int index;
+                        for(MailBean x: mailBeanArrayList)
+                        {
+                            if(x.getKey().equals(key)){
+                                mailBean.setKey(key);
+                                mailBeanArrayList.set(mailBeanArrayList.indexOf(x),mailBean);
+                                break;
                             }
-                            mailListAdapter.notifyDataSetChanged();
-                            break;
 
-                        case REMOVED:
-                            for(MailBean mb:mailBeanArrayList){            //TODO optimize it futher
-                                if(mb.getKey().equals(dc.getDocument().getId())){
-                                    mailBeanArrayList.remove(mb);
-                                    mailListAdapter.notifyDataSetChanged();
-                                    break;
-                                }
+                        }
+                        mailListAdapter.notifyDataSetChanged();
+                        break;
+
+                    case REMOVED:
+                        for(MailBean mb:mailBeanArrayList){            //TODO optimize it futher
+                            if(mb.getKey().equals(dc.getDocument().getId())){
+                                mailBeanArrayList.remove(mb);
+                                mailListAdapter.notifyDataSetChanged();
+                                break;
                             }
-                            break;
-                    }
+                        }
+                        break;
                 }
             }
         });

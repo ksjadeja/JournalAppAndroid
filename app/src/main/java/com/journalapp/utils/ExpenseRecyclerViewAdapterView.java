@@ -42,13 +42,6 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
     public ExpenseRecyclerViewAdapterView(final Context context, final ArrayList<ExpenseBox> entries){
         this.entries = entries;
         this.context=context;
-//        if(entries.size()==0)
-//        {
-//            Toast.makeText(context, "list is empty", Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            Toast.makeText(context, "list is not empty", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     @Override
@@ -59,21 +52,16 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         holder.amount.setText(String.valueOf(entries.get(position).getAmount()));
         holder.description.setText(entries.get(position).getDesc());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, ExpenseEntryEditActivity.class);
-                ExpenseBox expensebox = new ExpenseBox();
-                expensebox.setId(entries.get(holder.getAdapterPosition()).getId());
-                intent.putExtra("expensebox",entries.get(holder.getAdapterPosition()));
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            Intent intent = new Intent(context, ExpenseEntryEditActivity.class);
+            ExpenseBox expensebox = new ExpenseBox();
+            expensebox.setId(entries.get(holder.getAdapterPosition()).getId());
+            intent.putExtra("expensebox",entries.get(holder.getAdapterPosition()));
+            context.startActivity(intent);
+            return true;
         });
 
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -84,23 +72,6 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-//    public void addNewData(){
-//        ExpenseBox expensebox = new ExpenseBox();
-//        Calendar calendar = Calendar.getInstance();
-//        DateFormat dateFormat,timeFormat;
-//        dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        timeFormat = new SimpleDateFormat("hh:mm:ss a");
-//        Toast.makeText(context, "date is "+dateFormat.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
-//        expensebox.setDate(dateFormat.format(calendar.getTime()));
-//        expensebox.setTime(timeFormat.format(calendar.getTime()));
-//        expensebox.setItemName("");
-//        expensebox.setAmount("");
-//        expensebox.setDesc("");
-//
-//        entries.add(expensebox);
-//        notifyDataSetChanged();
-//    }
-
 
     public static class EntryHolder extends RecyclerView.ViewHolder {
         MaterialCardView cv;
@@ -109,7 +80,7 @@ public class ExpenseRecyclerViewAdapterView extends RecyclerView.Adapter<Expense
         TextView itemName;
         TextView amount;
         TextView description;
-//        String id;
+        String id;
 
         public EntryHolder(final View itemView) {
             super(itemView);

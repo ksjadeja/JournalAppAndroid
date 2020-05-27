@@ -63,6 +63,8 @@ public class EntriesTab extends Fragment {
                              Bundle savedInstanceState) {
 
         View entriesView = inflater.inflate(R.layout.fragment_home_entries, container, false);
+        setRetainInstance(true);
+
         recyclerView = entriesView.findViewById(R.id.recycler_view);
 
         feedboxesList = new ArrayList<>();
@@ -70,56 +72,52 @@ public class EntriesTab extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecyclerViewAdapter(getContext(), feedboxesList);
 
-        liveJournalEntries = journalEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
+        liveJournalEntries = journalEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).limit(limit).addSnapshotListener((snapshots, e) -> {
 
-                if (e != null) {
-                    Log.i("ERROR:", "listen:error", e);
-                    return;
-                }
-
-                for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                    String key = null;
-                    FeedboxDao feedboxDao = null;
-
-                    switch (dc.getType()) {
-                        case ADDED:
-                            key = dc.getDocument().getId();
-                            feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                            Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
-                            if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
-                                feedboxesList.add(0, new Feedbox(feedboxDao, key));
-                                EntriesMap.addFirst(key);
-                            } else {
-                                feedboxesList.add(new Feedbox(feedboxDao, key));
-                                EntriesIndex.put(key, feedboxesList.size() - 1);
-                            }
-                            break;
-
-                        case MODIFIED:
-                            key = dc.getDocument().getId();
-                            feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                            int index = EntriesIndex.get(key);
-                            feedboxesList.set(index, new Feedbox(feedboxDao, key));
-                            break;
-
-                        case REMOVED:
-                            for (Feedbox fb : feedboxesList) {            //TODO optimize it futher
-                                if (fb.getId().equals(dc.getDocument().getId())) {
-                                    EntriesMap.delete(fb.getId(), feedboxesList.indexOf(fb));
-                                    feedboxesList.remove(fb);
-                                    break;
-                                }
-                            }
-                            break;
-                    }
-                }
-                adapter.notifyDataSetChanged();
-                if (snapshots.size() != 0)
-                    lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
+            if (e != null) {
+                Log.i("ERROR:", "listen:error", e);
+                return;
             }
+
+            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                String key = null;
+                FeedboxDao feedboxDao = null;
+
+                switch (dc.getType()) {
+                    case ADDED:
+                        key = dc.getDocument().getId();
+                        feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                        Log.i("JOURNAL  :", feedboxDao.getData().substring(0,5));
+                        if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
+                            feedboxesList.add(0, new Feedbox(feedboxDao, key));
+                            EntriesMap.addFirst(key);
+                        } else {
+                            feedboxesList.add(new Feedbox(feedboxDao, key));
+                            EntriesIndex.put(key, feedboxesList.size() - 1);
+                        }
+                        break;
+
+                    case MODIFIED:
+                        key = dc.getDocument().getId();
+                        feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                        int index = EntriesIndex.get(key);
+                        feedboxesList.set(index, new Feedbox(feedboxDao, key));
+                        break;
+
+                    case REMOVED:
+                        for (Feedbox fb : feedboxesList) {            //TODO optimize it futher
+                            if (fb.getId().equals(dc.getDocument().getId())) {
+                                EntriesMap.delete(fb.getId(), feedboxesList.indexOf(fb));
+                                feedboxesList.remove(fb);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+            adapter.notifyDataSetChanged();
+            if (snapshots.size() != 0)
+                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -144,61 +142,57 @@ public class EntriesTab extends Fragment {
                 if (isScrolling && (firstVisibleItemPosition + visibleItemCount == totalItemCount) && !isLastItemReached) {
                     isScrolling = false;
 
-                    journalEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot snapshots,
-                                            @Nullable FirebaseFirestoreException e) {
+                    journalEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).startAfter(lastVisible).limit(limit).addSnapshotListener((snapshots, e) -> {
 
-                            if (e != null) {
-                                Log.i("ERROR:", "listen:error", e);
-                                return;
-                            }
+                        if (e != null) {
+                            Log.i("ERROR:", "listen:error", e);
+                            return;
+                        }
 
-                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                                String key = null;
-                                FeedboxDao feedboxDao = null;
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            String key = null;
+                            FeedboxDao feedboxDao = null;
 
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        key = dc.getDocument().getId();
-                                        feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                                        Log.i("DEBUG    :", "ent: " + feedboxDao.getTimestamp().toDate());
-                                        if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
-                                            feedboxesList.add(0, new Feedbox(feedboxDao, key));
-                                            EntriesMap.addFirst(key);
-                                        } else {
-                                            feedboxesList.add(new Feedbox(feedboxDao, key));
-                                            EntriesIndex.put(key, feedboxesList.size() - 1);
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    key = dc.getDocument().getId();
+                                    feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                                    if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
+                                        feedboxesList.add(0, new Feedbox(feedboxDao, key));
+                                        EntriesMap.addFirst(key);
+                                    } else {
+                                        feedboxesList.add(new Feedbox(feedboxDao, key));
+                                        EntriesIndex.put(key, feedboxesList.size() - 1);
+                                    }
+                                    Log.i("JOURNAL  :", feedboxDao.getData().substring(0,5));
+                                    break;
+
+                                case MODIFIED:
+                                    key = dc.getDocument().getId();
+                                    feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                                    int index = EntriesIndex.get(key);
+                                    feedboxesList.set(index, new Feedbox(feedboxDao, key));
+                                    break;
+
+                                case REMOVED:
+                                    for (Feedbox fb : feedboxesList) {
+                                        if (fb.getId().equals(dc.getDocument().getId())) {
+                                            EntriesMap.delete(fb.getId(), feedboxesList.indexOf(fb));
+                                            feedboxesList.remove(fb);
+                                            break;
                                         }
-                                        break;
-
-                                    case MODIFIED:
-                                        key = dc.getDocument().getId();
-                                        feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
-                                        int index = EntriesIndex.get(key);
-                                        feedboxesList.set(index, new Feedbox(feedboxDao, key));
-                                        break;
-
-                                    case REMOVED:
-                                        for (Feedbox fb : feedboxesList) {
-                                            if (fb.getId().equals(dc.getDocument().getId())) {
-                                                EntriesMap.delete(fb.getId(), feedboxesList.indexOf(fb));
-                                                feedboxesList.remove(fb);
-                                                break;
-                                            }
-                                        }
-                                        break;
-                                }
+                                    }
+                                    break;
                             }
-                            adapter.notifyDataSetChanged();
+                        }
+                        adapter.notifyDataSetChanged();
 
-                            if (snapshots.size() != 0) {
-                                lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
-                            }
+                        if (snapshots.size() != 0) {
+                            lastVisible = snapshots.getDocuments().get(snapshots.size() - 1);
+                        }
 
-                            if (snapshots.size() < limit) {
-                                isLastItemReached = true;
-                            }
+                        if (snapshots.size() < limit) {
+                            isLastItemReached = true;
                         }
                     });
                 }
@@ -211,6 +205,6 @@ public class EntriesTab extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        liveJournalEntries.remove();
+//        liveJournalEntries.remove();
     }
 }

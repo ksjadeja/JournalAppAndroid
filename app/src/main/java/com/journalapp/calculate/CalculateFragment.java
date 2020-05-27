@@ -304,10 +304,13 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             break;
                                     }
                                 }
+                                if(expense_list.size()>0){
+                                    showExpenseTotalBar();
+                                }else{
+                                    hideExpenseTotalBar();
+                                }
                             }
                         });
-                        avg_exp_message.setVisibility(View.GONE);
-                        average_n_total_bar.setVisibility(View.VISIBLE);
                     }else{
                         avg_exp_message.setVisibility(View.VISIBLE);
                         average_n_total_bar.setVisibility(View.GONE);
@@ -440,10 +443,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
+                                    if(account_list.size()>0){
+                                        showAccountTotalBar();
+                                    }else {
+                                        hideAccountTotalBar();
+                                    }
                                 }
                             });
                         } else {
-                            Log.i("TEMP", selected_name);
                             accountEntriesRef.document(USER).collection("entries").whereEqualTo("name", selected_name).whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -551,8 +558,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
                             account_mail_bar.setVisibility(View.VISIBLE);
                         }
-                        total_account_message.setVisibility(View.GONE);
-                        total_account_bar.setVisibility(View.VISIBLE);
                     }else{
                         total_account_message.setVisibility(View.VISIBLE);
                         total_account_bar.setVisibility(View.GONE);
@@ -576,7 +581,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             selected_name = parent.getItemAtPosition(position).toString();
         }
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -596,20 +600,37 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             }
             int extraDays = 0;
             int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
-
             while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
                 dayOne.add(Calendar.YEAR, -1);
                 // getActualMaximum() important for leap years
                 extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
             }
-
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Calculate");
+    }
+
+    private void showExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.GONE);
+        average_n_total_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.VISIBLE);
+        average_n_total_bar.setVisibility(View.GONE);
+    }
+
+    private void showAccountTotalBar(){
+        total_account_message.setVisibility(View.GONE);
+        total_account_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAccountTotalBar(){
+        total_account_message.setVisibility(View.VISIBLE);
+        total_account_bar.setVisibility(View.GONE);
     }
 }

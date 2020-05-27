@@ -119,43 +119,25 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             update=false;
         }
 
-        save_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(update){
-                    updateEntry();
-                }else {
-                    saveEntry();
-                }
-
+        save_btn.setOnClickListener(v -> {
+            if(update){
+                updateEntry();
+            }else {
+                saveEntry();
             }
+
         });
 
-        discard_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEntry();
-            }
-        });
+        discard_btn.setOnClickListener(v -> finish());
+        delete_btn.setOnClickListener(v -> deleteEntry());
 
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_item,accountNameList);
         fillUserSeggestions();
         nameText.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
-        nameText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                String item = adapterView.getItemAtPosition(i).toString();
-                Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
-            }
+        nameText.setOnItemClickListener((adapterView, view, i, l) -> {
+            String item = adapterView.getItemAtPosition(i).toString();
+//            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
 
     }
@@ -182,18 +164,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveEntry();
-                }
-            });
-            saveAlert.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
+            saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
+            saveAlert.setNegativeButton("Discard", (dialog, which) -> finish());
             saveAlert.show();
         }else {
             finish();
@@ -215,7 +187,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     if (task.isSuccessful()) {
-                        Log.i("Status:", "db acc entry is successful");
                         MailBean mailBean = new MailBean();
                         String name = accEntrybox.getName();
                         mailBean.setPersonName(name);
@@ -283,19 +254,13 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         final AlertDialog.Builder saveAlert = new AlertDialog.Builder(AccountEntryEditActivity.this);
         saveAlert.setTitle("Do you really want to Delete?");
         saveAlert.setCancelable(false);
-        saveAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
-                AccEntriesMap.delete(accountBox.getId(), AccEntriesIndex.get(accountBox.getId()));
-                finish();
-            }
+        saveAlert.setPositiveButton("Yes", (dialog, which) -> {
+            accountEntriesRef.document(USER).collection("entries").document(accountBox.getId()).delete();
+            AccEntriesMap.delete(accountBox.getId(), AccEntriesIndex.get(accountBox.getId()));
+            finish();
         });
-        saveAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
+        saveAlert.setNegativeButton("No", (dialog, which) -> {
+            return;
         });
         saveAlert.show();
 
@@ -328,10 +293,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                     switch (dc.getType()) {
                         case ADDED:
                             key = dc.getDocument().getId();
-                            Log.i("CntAAA:",(i++)+":::"+key);
-
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            Log.i("CntAAA:",(i++)+":::"+accountBoxDao.getName());
                             accountNameList.add(accountBoxDao.getName());
                             AccEntriesMap.addFirst(key);
                             adapter.notifyDataSetChanged();
@@ -341,10 +303,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             key = dc.getDocument().getId();
                             accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
-                            Log.i("CntAAA:",(i++)+"Modified :::"+accountBoxDao.getName()+"index  "+index);
-                            Log.i("CntAAA:",(i++)+"Old :::"+accountNameList.get(index)+"index  "+index);
                             accountNameList.set(index,accountBoxDao.getName());
-                            Log.i("CntAAA:",(i++)+"Modified :::"+accountNameList.get(index)+"index  "+index);
                             adapter.notifyDataSetChanged();
                             break;
 

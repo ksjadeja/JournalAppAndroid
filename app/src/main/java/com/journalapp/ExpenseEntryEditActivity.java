@@ -81,32 +81,15 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
             update=false;
         }
 
-        save_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(update){
-                    updateEntry();
-                }else {
-                    saveEntry();
-                }
-
+        save_btn.setOnClickListener(v -> {
+            if(update){
+                updateEntry();
+            }else {
+                saveEntry();
             }
         });
-
-        discard_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        delete_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteEntry();
-            }
-        });
-        
+        discard_btn.setOnClickListener(v -> finish());
+        delete_btn.setOnClickListener(v -> deleteEntry());
     }
 
     @Override
@@ -115,18 +98,8 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(ExpenseEntryEditActivity.this);
             saveAlert.setTitle("Do you want to save?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    saveEntry();
-                }
-            });
-            saveAlert.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
+            saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
+            saveAlert.setNegativeButton("Discard", (dialog, which) -> finish());
             saveAlert.show();
         }else {
             finish();
@@ -197,22 +170,15 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
         final AlertDialog.Builder saveAlert = new AlertDialog.Builder(ExpenseEntryEditActivity.this);
         saveAlert.setTitle("Do you really want to Delete?");
         saveAlert.setCancelable(false);
-        saveAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                expenseEntriesRef.document(USER).collection("entries").document(expenseBox.getId()).delete();
-                ExpEntriesMap.delete(expenseBox.getId(), ExpEntriesMap.ExpEntriesIndex.get(expenseBox.getId()));
-                finish();
-            }
+        saveAlert.setPositiveButton("Yes", (dialog, which) -> {
+            expenseEntriesRef.document(USER).collection("entries").document(expenseBox.getId()).delete();
+            ExpEntriesMap.delete(expenseBox.getId(), ExpEntriesMap.ExpEntriesIndex.get(expenseBox.getId()));
+            finish();
         });
-        saveAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
+        saveAlert.setNegativeButton("No", (dialog, which) -> {
+            return;
         });
         saveAlert.show();
-
     }
 
     private boolean isChanged(){
@@ -223,6 +189,4 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
         }
         return true;
     }
-    
-    
 }
