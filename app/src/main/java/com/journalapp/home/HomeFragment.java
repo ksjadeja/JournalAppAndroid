@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
+        setRetainInstance(true);
         tabLayout= root.findViewById(R.id.timelineTabs);
 
         viewPager = root.findViewById(R.id.viewPager);
@@ -83,7 +83,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
          viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(myPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
         closeSubMenusFab();
         Log.w(TAG, "fragment onCreateView() ");
 
@@ -101,17 +100,13 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
+        Toast.makeText(getActivity(), "Tab selected", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
+    public void onTabUnselected(TabLayout.Tab tab) {}
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
+    public void onTabReselected(TabLayout.Tab tab) { }
 
     //closes FAB submenus
     private void closeSubMenusFab(){

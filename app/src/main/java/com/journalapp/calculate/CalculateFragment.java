@@ -575,7 +575,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             selected_name = parent.getItemAtPosition(position).toString();
         }
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -595,17 +594,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             }
             int extraDays = 0;
             int dayOneOriginalYearDays = dayOne.get(Calendar.DAY_OF_YEAR);
-
             while (dayOne.get(Calendar.YEAR) > dayTwo.get(Calendar.YEAR)) {
                 dayOne.add(Calendar.YEAR, -1);
                 // getActualMaximum() important for leap years
                 extraDays += dayOne.getActualMaximum(Calendar.DAY_OF_YEAR);
             }
-
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

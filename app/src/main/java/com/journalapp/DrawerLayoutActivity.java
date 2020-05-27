@@ -59,10 +59,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
         mAuth = FirebaseAuth.getInstance();
-
         user_profile_image = header.findViewById(R.id.user_profile_image);
         user_display_name = header.findViewById(R.id.user_display_name);
         user_email = header.findViewById(R.id.user_email);
@@ -85,9 +82,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         navigationView = findViewById(R.id.nav_view);
         navigationView.addHeaderView(header);
         navigationView.setNavigationItemSelectedListener(this);
-
         drawerLayout = findViewById(R.id.drawer_layout);
-
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -98,13 +93,10 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.nav_host_fragment, homeFragment, "home");
         fragmentTransaction.commit();
-
     }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
-
         if (menuItem.getItemId() == R.id.nav_calendar) {
             if (getSupportFragmentManager().findFragmentByTag("calendar") == null) {
                 fragment = new CalendarFragment();
@@ -176,20 +168,14 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(this);
             saveAlert.setTitle("Do you really want to Sign Out?");
             saveAlert.setCancelable(false);
-            saveAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    FirebaseAuth.getInstance().signOut();
-                    mGoogleSignInClient.signOut();
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                }
+            saveAlert.setPositiveButton("Yes", (dialog, which) -> {
+                FirebaseAuth.getInstance().signOut();
+                mGoogleSignInClient.signOut();
+                finish();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             });
-            saveAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
+            saveAlert.setNegativeButton("No", (dialog, which) -> {
+                return;
             });
             saveAlert.show();
         }
@@ -198,12 +184,12 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             fragment.setRetainInstance(true);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }*/
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -213,6 +199,5 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             finish();
             startActivity(new Intent(this, MainActivity.class));
         }
-
     }
 }

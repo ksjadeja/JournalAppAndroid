@@ -16,7 +16,6 @@ public class AccountBox implements Serializable {
     private String id;
 
     public AccountBox(){}
-
     public AccountBox(AccountBoxDao accountBoxDao, String key){
         name = accountBoxDao.getName();
         amount = accountBoxDao.getAmount();

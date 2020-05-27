@@ -3,6 +3,7 @@ package com.journalapp.utils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,21 +59,22 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         if(x==0)
         {
             holder.type.setText("GIVE");
+//            holder.cv.setCardBackgroundColor(Color.rgb(255,146,146));
+            holder.cv.setCardBackgroundColor(Color.rgb(255,100,100));
         }else{
             holder.type.setText("TAKE");
+            holder.cv.setCardBackgroundColor(Color.rgb(119,221,119));
         }
-
-        holder.itemView.setOnClickListener(view -> {
+        holder.itemView.setOnLongClickListener(view -> {
             Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, AccountEntryEditActivity.class);
             AccountBox accountBox = new AccountBox();
             accountBox.setId(entries.get(holder.getAdapterPosition()).getId());
             intent.putExtra("accountbox",entries.get(holder.getAdapterPosition()));
             context.startActivity(intent);
+            return  true;
         });
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -102,6 +104,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
             amount = itemView.findViewById(R.id.acc_tv_amount);
             description= itemView.findViewById(R.id.acc_tv_desc);
             type  = itemView.findViewById(R.id.acc_category);
+
         }
 
 
