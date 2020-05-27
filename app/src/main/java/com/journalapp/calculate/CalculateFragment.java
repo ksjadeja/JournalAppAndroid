@@ -304,10 +304,13 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             break;
                                     }
                                 }
+                                if(expense_list.size()>0){
+                                    showExpenseTotalBar();
+                                }else{
+                                    hideExpenseTotalBar();
+                                }
                             }
                         });
-                        avg_exp_message.setVisibility(View.GONE);
-                        average_n_total_bar.setVisibility(View.VISIBLE);
                     }else{
                         avg_exp_message.setVisibility(View.VISIBLE);
                         average_n_total_bar.setVisibility(View.GONE);
@@ -440,6 +443,11 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
+                                    if(account_list.size()>0){
+                                        showAccountTotalBar();
+                                    }else {
+                                        hideAccountTotalBar();
+                                    }
                                 }
                             });
                         } else {
@@ -550,8 +558,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
                             account_mail_bar.setVisibility(View.VISIBLE);
                         }
-                        total_account_message.setVisibility(View.GONE);
-                        total_account_bar.setVisibility(View.VISIBLE);
                     }else{
                         total_account_message.setVisibility(View.VISIBLE);
                         total_account_bar.setVisibility(View.GONE);
@@ -606,5 +612,25 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Calculate");
+    }
+
+    private void showExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.GONE);
+        average_n_total_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.VISIBLE);
+        average_n_total_bar.setVisibility(View.GONE);
+    }
+
+    private void showAccountTotalBar(){
+        total_account_message.setVisibility(View.GONE);
+        total_account_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAccountTotalBar(){
+        total_account_message.setVisibility(View.VISIBLE);
+        total_account_bar.setVisibility(View.GONE);
     }
 }
