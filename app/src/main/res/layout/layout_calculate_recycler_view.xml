@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="110dp"
                 android:maxLines="2"
+                android:textColor="@color/black"
                 android:layout_gravity="start"
                 android:id="@+id/calculate_item_date_time"
                 android:layout_marginRight="10dp"
@@ -50,6 +51,7 @@
                 android:id="@+id/calculate_item_desc"
                 android:text="description of dede ede de"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:paddingStart="5dp"
                 android:paddingEnd="10dp" />
 
@@ -62,6 +64,7 @@
                 android:layout_marginLeft="10dp"
                 android:id="@+id/calculate_item_amount"
                 android:text="450 Rs."
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:layout_marginStart="10dp" />
 

@@ -152,7 +152,7 @@
         android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/ic_plus_btn"
         style="@style/fab_material"
-        android:backgroundTint="@color/darkFab"
+        android:backgroundTint="#9268DC"
         />
 
 </FrameLayout>

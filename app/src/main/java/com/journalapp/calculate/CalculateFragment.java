@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,13 +43,19 @@ import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.CalculateRecyclerViewAdapter;
+import com.journalapp.utils.CustomSearchableSpinner;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    private static long e1=0,e2=0,a1=0,a2=0;
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
     private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
@@ -61,9 +68,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
     private LinearLayout average_n_total_bar, total_account_bar, account_mail_bar;
 
-    private Spinner account_names;
+    private CustomSearchableSpinner account_names;
     private HashMap<String, String> names_map;
     private ArrayList<String> names_list;
+    private Set<String> names_set;
     ArrayAdapter arrayAdapter;
 
     private String selected_name;
@@ -91,7 +99,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
         names_map = new HashMap<>();
         names_list = new ArrayList<>();
+        names_set = new HashSet<>();
         names_list.add("All");
+        names_set.add("All");
 
         View view = inflater.inflate(R.layout.fragment_calculate, container, false);
 
@@ -168,7 +178,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             if (!names_map.containsKey(accountBoxDao.getName())) {
                                 names_map.put(accountBoxDao.getName(), accountBoxDao.getName());
                                 names_list.add(accountBoxDao.getName());
-                                arrayAdapter.notifyDataSetChanged();
+//                                arrayAdapter.notifyDataSetChanged();
                             }
                             break;
 
@@ -188,11 +198,15 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                         break;
                                     }
                                 }
-                                arrayAdapter.notifyDataSetChanged();
+//                                arrayAdapter.notifyDataSetChanged();
                             }
                             break;
                     }
                 }
+                names_set.addAll(names_list);
+                names_list.clear();
+                names_list.addAll(names_set);
+                arrayAdapter.notifyDataSetChanged();
             }
         });
 
@@ -210,6 +224,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.avg_expense_start:
+                if (SystemClock.elapsedRealtime() - e1 < 1000){
+                    return;
+                }
+                e1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -222,6 +240,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog.show();
                 break;
             case R.id.avg_expense_end:
+                if (SystemClock.elapsedRealtime() - e2 < 1000){
+                    return;
+                }
+                e2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @SuppressLint("SimpleDateFormat")
                     @Override
@@ -326,6 +348,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
 
             case R.id.total_account_start:
+                if (SystemClock.elapsedRealtime() - a1 < 1000){
+                    return;
+                }
+                a1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog3 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -338,6 +364,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog3.show();
                 break;
             case R.id.total_account_end:
+                if (SystemClock.elapsedRealtime() - a2 < 1000){
+                    return;
+                }
+                a2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog4 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @SuppressLint("SimpleDateFormat")
                     @Override
@@ -532,6 +562,11 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
+                                    if(account_list.size()>0){
+                                        showAccountTotalBar();
+                                    }else {
+                                        hideAccountTotalBar();
+                                    }
                                 }
                             });
 
@@ -542,7 +577,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             if (task.isSuccessful()) {
                                                 if (task.getResult().getDocuments().size() > 0) {
                                                     MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                    if (!mailBean.getEmail().equals("")) {
+                                                    if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
                                                         account_email_box.setText(mailBean.getEmail());
                                                         account_email_box.setEnabled(false);
                                                     }
@@ -556,7 +591,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                         }
                                     });
 
-                            account_mail_bar.setVisibility(View.VISIBLE);
+                            if(account_list.size()>0){
+                                account_mail_bar.setVisibility(View.VISIBLE);
+                            }
                         }
                     }else{
                         total_account_message.setVisibility(View.VISIBLE);
@@ -586,6 +623,13 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
     }
 
+//    @Override
+//    public void onAttachFragment(Fragment fragment) {
+//        if (fragment.isAdded())
+//            return;
+//        super.onAttachFragment(fragment);
+//    }
+
     public static int daysBetween(Calendar day1, Calendar day2) {
         Calendar dayOne = (Calendar) day1.clone(),
                 dayTwo = (Calendar) day2.clone();
@@ -611,6 +655,12 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Calculate");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         getActivity().setTitle("Calculate");
     }
 

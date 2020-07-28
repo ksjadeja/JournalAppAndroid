@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +69,8 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class ChartsFragment extends Fragment implements View.OnClickListener {
+
+    private static long a1=0,a2=0,b1=0,b2=0,c1=0,c2=0,d1=0,d2=0;
 
     private BarChart datewiseAccChart, datewiseExpChart, datewisePersonAccChart;
     private LineChart expenseChart;
@@ -142,6 +145,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.start_date:
+                if (SystemClock.elapsedRealtime() - a1 < 1000){
+                    return;
+                }
+                a1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
 //                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
                     Calendar calendar = Calendar.getInstance();
@@ -152,6 +159,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 datePickerDialog.show();
                 break;
             case R.id.end_date:
+                if (SystemClock.elapsedRealtime() - a2 < 1000){
+                    return;
+                }
+                a2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
 //                        DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
                     Calendar calendar = Calendar.getInstance();
@@ -216,6 +227,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.start_date_exp:
+                if (SystemClock.elapsedRealtime() - b1 < 1000){
+                    return;
+                }
+                b1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog3 = new DatePickerDialog(Objects.requireNonNull(getContext()), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
@@ -226,6 +241,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 datePickerDialog3.show();
                 break;
             case R.id.end_date_exp:
+                if (SystemClock.elapsedRealtime() - b2 < 1000){
+                    return;
+                }
+                b2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog4 = new DatePickerDialog(Objects.requireNonNull(getContext()), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
@@ -293,6 +312,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.start_date_person:
+                if (SystemClock.elapsedRealtime() - c1 < 1000){
+                    return;
+                }
+                c1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog5 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
                     Calendar calendar = Calendar.getInstance();
@@ -303,6 +326,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 datePickerDialog5.show();
                 break;
             case R.id.end_date_person:
+                if (SystemClock.elapsedRealtime() - c2 < 1000){
+                    return;
+                }
+                c2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog6 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm:ss a z");
                     Calendar calendar = Calendar.getInstance();
@@ -368,6 +395,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.start_date_expense:
+                if (SystemClock.elapsedRealtime() - d1 < 1000){
+                    return;
+                }
+                d1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog7 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
@@ -378,6 +409,10 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                 datePickerDialog7.show();
                 break;
             case R.id.end_date_expense:
+                if (SystemClock.elapsedRealtime() - d2 < 1000){
+                    return;
+                }
+                d2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog8 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
                     DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calendar = Calendar.getInstance();
@@ -683,9 +718,15 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         getActivity().setTitle("Charts");
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle("Charts");
+    }
+
 
     private void drawAccountBarChart(ArrayList<AccountBox> accountEntryList) {
         final TreeMap<String, ValueAndLabel<Float, String>> map = new TreeMap<>();

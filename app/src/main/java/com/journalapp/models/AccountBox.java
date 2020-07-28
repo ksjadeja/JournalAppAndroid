@@ -17,11 +17,11 @@ public class AccountBox implements Serializable {
 
     public AccountBox(){}
     public AccountBox(AccountBoxDao accountBoxDao, String key){
-        name = accountBoxDao.getName();
+        name = accountBoxDao.getName().trim();
         amount = accountBoxDao.getAmount();
-        desc = accountBoxDao.getDesc();
+        desc = accountBoxDao.getDesc().trim();
         t_type = accountBoxDao.getT_type();
-        id = key;
+        id = key.trim();
         timestamp = accountBoxDao.getTimestamp().toDate();
         date = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
         time = new SimpleDateFormat("hh:mm:ss a").format(timestamp);
@@ -36,7 +36,7 @@ public class AccountBox implements Serializable {
         return name;
     }
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
     public String getDate() {
         return date;
@@ -60,7 +60,7 @@ public class AccountBox implements Serializable {
         return desc;
     }
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.desc = desc.trim();
     }
     public String getT_type() {
         return t_type;
