@@ -6,11 +6,9 @@ public class MailBean {
 
 //    @Exclude
     private String key;
-
     private String personName;
     private String email;
     private boolean emailEntered;
-
 
     @Exclude
     public String getKey() {

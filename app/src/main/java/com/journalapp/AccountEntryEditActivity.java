@@ -4,12 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
@@ -26,14 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
@@ -43,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import static com.google.firebase.firestore.Query.*;
@@ -130,18 +125,15 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
         discard_btn.setOnClickListener(v -> finish());
         delete_btn.setOnClickListener(v -> deleteEntry());
-
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_item,accountNameList);
-        fillUserSeggestions();
+        fillUserSuggestions();
         nameText.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
         nameText.setOnItemClickListener((adapterView, view, i, l) -> {
             String item = adapterView.getItemAtPosition(i).toString();
             Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
-
     }
-
     public void onRadioButtonClicked(View view) {
         boolean checked = ((MaterialRadioButton) view).isChecked();
 
@@ -175,7 +167,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     private void saveEntry(){
 
         if(validateInput()){
-
             accountBox.setName(nameText.getText().toString());
             accountBox.setAmount(Integer.parseInt(amountText.getText().toString()));
             accountBox.setDesc(descText.getText().toString());
@@ -183,29 +174,23 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
             final AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
-            accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentReference> task) {
-                    if (task.isSuccessful()) {
-                        MailBean mailBean = new MailBean();
-                        String name = accEntrybox.getName();
-                        mailBean.setPersonName(name);
-                        mailBean.setEmail(null);
-                        mailBean.setEmailEntered(false);
-                        mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if(task.isSuccessful())
-                                {
-                                    Log.i("Status:", "db mail list entry is successful");
-                                }else{
-                                    Log.i("Status:", "db mail list entry is not successful");
-                                }
-                            }
-                        });
-                    } else {
-                        Log.i("Status:", "db acc entry is not successful");
-                    }
+            accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    MailBean mailBean = new MailBean();
+                    String name = accEntrybox.getName();
+                    mailBean.setPersonName(name);
+                    mailBean.setEmail(null);
+                    mailBean.setEmailEntered(false);
+                    mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(task1 -> {
+                        if(task1.isSuccessful())
+                        {
+                            Log.i("Status:", "db mail list entry is successful");
+                        }else{
+                            Log.i("Status:", "db mail list entry is not successful");
+                        }
+                    });
+                } else {
+                    Log.i("Status:", "db acc entry is not successful");
                 }
             });
             finish();
@@ -263,7 +248,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             return;
         });
         saveAlert.show();
-
     }
 
     private boolean isChanged(){
@@ -276,7 +260,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         return true;
     }
 
-    private void fillUserSeggestions() {
+    private void fillUserSuggestions() {
         AccEntriesMap.clearMap();
         liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -322,5 +306,4 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             }
         });
     }
-
 }

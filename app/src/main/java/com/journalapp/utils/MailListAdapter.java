@@ -32,7 +32,6 @@ public class MailListAdapter extends BaseAdapter {
         this.context=context;
         this.mailList=mailList;
     }
-
     @Override
     public int getCount() {
         return mailList.size();

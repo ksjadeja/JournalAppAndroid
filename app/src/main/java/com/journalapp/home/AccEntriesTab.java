@@ -63,7 +63,6 @@ public class AccEntriesTab extends Fragment {
         recyclerView = rootView.findViewById(R.id.acc_recycler_view);
         accountEntryList = new ArrayList<>();
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AccountRecyclerViewAdapter(getContext(), accountEntryList);
         liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
@@ -72,6 +71,7 @@ public class AccEntriesTab extends Fragment {
                 return;
             }
             int i = 0;
+            if (snapshots == null) throw new AssertionError();
             for (DocumentChange dc : snapshots.getDocumentChanges()) {
                 String key = null;
                 AccountBoxDao accountBoxDao = null;
@@ -79,6 +79,7 @@ public class AccEntriesTab extends Fragment {
                     case ADDED:
                         key = dc.getDocument().getId();
                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+
                         if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
                             accountEntryList.add(0, new AccountBox(accountBoxDao, key));
                             AccEntriesMap.addFirst(key);

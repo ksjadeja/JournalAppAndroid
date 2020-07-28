@@ -46,7 +46,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     TextView user_display_name, user_email;
 
     public static CalendarFragment calendarFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +130,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
