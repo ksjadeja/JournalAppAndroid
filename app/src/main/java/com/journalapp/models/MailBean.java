@@ -16,7 +16,7 @@ public class MailBean {
     }
 
     public void setKey(String key) {
-        this.key = key;
+        this.key = key.trim();
     }
     public boolean getEmailEntered() {
         return emailEntered;
@@ -31,7 +31,7 @@ public class MailBean {
     }
 
     public void setPersonName(String personName) {
-        this.personName = personName;
+        this.personName = personName.trim();
     }
 
     public String getEmail() {
@@ -39,6 +39,6 @@ public class MailBean {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 }

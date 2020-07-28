@@ -52,18 +52,10 @@ public class MailFragment extends Fragment {
                 Log.i("ERROR:", "listen:error", e);
                 return;
             }
-
             for (DocumentChange dc : snapshots.getDocumentChanges()) {
                 String key=null;
                 MailBean mailBean;
                 switch (dc.getType()) {
-                    case ADDED:
-                        key = dc.getDocument().getId();
-                        mailBean = dc.getDocument().toObject(MailBean.class);
-                        mailBean.setKey(key);
-                        mailBeanArrayList.add(mailBean);
-                        mailListAdapter.notifyDataSetChanged();
-                        break;
                     case MODIFIED:
                         key = dc.getDocument().getId();
                         mailBean = dc.getDocument().toObject(MailBean.class);
@@ -79,6 +71,7 @@ public class MailFragment extends Fragment {
                         }
                         mailListAdapter.notifyDataSetChanged();
                         break;
+
                     case REMOVED:
                         for(MailBean mb:mailBeanArrayList){            //TODO optimize it futher
                             if(mb.getKey().equals(dc.getDocument().getId())){
@@ -96,6 +89,12 @@ public class MailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Mail");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         getActivity().setTitle("Mail");
     }
 

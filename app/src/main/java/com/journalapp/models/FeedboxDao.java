@@ -18,7 +18,7 @@ public class FeedboxDao {
         }else {
             timestamp = new Timestamp(new Date());
         }
-        data = feedbox.getData();
+        data = feedbox.getData().trim();
     }
 
     public Timestamp getTimestamp() {
@@ -34,6 +34,6 @@ public class FeedboxDao {
     }
 
     public void setData(String data) {
-        this.data = data;
+        this.data = data.trim();
     }
 }

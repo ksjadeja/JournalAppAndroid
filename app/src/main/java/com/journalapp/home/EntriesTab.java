@@ -87,6 +87,7 @@ public class EntriesTab extends Fragment {
                     case ADDED:
                         key = dc.getDocument().getId();
                         feedboxDao = dc.getDocument().toObject(FeedboxDao.class);
+                        Log.i("JOURNAL  :", feedboxDao.getData().substring(0,5));
                         if (feedboxesList.size() > 0 && feedboxesList.get(0).getTimestamp().compareTo(feedboxDao.getTimestamp().toDate()) < 0) {
                             feedboxesList.add(0, new Feedbox(feedboxDao, key));
                             EntriesMap.addFirst(key);
@@ -163,6 +164,7 @@ public class EntriesTab extends Fragment {
                                         feedboxesList.add(new Feedbox(feedboxDao, key));
                                         EntriesIndex.put(key, feedboxesList.size() - 1);
                                     }
+                                    Log.i("JOURNAL  :", feedboxDao.getData().substring(0,5));
                                     break;
 
                                 case MODIFIED:

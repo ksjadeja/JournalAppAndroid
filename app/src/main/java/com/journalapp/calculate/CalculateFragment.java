@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,13 +46,19 @@ import com.journalapp.models.ExpenseBox;
 import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.CalculateRecyclerViewAdapter;
+import com.journalapp.utils.CustomSearchableSpinner;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    private static long e1=0,e2=0,a1=0,a2=0;
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
     private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
@@ -64,9 +71,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
     private LinearLayout average_n_total_bar, total_account_bar, account_mail_bar;
 
-    private Spinner account_names;
+    private CustomSearchableSpinner account_names;
     private HashMap<String, String> names_map;
     private ArrayList<String> names_list;
+    private Set<String> names_set;
     ArrayAdapter arrayAdapter;
 
     private String selected_name;
@@ -91,7 +99,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
         names_map = new HashMap<>();
         names_list = new ArrayList<>();
+        names_set = new HashSet<>();
         names_list.add("All");
+        names_set.add("All");
 
         View view = inflater.inflate(R.layout.fragment_calculate, container, false);
 
@@ -170,7 +180,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             if (!names_map.containsKey(accountBoxDao.getName())) {
                                 names_map.put(accountBoxDao.getName(), accountBoxDao.getName());
                                 names_list.add(accountBoxDao.getName());
-                                arrayAdapter.notifyDataSetChanged();
+//                                arrayAdapter.notifyDataSetChanged();
                             }
                             break;
 
@@ -190,11 +200,15 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                         break;
                                     }
                                 }
-                                arrayAdapter.notifyDataSetChanged();
+//                                arrayAdapter.notifyDataSetChanged();
                             }
                             break;
                     }
                 }
+                names_set.addAll(names_list);
+                names_list.clear();
+                names_list.addAll(names_set);
+                arrayAdapter.notifyDataSetChanged();
             }
         });
 
@@ -231,6 +245,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 }
                 break;
             case R.id.avg_expense_start:
+                if (SystemClock.elapsedRealtime() - e1 < 1000){
+                    return;
+                }
+                e1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -243,6 +261,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog.show();
                 break;
             case R.id.avg_expense_end:
+                if (SystemClock.elapsedRealtime() - e2 < 1000){
+                    return;
+                }
+                e2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @SuppressLint("SimpleDateFormat")
                     @Override
@@ -323,10 +345,13 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             break;
                                     }
                                 }
+                                if(expense_list.size()>0){
+                                    showExpenseTotalBar();
+                                }else{
+                                    hideExpenseTotalBar();
+                                }
                             }
                         });
-                        avg_exp_message.setVisibility(View.GONE);
-                        average_n_total_bar.setVisibility(View.VISIBLE);
                     }else{
                         avg_exp_message.setVisibility(View.VISIBLE);
                         average_n_total_bar.setVisibility(View.GONE);
@@ -342,6 +367,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
 
             case R.id.total_account_start:
+                if (SystemClock.elapsedRealtime() - a1 < 1000){
+                    return;
+                }
+                a1 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog3 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -354,6 +383,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog3.show();
                 break;
             case R.id.total_account_end:
+                if (SystemClock.elapsedRealtime() - a2 < 1000){
+                    return;
+                }
+                a2 = SystemClock.elapsedRealtime();
                 DatePickerDialog datePickerDialog4 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @SuppressLint("SimpleDateFormat")
                     @Override
@@ -461,10 +494,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
+                                    if(account_list.size()>0){
+                                        showAccountTotalBar();
+                                    }else {
+                                        hideAccountTotalBar();
+                                    }
                                 }
                             });
-                        }
-                        else {
+                        } else {
                             accountEntriesRef.document(USER).collection("entries").whereEqualTo("name", selected_name).whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
                                 public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -546,17 +583,27 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
+                                    if(account_list.size()>0){
+                                        showAccountTotalBar();
+                                    }else {
+                                        hideAccountTotalBar();
+                                    }
                                 }
                             });
 
                             mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).get()
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            if (task.getResult().getDocuments().size() > 0) {
-                                                MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                if (!mailBean.getEmail().equals("")) {
-                                                    account_email_box.setText(mailBean.getEmail());
-                                                    account_email_box.setEnabled(false);
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                if (task.getResult().getDocuments().size() > 0) {
+                                                    MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
+                                                    if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
+                                                        account_email_box.setText(mailBean.getEmail());
+                                                        account_email_box.setEnabled(false);
+                                                    }
+                                                } else {
+                                                    Log.i("LOG:", "no email found for: " + selected_name, task.getException());
                                                 }
                                             } else {
                                                 Log.i("LOG:", "no email found for: " + selected_name, task.getException());
@@ -567,10 +614,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                         }
                                     });
 
-                            account_mail_bar.setVisibility(View.VISIBLE);
+                            if(account_list.size()>0){
+                                account_mail_bar.setVisibility(View.VISIBLE);
+                            }
                         }
-                        total_account_message.setVisibility(View.GONE);
-                        total_account_bar.setVisibility(View.VISIBLE);
                     }else{
                         total_account_message.setVisibility(View.VISIBLE);
                         total_account_bar.setVisibility(View.GONE);
@@ -640,5 +687,31 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Calculate");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle("Calculate");
+    }
+
+    private void showExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.GONE);
+        average_n_total_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideExpenseTotalBar(){
+        avg_exp_message.setVisibility(View.VISIBLE);
+        average_n_total_bar.setVisibility(View.GONE);
+    }
+
+    private void showAccountTotalBar(){
+        total_account_message.setVisibility(View.GONE);
+        total_account_bar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAccountTotalBar(){
+        total_account_message.setVisibility(View.VISIBLE);
+        total_account_bar.setVisibility(View.GONE);
     }
 }

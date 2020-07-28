@@ -20,9 +20,9 @@ public class ExpenseBoxDao {
         else{
             timestamp = new Timestamp(new Date());
         }
-        itemName = expenseBox.getItemName();
+        itemName = expenseBox.getItemName().trim();
         amount = expenseBox.getAmount();
-        desc = expenseBox.getDesc();
+        desc = expenseBox.getDesc().trim();
     }
 
     public Timestamp getTimestamp() {
@@ -55,7 +55,7 @@ public class ExpenseBoxDao {
         return itemName;
     }
     public void setItemName(String name) {
-        this.itemName= name;
+        this.itemName= name.trim();
     }
 
     public int getAmount() {
@@ -69,7 +69,7 @@ public class ExpenseBoxDao {
         return desc;
     }
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.desc = desc.trim();
     }
 
 }

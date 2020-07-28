@@ -14,7 +14,7 @@ public class Feedbox implements Serializable {
 
     public Feedbox(FeedboxDao feedboxDao, String key){
 
-        this.setData(feedboxDao.getData());
+        this.setData(feedboxDao.getData().trim());
         this.setId(key);
         this.timestamp = feedboxDao.getTimestamp().toDate();
         this.date = new SimpleDateFormat("dd-MM-yyyy").format(feedboxDao.getTimestamp().toDate());
@@ -50,7 +50,7 @@ public class Feedbox implements Serializable {
     }
 
     public void setData(String data) {
-        this.data = data;
+        this.data = data.trim();
     }
 
     public Date getTimestamp() {

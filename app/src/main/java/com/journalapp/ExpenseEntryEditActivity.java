@@ -110,9 +110,9 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
 
         if(validateInput()){
 
-            expenseBox.setItemName(nameText.getText().toString());
-            expenseBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            expenseBox.setDesc(descText.getText().toString());
+            expenseBox.setItemName(nameText.getText().toString().trim());
+            expenseBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            expenseBox.setDesc(descText.getText().toString().trim());
             expenseBox.setDate(dateText.getText().toString());
             expenseBox.setTime(timeText.getText().toString());
             ExpenseBoxDao expEntrybox = new ExpenseBoxDao(expenseBox);
@@ -133,9 +133,9 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
     private void updateEntry() {
 
         if(validateInput()){
-            expenseBox.setItemName(nameText.getText().toString());
-            expenseBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            expenseBox.setDesc(descText.getText().toString());
+            expenseBox.setItemName(nameText.getText().toString().trim());
+            expenseBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            expenseBox.setDesc(descText.getText().toString().trim());
             expenseBox.setDate(dateText.getText().toString());
             expenseBox.setTime(timeText.getText().toString());
             ExpenseBoxDao expEntryDao = new ExpenseBoxDao(expenseBox);
@@ -158,8 +158,8 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
         String textPattern = "[a-zA-Z\"\']+[ a-zA-Z0-9()/\"\'+-_]*";
         String numberPattern = "[0-9.]+";
 
-        if(Pattern.matches(textPattern,nameText.getText().toString()) &&
-                Pattern.matches(numberPattern,amountText.getText().toString())){
+        if(Pattern.matches(textPattern,nameText.getText().toString().trim()) &&
+                Pattern.matches(numberPattern,amountText.getText().toString().trim())){
             return true;
         }
         Toast.makeText(ExpenseEntryEditActivity.this,"Insert appropriate details..",Toast.LENGTH_LONG).show();
@@ -183,9 +183,9 @@ public class ExpenseEntryEditActivity extends AppCompatActivity {
 
     private boolean isChanged(){
         if(update){
-            return !nameText.getText().toString().equals(expenseBox.getItemName()) ||
-                    !amountText.getText().toString().equals(String.valueOf(expenseBox.getAmount())) ||
-                    !descText.getText().toString().equals(expenseBox.getDesc());
+            return !nameText.getText().toString().trim().equals(expenseBox.getItemName().trim()) ||
+                    !amountText.getText().toString().trim().equals(String.valueOf(expenseBox.getAmount())) ||
+                    !descText.getText().toString().trim().equals(expenseBox.getDesc().trim());
         }
         return true;
     }

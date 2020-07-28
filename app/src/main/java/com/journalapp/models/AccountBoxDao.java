@@ -23,9 +23,9 @@ public class AccountBoxDao {
         } else {
             timestamp = new Timestamp(new Date());
         }
-        name = accountBox.getName();
+        name = accountBox.getName().trim();
         amount = accountBox.getAmount();
-        desc = accountBox.getDesc();
+        desc = accountBox.getDesc().trim();
         t_type = accountBox.getT_type();
     }
     public Timestamp getTimestamp() {
@@ -38,7 +38,7 @@ public class AccountBoxDao {
         return name;
     }
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
     public int getAmount() {
         return amount;
@@ -50,7 +50,7 @@ public class AccountBoxDao {
         return desc;
     }
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.desc = desc.trim();
     }
     public String getT_type() {
         return t_type;

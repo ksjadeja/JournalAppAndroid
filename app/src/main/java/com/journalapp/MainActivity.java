@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +29,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
 
+    //variables
+    Animation topAnim,bottomAnim;
+    ImageView image;
+    TextView logo,slogan;
+
+
     private static final int RC_SIGN_IN = 200;
     private static final String TAG = "LOG:";
     SignInButton google_sign_in_btn;
@@ -38,6 +48,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Animations
+        topAnim=AnimationUtils.loadAnimation(this,R.anim.top_animation);
+        bottomAnim=AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
+
+        //hooks
+
+        image =findViewById(R.id.imageview);
+        logo =findViewById(R.id.textview);
+        slogan =findViewById(R.id.textview2);
+
+        image.setAnimation(topAnim);
+        logo.setAnimation(bottomAnim);
+        slogan.setAnimation(bottomAnim);
+
+
         mAuth = FirebaseAuth.getInstance();
 
         google_sign_in_btn = findViewById(R.id.google_sign_in_btn);
@@ -46,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 signIn();
             }
+
+
+
+
+
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -108,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(getApplicationContext(), "User "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
                             launchApp();
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

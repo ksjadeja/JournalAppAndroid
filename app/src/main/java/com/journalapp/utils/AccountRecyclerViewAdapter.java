@@ -59,14 +59,12 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         if(x==0)
         {
             holder.type.setText("GIVE");
-//            holder.cv.setCardBackgroundColor(Color.rgb(255,146,146));
-            holder.cv.setCardBackgroundColor(Color.rgb(255,100,100));
+//            holder.cv.setCardBackgroundColor(Color.rgb(255,100,100));
         }else{
             holder.type.setText("TAKE");
-            holder.cv.setCardBackgroundColor(Color.rgb(119,221,119));
+//            holder.cv.setCardBackgroundColor(Color.rgb(119,221,119));
         }
         holder.itemView.setOnLongClickListener(view -> {
-            Toast.makeText(context,"Selection position : "+ entries.get(position).getDate(),Toast.LENGTH_LONG).show();
             Intent intent = new Intent(context, AccountEntryEditActivity.class);
             AccountBox accountBox = new AccountBox();
             accountBox.setId(entries.get(holder.getAdapterPosition()).getId());

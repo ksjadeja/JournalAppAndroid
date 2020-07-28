@@ -86,9 +86,9 @@
     </style>
 
     <style name="fab_material" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/lightFab</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">#FA8764</item>
         <item name="borderWidth">3dp</item>
-        <item name="backgroundTint">#414141</item>
+        <item name="backgroundTint">#2F4ADF</item>
         <item name="android:elevation" tools:targetApi="lollipop">0dp</item>
     </style>
     
@@ -204,4 +204,23 @@
         <item name="cornerSizeBottomLeft">20dp</item>
     </style>
 
-</resources>
+    <style name="Theme.Custom" parent="AppTheme">
+        <item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>
+    </style>
+
+    <style name="Widget.CalendarView.Custom" parent="Theme.AppCompat">
+        <item name="android:focusedMonthDateColor">#FA8764</item>
+        <item name="android:weekDayTextAppearance">@color/colorPrimary</item>
+        <item name="android:dateTextAppearance">@color/black</item>
+    </style>
+
+    <style name="calendarview_custom_text_style" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">#1E1D1D</item>
+        <item name="android:colorBackground">#BFBFBF</item>
+        <item name="android:colorActivatedHighlight">#FA8764</item>
+        <item name="android:focusedMonthDateColor">#FA8764</item>
+        <item name="android:weekDayTextAppearance">@color/colorPrimary</item>
+        <item name="android:dateTextAppearance">@color/black</item>
+    </style>
+
+    </resources>

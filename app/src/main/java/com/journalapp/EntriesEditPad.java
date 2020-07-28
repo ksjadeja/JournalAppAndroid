@@ -77,7 +77,7 @@ public class EntriesEditPad extends AppCompatActivity {
             if (TextUtils.isEmpty(dataText.getText())){
                 Toast.makeText(EntriesEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
             }else{
-                feedbox.setData(dataText.getText().toString());
+                feedbox.setData(dataText.getText().toString().trim());
                 if(update){
                     updateEntry();
                 }else{
@@ -95,7 +95,6 @@ public class EntriesEditPad extends AppCompatActivity {
             saveAlert.setCancelable(false);
             saveAlert.setPositiveButton("Save", (dialog, which) -> saveEntry());
             saveAlert.setNegativeButton("Discard", (dialog, which) -> {
-                Toast.makeText(EntriesEditPad.this,"Closing Activity",Toast.LENGTH_SHORT).show();
                 finish();
             });
             saveAlert.show();

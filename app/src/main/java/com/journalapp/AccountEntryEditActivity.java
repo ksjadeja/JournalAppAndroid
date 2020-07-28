@@ -132,6 +132,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         nameText.setOnItemClickListener((adapterView, view, i, l) -> {
             String item = adapterView.getItemAtPosition(i).toString();
             Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
+//            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
     }
     public void onRadioButtonClicked(View view) {
@@ -167,30 +168,37 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     private void saveEntry(){
 
         if(validateInput()){
-            accountBox.setName(nameText.getText().toString());
-            accountBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            accountBox.setDesc(descText.getText().toString());
+
+            accountBox.setName(nameText.getText().toString().trim());
+            accountBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            accountBox.setDesc(descText.getText().toString().trim());
             accountBox.setT_type(String.valueOf(t_type));
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
             final AccountBoxDao accEntrybox = new AccountBoxDao(accountBox);
-            accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    MailBean mailBean = new MailBean();
-                    String name = accEntrybox.getName();
-                    mailBean.setPersonName(name);
-                    mailBean.setEmail(null);
-                    mailBean.setEmailEntered(false);
-                    mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(task1 -> {
-                        if(task1.isSuccessful())
-                        {
-                            Log.i("Status:", "db mail list entry is successful");
-                        }else{
-                            Log.i("Status:", "db mail list entry is not successful");
-                        }
-                    });
-                } else {
-                    Log.i("Status:", "db acc entry is not successful");
+            accountEntriesRef.document(USER).collection("entries").add(accEntrybox).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if (task.isSuccessful()) {
+                        MailBean mailBean = new MailBean();
+                        String name = accEntrybox.getName();
+                        mailBean.setPersonName(name);
+                        mailBean.setEmail(null);
+                        mailBean.setEmailEntered(false);
+                        mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if(task.isSuccessful())
+                                {
+                                    Log.i("Status:", "db mail list entry is successful");
+                                }else{
+                                    Log.i("Status:", "db mail list entry is not successful");
+                                }
+                            }
+                        });
+                    } else {
+                        Log.i("Status:", "db acc entry is not successful");
+                    }
                 }
             });
             finish();
@@ -200,9 +208,9 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     private void updateEntry() {
 
         if(validateInput()){
-            accountBox.setName(nameText.getText().toString());
-            accountBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            accountBox.setDesc(descText.getText().toString());
+            accountBox.setName(nameText.getText().toString().trim());
+            accountBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            accountBox.setDesc(descText.getText().toString().trim());
             accountBox.setT_type(String.valueOf(t_type));
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
@@ -226,8 +234,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         String textPattern = "[a-zA-Z\"\']+[ a-zA-Z0-9()/\"\'+-_]*";
         String numberPattern = "[0-9.]+";
 
-        if(Pattern.matches(textPattern,nameText.getText().toString()) &&
-                Pattern.matches(numberPattern,amountText.getText().toString()) &&
+        if(Pattern.matches(textPattern,nameText.getText().toString().trim()) &&
+                Pattern.matches(numberPattern,amountText.getText().toString().trim()) &&
                 t_type != -1){
             return true;
         }
@@ -252,10 +260,10 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     private boolean isChanged(){
         if(update){
-            return !nameText.getText().toString().equals(accountBox.getName()) ||
-                    !amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) ||
+            return !nameText.getText().toString().trim().equals(accountBox.getName().trim()) ||
+                    !amountText.getText().toString().trim().equals(String.valueOf(accountBox.getAmount())) ||
                     t_type != Integer.parseInt(accountBox.getT_type()) ||
-                    !descText.getText().toString().equals(accountBox.getDesc());
+                    !descText.getText().toString().trim().equals(accountBox.getDesc().trim());
         }
         return true;
     }

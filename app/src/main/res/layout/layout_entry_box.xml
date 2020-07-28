@@ -4,18 +4,18 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
+    android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
     android:minHeight="150dp"
-    app:cardBackgroundColor="#83b8f4"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradientbg2"
         android:orientation="vertical">
 
         <com.google.android.material.card.MaterialCardView
@@ -32,15 +32,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="right"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/dateField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="130dp"
                     android:text="12/12/2020"
+                    android:layout_marginLeft="40dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                     android:textSize="14dp"
                     app:fontFamily="sans-serif-black" />
@@ -68,7 +68,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             app:cardPreventCornerOverlap="true"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"

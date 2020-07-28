@@ -33,15 +33,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/datePickerLayout"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/fragment_background">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/calendarTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabSelectedTextColor="@color/colorPrimary" />
+            android:background="#FFFFFF"
+            app:tabIndicatorColor="@color/colorPrimaryDark"
+            app:tabSelectedTextColor="@color/darkFab" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/calendarViewPager"

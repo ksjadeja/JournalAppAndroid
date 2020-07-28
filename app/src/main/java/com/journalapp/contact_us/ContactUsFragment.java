@@ -33,7 +33,12 @@ public class ContactUsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Contact Us");
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         getActivity().setTitle("Contact Us");
     }
 }

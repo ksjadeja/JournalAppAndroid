@@ -17,9 +17,9 @@ public class ExpenseBox implements Serializable {
     public ExpenseBox(){}
 
     public ExpenseBox(ExpenseBoxDao expenseBoxDao, String key){
-        itemName= expenseBoxDao.getItemName();
+        itemName= expenseBoxDao.getItemName().trim();
         amount = expenseBoxDao.getAmount();
-        desc = expenseBoxDao.getDesc();
+        desc = expenseBoxDao.getDesc().trim();
         id = key;
         timestamp = expenseBoxDao.getTimestamp().toDate();
         date = new SimpleDateFormat("dd-MM-yyyy").format(timestamp);
@@ -54,7 +54,7 @@ public class ExpenseBox implements Serializable {
     }
 
     public void setItemName(String name) {
-        this.itemName= name;
+        this.itemName= name.trim();
     }
 
     public int getAmount() {
@@ -70,7 +70,7 @@ public class ExpenseBox implements Serializable {
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.desc = desc.trim();
     }
 
     public String getId() {
@@ -78,6 +78,6 @@ public class ExpenseBox implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id.trim();
     }
 }

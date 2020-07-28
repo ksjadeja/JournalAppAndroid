@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background_gradient">
+    android:background="@drawable/gradientbg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="-10dp"
         android:layout_marginBottom="20dp">
 
         <com.google.android.material.card.MaterialCardView
@@ -30,10 +31,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Expense Entry  "
+                android:text="  Expense Entry  "
                 android:textColor="#000"
-                android:textSize="30sp"
-                android:textStyle="bold|italic" />
+                android:textSize="30dp"
+                android:textStyle="bold" />
 
         </com.google.android.material.card.MaterialCardView>
 
