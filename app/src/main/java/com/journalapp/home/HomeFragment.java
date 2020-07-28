@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,23 +20,22 @@ import com.journalapp.ExpenseEntryNewActivity;
 import com.journalapp.R;
 import com.journalapp.utils.MyPagerAdapter;
 
-public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedListener{
+public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
     MyPagerAdapter myPagerAdapter;
-    private FloatingActionButton add_fab,layoutAccEntryFab, layoutEntryFab , layoutExpEntryFab;
+    private FloatingActionButton add_fab, layoutAccEntryFab, layoutEntryFab, layoutExpEntryFab;
     private Boolean fabExpanded = false;
 
     private static String TAG = "DEB    :";
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         setRetainInstance(true);
-        tabLayout= root.findViewById(R.id.timelineTabs);
+        tabLayout = root.findViewById(R.id.timelineTabs);
 
         viewPager = root.findViewById(R.id.viewPager);
 
@@ -49,12 +47,12 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         add_fab = root.findViewById(R.id.add_fab);
         layoutEntryFab = root.findViewById(R.id.entries_fab);
-        layoutAccEntryFab =root.findViewById(R.id.acc_entry_fab);
+        layoutAccEntryFab = root.findViewById(R.id.acc_entry_fab);
         layoutExpEntryFab = root.findViewById(R.id.exp_entry_fab);
         add_fab.setOnClickListener(v -> {
-            if(fabExpanded){
+            if (fabExpanded) {
                 closeSubMenusFab();
-            }else {
+            } else {
                 openSubMenusFab();
             }
         });
@@ -79,8 +77,8 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
         });
 
         tabLayout.setOnTabSelectedListener(this);
-         myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(),tabLayout.getTabCount());
-         viewPager.setOffscreenPageLimit(3);
+        myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(myPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         closeSubMenusFab();
@@ -93,8 +91,6 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Timeline");
-        Log.w(TAG, "fragment onViewCreated() ");
-
     }
 
     @Override
@@ -103,12 +99,15 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {}
+    public void onTabUnselected(TabLayout.Tab tab) {
+    }
+
     @Override
-    public void onTabReselected(TabLayout.Tab tab) { }
+    public void onTabReselected(TabLayout.Tab tab) {
+    }
 
     //closes FAB submenus
-    private void closeSubMenusFab(){
+    private void closeSubMenusFab() {
         layoutEntryFab.setVisibility(View.INVISIBLE);
         layoutAccEntryFab.setVisibility(View.INVISIBLE);
         layoutExpEntryFab.setVisibility(View.INVISIBLE);
@@ -117,7 +116,7 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     }
 
     //Opens FAB submenus
-    private void openSubMenusFab(){
+    private void openSubMenusFab() {
         layoutEntryFab.setVisibility(View.VISIBLE);
         layoutAccEntryFab.setVisibility(View.VISIBLE);
         layoutExpEntryFab.setVisibility(View.VISIBLE);
@@ -129,48 +128,16 @@ public class HomeFragment extends Fragment implements  TabLayout.OnTabSelectedLi
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().setTitle("Timeline");
         Log.w(TAG, "fragment onStart() ");
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Log.w(TAG, "fragment onResume() ");
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            getActivity().setTitle("Timeline");
+        }
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.w(TAG, "fragment onPause() ");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.w(TAG, "fragment onStop() ");
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.w(TAG, "fragment onDestroyView() ");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.w(TAG, "fragment onDestroy() ");
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.w(TAG, "fragment onDetach() ");
-
-    }
-
 
 }

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_gradient"
+        android:background="@drawable/gradientbg"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
@@ -38,7 +38,7 @@
                     android:text="   Journal   "
                     android:textColor="#000"
                     android:textSize="30sp"
-                    android:textStyle="bold|italic" />
+                    android:textStyle="bold" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -123,6 +123,7 @@
                         android:layout_marginEnd="24dp"
                         android:layout_marginBottom="0dp"
                         android:text="Date : "
+                        android:textColor="@color/black"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
@@ -137,7 +138,6 @@
                         android:layout_marginBottom="4dp"
                         android:text="dateField is here"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textStyle="italic"
                         app:fontFamily="sans-serif-black" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -170,6 +170,7 @@
                         android:layout_marginRight="24dp"
                         android:layout_marginBottom="8dp"
                         android:text="Time : "
+                        android:textColor="@color/black"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                     <TextView
@@ -184,7 +185,6 @@
                         android:layout_marginBottom="8dp"
                         android:text="timeField is here"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textStyle="italic"
                         app:fontFamily="sans-serif-black" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

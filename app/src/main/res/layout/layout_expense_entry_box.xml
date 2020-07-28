@@ -11,7 +11,6 @@
     android:layout_marginRight="5dp"
     android:layout_marginBottom="5dp"
     android:minHeight="150dp"
-    app:cardBackgroundColor="@color/exp_entry_card_background"
     app:cardCornerRadius="20dp"
     app:cardElevation="5dp"
     app:cardPreventCornerOverlap="false"
@@ -19,6 +18,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@drawable/gradientbg2"
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
@@ -30,20 +30,20 @@
             android:layout_marginRight="5dp"
             app:cardUseCompatPadding="true"
             app:shapeAppearanceOverlay="@style/feedbox_header_rounded_cut"
-            app:cardBackgroundColor="@color/exp_entry_card_header">
+           >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="right"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/expense_entry_date2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="130dp"
                     android:text="12/12/2020"
+                    android:layout_marginLeft="40dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                     android:textSize="14dp"
                     app:fontFamily="sans-serif-black" />
@@ -75,7 +75,7 @@
             android:layout_margin="5dp"
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="true"
-            app:cardBackgroundColor="@color/exp_entry_card_body">
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                     app:cardElevation="0dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="4"
-                    app:cardBackgroundColor="@color/exp_entry_card_body">
+                   >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -122,6 +122,7 @@
                                     android:layout_marginLeft="10dp"
                                     android:layout_marginEnd="5dp"
                                     android:layout_marginRight="5dp"
+                                   android:textColor="@color/black"
                                     android:ellipsize="end"
                                     android:freezesText="false"
                                     android:gravity="center_vertical"
@@ -146,7 +147,7 @@
                                     android:ellipsize="end"
                                     android:text="Birthday Party"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textStyle="bold|italic"
+                                    android:textStyle="bold"
                                     app:fontFamily="sans-serif-black" />
 
                             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -161,7 +162,7 @@
                             style="@style/aacountbox_left_cardview_component"
                             app:cardElevation="3dp"
                             android:layout_margin="5dp"
-                            app:cardBackgroundColor="@color/exp_entry_card_body_data_left">
+                           >
 
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="match_parent"
@@ -176,6 +177,7 @@
                                     android:layout_marginStart="10dp"
                                     android:layout_marginEnd="5dp"
                                     android:text="Amount: "
+                                    android:textColor="@color/black"
                                     android:textSize="14dp"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                                     android:layout_marginLeft="10dp"
@@ -192,7 +194,7 @@
                                     android:layout_marginRight="10dp"
                                     android:text="850"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textStyle="bold|italic"
+                                    android:textStyle="bold"
                                     app:fontFamily="sans-serif-black" />
 
                             </androidx.appcompat.widget.LinearLayoutCompat>

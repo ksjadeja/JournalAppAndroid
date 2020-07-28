@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -163,7 +164,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
                 getSupportFragmentManager().beginTransaction().hide(last_fragment).show(getSupportFragmentManager().findFragmentByTag("contact")).commit();
                 last_fragment = getSupportFragmentManager().findFragmentByTag("contact");
             }
-            this.setTitle("Contact");
+            this.setTitle("Contact Us");
         } else if (menuItem.getItemId() == R.id.nav_sign_out) {
             AlertDialog.Builder saveAlert = new AlertDialog.Builder(this);
             saveAlert.setTitle("Do you really want to Sign Out?");
@@ -180,13 +181,13 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             saveAlert.show();
         }
 
-       /* if (fragment != null) {
-            fragment.setRetainInstance(true);
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }*/
+//        if (fragment != null) {
+//            fragment.setRetainInstance(true);
+//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -200,4 +201,26 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             startActivity(new Intent(this, MainActivity.class));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().findFragmentByTag("home") != null) {
+            Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("home");
+            if(homeFragment.isHidden()){
+               getSupportFragmentManager().beginTransaction().hide(last_fragment).show(homeFragment).commit();
+               last_fragment = homeFragment;
+               return;
+            }
+        }
+        finish();
+    }
+//        fragment = new ContentMainActivity();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.containerView, fragment).addToBackStack(null).commit();
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
 }

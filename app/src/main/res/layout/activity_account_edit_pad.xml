@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/gradientbg"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -22,16 +22,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginRight="15dp"
-            android:paddingLeft="20dp"
+            android:layout_marginLeft="-10dp"
             app:cardElevation="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Account Entry "
+                android:text="  Account Entry "
                 android:textColor="#000"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="bold|italic" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -81,15 +81,18 @@
     </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/account_main_card_left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp">
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        app:cardPreventCornerOverlap="false"
+        style="@style/account_main_card_left">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:background="@drawable/gradientbg2_right_top_rounded_30"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
 
@@ -109,7 +112,8 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp">
 
                     <TextView
                         android:id="@+id/account_entry_date"
@@ -118,7 +122,8 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="15dp"
                         android:text="dateField is here"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/account_entry_time"
@@ -127,7 +132,8 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="20dp"
                         android:text="timeField is here"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -148,14 +154,15 @@
                     android:layout_marginBottom="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Name:" />
+                        android:text="Name:"
+                        android:textColor="@color/black" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -169,7 +176,7 @@
 
                     <AutoCompleteTextView
                         android:id="@+id/account_entry_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
                         android:completionThreshold="1"
                         android:hint="Enter name of person"
@@ -196,20 +203,21 @@
                     android:layout_marginBottom="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Amount:" />
+                        android:text="Amount:"
+                        android:textColor="@color/black" />
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     style="@style/account_input_data_input_cards"
-                    android:layout_width="wrap_content"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
@@ -244,20 +252,21 @@
                     android:layout_marginBottom="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Type:" />
+                        android:text="Type:"
+                        android:textColor="@color/black" />
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     style="@style/account_input_data_input_cards"
-                    android:layout_width="wrap_content"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
@@ -267,22 +276,23 @@
                         android:id="@+id/radio_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="20dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp">
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_category_give"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="onRadioButtonClicked"
-                            android:paddingRight="10dp"
+                            android:paddingRight="50dp"
                             android:text="Give" />
 
                         <com.google.android.material.radiobutton.MaterialRadioButton
                             android:id="@+id/radio_category_take"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:onClick="onRadioButtonClicked"
-                            android:paddingRight="10dp"
                             android:text="Take" />
                     </RadioGroup>
 
@@ -293,7 +303,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
+                android:layout_width="360dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
@@ -317,7 +327,8 @@
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Desc:" />
+                        android:text="Desc:"
+                        android:textColor="@color/black" />
 
 
                     <com.google.android.material.card.MaterialCardView
@@ -349,7 +360,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="center"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center_vertical"
@@ -360,9 +371,10 @@
                     android:id="@+id/discard_button_account_entry_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_marginLeft="50dp"
                     android:layout_marginRight="10dp"
                     android:text="Discard"
+                    android:textSize="16dp"
                     app:cornerRadius="20dp"
                     app:elevation="10dp" />
 
@@ -371,8 +383,9 @@
                     android:id="@+id/save_button_account_entry_dialog"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="right"
+                    android:layout_marginLeft="50dp"
                     android:text="Save"
+                    android:textSize="17dp"
                     app:cornerRadius="20dp"
                     app:elevation="10dp" />
 

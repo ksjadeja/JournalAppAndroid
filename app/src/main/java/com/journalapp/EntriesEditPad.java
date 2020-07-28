@@ -77,7 +77,7 @@ public class EntriesEditPad extends AppCompatActivity {
             if (TextUtils.isEmpty(dataText.getText())){
                 Toast.makeText(EntriesEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
             }else{
-                feedbox.setData(dataText.getText().toString());
+                feedbox.setData(dataText.getText().toString().trim());
                 if(update){
                     updateEntry();
                 }else{

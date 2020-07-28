@@ -176,9 +176,9 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
         if(validateInput()){
 
-            accountBox.setName(nameText.getText().toString());
-            accountBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            accountBox.setDesc(descText.getText().toString());
+            accountBox.setName(nameText.getText().toString().trim());
+            accountBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            accountBox.setDesc(descText.getText().toString().trim());
             accountBox.setT_type(String.valueOf(t_type));
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
@@ -215,9 +215,9 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     private void updateEntry() {
 
         if(validateInput()){
-            accountBox.setName(nameText.getText().toString());
-            accountBox.setAmount(Integer.parseInt(amountText.getText().toString()));
-            accountBox.setDesc(descText.getText().toString());
+            accountBox.setName(nameText.getText().toString().trim());
+            accountBox.setAmount(Integer.parseInt(amountText.getText().toString().trim()));
+            accountBox.setDesc(descText.getText().toString().trim());
             accountBox.setT_type(String.valueOf(t_type));
             accountBox.setDate(dateText.getText().toString());
             accountBox.setTime(timeText.getText().toString());
@@ -241,8 +241,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         String textPattern = "[a-zA-Z\"\']+[ a-zA-Z0-9()/\"\'+-_]*";
         String numberPattern = "[0-9.]+";
 
-        if(Pattern.matches(textPattern,nameText.getText().toString()) &&
-                Pattern.matches(numberPattern,amountText.getText().toString()) &&
+        if(Pattern.matches(textPattern,nameText.getText().toString().trim()) &&
+                Pattern.matches(numberPattern,amountText.getText().toString().trim()) &&
                 t_type != -1){
             return true;
         }
@@ -268,10 +268,10 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
     private boolean isChanged(){
         if(update){
-            return !nameText.getText().toString().equals(accountBox.getName()) ||
-                    !amountText.getText().toString().equals(String.valueOf(accountBox.getAmount())) ||
+            return !nameText.getText().toString().trim().equals(accountBox.getName().trim()) ||
+                    !amountText.getText().toString().trim().equals(String.valueOf(accountBox.getAmount())) ||
                     t_type != Integer.parseInt(accountBox.getT_type()) ||
-                    !descText.getText().toString().equals(accountBox.getDesc());
+                    !descText.getText().toString().trim().equals(accountBox.getDesc().trim());
         }
         return true;
     }

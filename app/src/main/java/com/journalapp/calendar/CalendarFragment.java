@@ -173,6 +173,12 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle("Calendar");
+    }
+
+    @Override
     public void onTabSelected(TabLayout.Tab tab) {
         calendarViewPager.setCurrentItem(tab.getPosition());
     }

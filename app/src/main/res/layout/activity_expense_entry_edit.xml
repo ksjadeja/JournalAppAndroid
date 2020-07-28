@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/background_gradient">
+    android:background="@drawable/gradientbg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:id="@+id/titleCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
+            android:layout_marginLeft="-10dp"
             android:layout_marginRight="15dp"
             app:cardElevation="10dp">
 
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Expense Entry  "
+                android:text="  Expense Entry  "
                 android:textColor="#000"
                 android:textSize="30sp"
                 android:textStyle="bold|italic" />
@@ -43,6 +43,7 @@
                 android:id="@+id/deleteCard"
                 style="@style/account_delete_card"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="#FF7474"
                 app:cardElevation="10dp">
@@ -80,24 +81,25 @@
 
     <com.google.android.material.card.MaterialCardView
         style="@style/account_main_card_left"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        app:cardPreventCornerOverlap="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:background="@drawable/gradientbg2_right_top_rounded_30"
             android:orientation="vertical">
 
 
-
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="15dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="7dp">
@@ -116,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="15dp"
+                        android:textColor="@color/black"
                         android:text="dateField is here"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -123,9 +126,10 @@
                         android:id="@+id/expense_entry_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="25dp"
                         android:layout_marginRight="20dp"
                         android:text="timeField is here"
+                        android:textColor="@color/black"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </LinearLayout>
 
@@ -147,14 +151,15 @@
                     android:layout_marginBottom="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Label: " />
+                        android:textColor="@color/black"
+                        android:text="Name: " />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -168,7 +173,7 @@
 
                     <EditText
                         android:id="@+id/expense_entry_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="260dp"
                         android:layout_height="wrap_content"
                         android:hint="Enter name of person"
                         android:imeOptions="actionNext" />
@@ -194,14 +199,16 @@
                     android:layout_marginBottom="5dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingStart="15dp"
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Amount:" />
+                        android:text="Amount:"
+                        android:textColor="@color/black"
+                        />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -215,7 +222,7 @@
 
                     <EditText
                         android:id="@+id/expense_entry_amount"
-                        android:layout_width="match_parent"
+                        android:layout_width="260dp"
                         android:layout_height="wrap_content"
                         android:hint="Enter amount"
                         android:imeOptions="actionNext"
@@ -228,12 +235,12 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
+                android:layout_width="370dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="15dp"
                 android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="3dp">
 
@@ -252,16 +259,18 @@
                         android:paddingLeft="15dp"
                         android:paddingEnd="15dp"
                         android:paddingRight="15dp"
-                        android:text="Desc:" />
+                        android:text="Desc:"
+                        android:textColor="@color/black"
+                        />
 
 
                     <com.google.android.material.card.MaterialCardView
                         style="@style/account_input_desc_data_card"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp">
 
                         <EditText
@@ -269,10 +278,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Enter description"
-                            android:minLines="4"
+                            android:imeOptions="actionNext"
                             android:maxLines="4"
-                            android:scrollbars="vertical"
-                            android:imeOptions="actionNext" />
+                            android:minLines="4"
+                            android:scrollbars="vertical" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -284,37 +293,37 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
+                android:layout_gravity="center"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_gravity="right"
-                    app:cornerRadius="20dp"
-                    app:elevation="10dp"
                     android:id="@+id/discard_button_expense_entry_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="35dp"
                     android:layout_marginRight="10dp"
-                    android:text="Discard" />
+                    android:text="Discard"
+                    android:textSize="16dp"
+                    app:cornerRadius="20dp"
+                    app:elevation="10dp" />
 
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_gravity="right"
-                    app:cornerRadius="20dp"
-                    app:elevation="10dp"
                     android:id="@+id/save_button_expense_entry_dialog"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Save" />
-
+                    android:layout_marginLeft="29dp"
+                    android:text="Save"
+                    android:textSize="16dp"
+                    app:cornerRadius="20dp"
+                    app:elevation="10dp" />
 
 
             </LinearLayout>
-
 
 
         </LinearLayout>
