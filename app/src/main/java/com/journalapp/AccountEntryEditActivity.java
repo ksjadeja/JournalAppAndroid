@@ -43,6 +43,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.google.firebase.firestore.Query.*;
@@ -69,6 +71,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountBox accountBox;
 
+    private Set<String> names_set;
+
     boolean update = false;
     private int t_type=-1;
 
@@ -88,6 +92,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         discard_btn = findViewById(R.id.discard_button_account_entry_dialog);
         save_btn = findViewById(R.id.save_button_account_entry_dialog);
         delete_btn = findViewById(R.id.deleteEntryButton);
+
+        names_set = new HashSet<>();
 
         Intent intent = getIntent();
         if(intent.hasExtra("accountbox")){
@@ -296,7 +302,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             accountNameList.add(accountBoxDao.getName());
                             AccEntriesMap.addFirst(key);
-                            adapter.notifyDataSetChanged();
                             break;
 
                         case MODIFIED:
@@ -304,7 +309,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
                             accountNameList.set(index,accountBoxDao.getName());
-                            adapter.notifyDataSetChanged();
                             break;
 
                         case REMOVED:
@@ -312,13 +316,16 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                                 if(AccEntriesMap.isKeyPresent(dc.getDocument().getId())){
                                     AccEntriesMap.delete(dc.getDocument().getId(),accountNameList.indexOf(ac));
                                     accountNameList.remove(ac);
-                                    adapter.notifyDataSetChanged();
                                     break;
                                 }
                             }
                             break;
                     }
                 }
+                names_set.addAll(accountNameList);
+                accountNameList.clear();
+                accountNameList.addAll(names_set);
+                adapter.notifyDataSetChanged();
             }
         });
     }

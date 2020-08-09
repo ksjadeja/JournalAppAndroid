@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +43,6 @@ import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.CalculateRecyclerViewAdapter;
 import com.journalapp.utils.CustomSearchableSpinner;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,7 +53,7 @@ import java.util.Set;
 
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private static long e1=0,e2=0,a1=0,a2=0;
+    private static long e1 = 0, e2 = 0, a1 = 0, a2 = 0;
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
     private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
@@ -224,7 +222,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.avg_expense_start:
-                if (SystemClock.elapsedRealtime() - e1 < 1000){
+                if (SystemClock.elapsedRealtime() - e1 < 1000) {
                     return;
                 }
                 e1 = SystemClock.elapsedRealtime();
@@ -240,7 +238,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog.show();
                 break;
             case R.id.avg_expense_end:
-                if (SystemClock.elapsedRealtime() - e2 < 1000){
+                if (SystemClock.elapsedRealtime() - e2 < 1000) {
                     return;
                 }
                 e2 = SystemClock.elapsedRealtime();
@@ -264,7 +262,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     total = 0;
                     average = 0;
                     n = daysBetween(startAvgExp, endAvgExp);
-                    if(startAvgExp.compareTo(endAvgExp) <= 0){
+                    if (startAvgExp.compareTo(endAvgExp) <= 0) {
                         expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -326,20 +324,20 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             break;
                                     }
                                 }
-                                if(expense_list.size()>0){
+                                if (expense_list.size() > 0) {
                                     showExpenseTotalBar();
-                                }else{
+                                } else {
                                     hideExpenseTotalBar();
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         avg_exp_message.setVisibility(View.VISIBLE);
                         average_n_total_bar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                     }
 
-                } else{
+                } else {
                     avg_exp_message.setVisibility(View.VISIBLE);
                     average_n_total_bar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
@@ -348,7 +346,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
 
             case R.id.total_account_start:
-                if (SystemClock.elapsedRealtime() - a1 < 1000){
+                if (SystemClock.elapsedRealtime() - a1 < 1000) {
                     return;
                 }
                 a1 = SystemClock.elapsedRealtime();
@@ -364,7 +362,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog3.show();
                 break;
             case R.id.total_account_end:
-                if (SystemClock.elapsedRealtime() - a2 < 1000){
+                if (SystemClock.elapsedRealtime() - a2 < 1000) {
                     return;
                 }
                 a2 = SystemClock.elapsedRealtime();
@@ -390,7 +388,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     account_email_box.setEnabled(true);
                     account_list.clear();
                     account_total = 0;
-                    if(startTotalAcc.compareTo(endTotalAcc) <= 0){
+                    if (startTotalAcc.compareTo(endTotalAcc) <= 0) {
                         if (selected_name.equals("All")) {
                             accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -473,9 +471,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
-                                    if(account_list.size()>0){
+                                    if (account_list.size() > 0) {
                                         showAccountTotalBar();
-                                    }else {
+                                    } else {
                                         hideAccountTotalBar();
                                     }
                                 }
@@ -562,9 +560,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
-                                    if(account_list.size()>0){
+                                    if (account_list.size() > 0) {
                                         showAccountTotalBar();
-                                    }else {
+                                    } else {
                                         hideAccountTotalBar();
                                     }
                                 }
@@ -577,9 +575,12 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             if (task.isSuccessful()) {
                                                 if (task.getResult().getDocuments().size() > 0) {
                                                     MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                    if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
+                                                    if (mailBean.getEmail() != null && !mailBean.getEmail().equals("")) {
                                                         account_email_box.setText(mailBean.getEmail());
                                                         account_email_box.setEnabled(false);
+                                                        if (account_list.size() > 0) {
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
                                                     }
                                                 } else {
                                                     Log.i("LOG:", "no email found for: " + selected_name, task.getException());
@@ -590,18 +591,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             }
                                         }
                                     });
-
-                            if(account_list.size()>0){
-                                account_mail_bar.setVisibility(View.VISIBLE);
-                            }
                         }
-                    }else{
+                    } else {
                         total_account_message.setVisibility(View.VISIBLE);
                         total_account_bar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                     }
 
-                }else{
+                } else {
                     total_account_message.setVisibility(View.VISIBLE);
                     total_account_bar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
@@ -618,6 +615,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             selected_name = parent.getItemAtPosition(position).toString();
         }
     }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
@@ -652,6 +650,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -664,22 +663,22 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         getActivity().setTitle("Calculate");
     }
 
-    private void showExpenseTotalBar(){
+    private void showExpenseTotalBar() {
         avg_exp_message.setVisibility(View.GONE);
         average_n_total_bar.setVisibility(View.VISIBLE);
     }
 
-    private void hideExpenseTotalBar(){
+    private void hideExpenseTotalBar() {
         avg_exp_message.setVisibility(View.VISIBLE);
         average_n_total_bar.setVisibility(View.GONE);
     }
 
-    private void showAccountTotalBar(){
+    private void showAccountTotalBar() {
         total_account_message.setVisibility(View.GONE);
         total_account_bar.setVisibility(View.VISIBLE);
     }
 
-    private void hideAccountTotalBar(){
+    private void hideAccountTotalBar() {
         total_account_message.setVisibility(View.VISIBLE);
         total_account_bar.setVisibility(View.GONE);
     }
