@@ -195,19 +195,15 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                         mailBean.setPersonName(name);
                         mailBean.setEmail("");//TODO Fixed
                         mailBean.setEmailEntered(false);
-                        mailEntriesRef.document(USER).collection("entries").document(name).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if (e != null) {
-                                    Log.i("ERROR:", "listen:error", e);
-                                    return;
-                                }
-                                if (documentSnapshot != null) {
-                                    if (documentSnapshot.exists()) {
 
+
+                        mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {
+                                if(task12.isSuccessful()){
+                                    DocumentSnapshot documentSnapshot = task12.getResult();
+                                    if(documentSnapshot.exists()) {
                                         Log.i("MAIL::STATUS", "User already exists(add) " + name);
                                         mailEntriesRef.document(USER).collection("entries").document(name).update("count", FieldValue.increment(1));
-                                    } else {
+                                    }else{
                                         Log.i("MAIL::STATUS", "User does not exist(add)");
                                         mailBean.setCount(1);
                                         mailEntriesRef.document(USER).collection("entries").document(name).set(mailBean).addOnCompleteListener(task1 -> {
@@ -218,11 +214,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                                             }
                                         });
                                     }
-                                } else {
-                                    Log.i("MAIL::STATUS", "User does not exist || DocSnap is nulll");
                                 }
-                            }
-                        });
+                    });
                     } else {
                         Log.i("Status:", "db acc entry is not successful");
                     }

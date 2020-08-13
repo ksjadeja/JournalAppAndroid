@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -109,31 +111,31 @@ public class AccEntriesTab extends Fragment {
                         mailBean.setEmail("");//TODO Fixed
                         mailBean.setEmailEntered(false);
 
-                        mailEntriesRef.document(USER).collection("entries").document(name).addSnapshotListener((documentSnapshot, e1) -> {
-                            if(e1!=null){
-                                Log.i("ERROR:", "listen:error", e1);
-                                return;
-                            }
-                            if(documentSnapshot!=null) {
-                                if (documentSnapshot.exists()) {
-                                    Log.i("MAIL::STATUS", "User already exists(modify)");
-                                    mailEntriesRef.document(USER).collection("entries").document(name).update("count",FieldValue.increment(1));
-                                    mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1));
-                                }else{
-                                    Log.i("MAIL::STATUS", "User does not exist(modify)");
-                                    mailBean.setCount(1);
-                                    mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(task1 -> {
-                                        if(task1.isSuccessful())
-                                        {
-                                            Log.i("Status:", "db mail list entry is successful");
-                                        }else{
-                                            Log.i("Status:", "db mail list entry is not successful");
-                                        }
-                                    });
+                            mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {
+                                if (task12.isSuccessful()) {
+                                    DocumentSnapshot documentSnapshot = task12.getResult();
+                                    if(documentSnapshot.exists()) {
+                                        Log.i("MAIL::STATUS", "User already exists(modify)");
+                                        mailEntriesRef.document(USER).collection("entries").document(name).update("count", FieldValue.increment(1));
+                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count", FieldValue.increment(-1));
+                                    }else{
+                                        Log.i("MAIL::STATUS", "User does not exist(modify)");
+                                        mailBean.setCount(1);
+                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                mailEntriesRef.document(USER).collection("entries").document(mailBean.getPersonName()).set(mailBean).addOnCompleteListener(task1 -> {
+                                                    if(task1.isSuccessful())
+                                                    {
+                                                        Log.i("Status:", "db mail list entry is successful");
+                                                    }else{
+                                                        Log.i("Status:", "db mail list entry is not successful");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
                                 }
-                            }else{
-                                Log.i("MAIL::STATUS", "User does not exist || DocSnap is nulll");
-                            }
                         });
                         break;
 
@@ -142,21 +144,23 @@ public class AccEntriesTab extends Fragment {
                             if (ac.getId().equals(dc.getDocument().getId())) {
                                 AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
                                 accountEntryList.remove(ac);
-                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("count",FieldValue.increment(-1)).addOnSuccessListener(aVoid -> {
-                                    Long cnt = mailEntriesRef.document(USER).collection("entries").document(ac.getName()).get().getResult().getLong("count");
-                                    if (cnt != null) {
-                                        if(cnt<=0) {
-                                            mailEntriesRef.document(USER).collection("entries").document(ac.getName()).delete()
-                                                    .addOnSuccessListener(aVoid1 -> Log.d("MAIL::STATUS", "DocumentSnapshot successfully deleted!"))
-                                                    .addOnFailureListener(e12 -> Log.w("MAIL::STATUS", "Error deleting document", e12));
-                                        }
+                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(task -> {
+                                    if(task.isComplete()) {
+                                        mailEntriesRef.document(USER).collection("entries").document(ac.getName()).get().addOnCompleteListener(task3->{
+                                            if(task3.isSuccessful()) {
+                                                Long cnt = task3.getResult().getLong("count");
+                                                if (cnt != null) {
+                                                    if (cnt <= 0) {
+                                                        mailEntriesRef.document(USER).collection("entries").document(ac.getName()).delete()
+                                                                .addOnSuccessListener(aVoid1 -> Log.d("MAIL::STATUS", "DocumentSnapshot successfully deleted!"))
+                                                                .addOnFailureListener(e12 -> Log.w("MAIL::STATUS", "Error deleting document", e12));
+                                                    }
+                                                }
+                                            }
+                                        });
                                     }
                                 });
-
-
-//                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("emailEntered",false);
-
-//                                break;
+                                break;
                             }
                         }
                         break;

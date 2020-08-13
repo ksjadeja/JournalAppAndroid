@@ -9,10 +9,7 @@ public class MailBean {
     private String personName;
     private String email;
     private boolean emailEntered;
-
     private int count;
-
-
     @Exclude
     public String getKey() {
         return key;

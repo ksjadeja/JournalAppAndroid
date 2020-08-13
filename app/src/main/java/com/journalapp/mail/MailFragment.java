@@ -100,11 +100,7 @@ public class MailFragment extends Fragment {
         getActivity().setTitle("Mail");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        getActivity().setTitle("Mail");
-    }
+
 
     @Override
     public void onDestroy() {
