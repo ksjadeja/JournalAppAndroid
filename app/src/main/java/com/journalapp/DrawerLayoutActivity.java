@@ -1,6 +1,5 @@
 package com.journalapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -94,6 +93,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         fragmentTransaction.add(R.id.nav_host_fragment, homeFragment, "home");
         fragmentTransaction.commit();
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
@@ -190,6 +190,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onStart() {
         super.onStart();

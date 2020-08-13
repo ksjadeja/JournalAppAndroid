@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +35,7 @@ public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         setRetainInstance(true);
-        tabLayout= root.findViewById(R.id.timelineTabs);
+        tabLayout = root.findViewById(R.id.timelineTabs);
 
         viewPager = root.findViewById(R.id.viewPager);
 
@@ -51,9 +50,9 @@ public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedLis
         layoutAccEntryFab = root.findViewById(R.id.acc_entry_fab);
         layoutExpEntryFab = root.findViewById(R.id.exp_entry_fab);
         add_fab.setOnClickListener(v -> {
-            if(fabExpanded){
+            if (fabExpanded) {
                 closeSubMenusFab();
-            }else {
+            } else {
                 openSubMenusFab();
             }
         });
@@ -102,9 +101,12 @@ public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedLis
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {}
+    public void onTabUnselected(TabLayout.Tab tab) {
+    }
+
     @Override
-    public void onTabReselected(TabLayout.Tab tab) { }
+    public void onTabReselected(TabLayout.Tab tab) {
+    }
 
     //closes FAB submenus
     private void closeSubMenusFab() {
@@ -139,6 +141,5 @@ public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedLis
             getActivity().setTitle("Timeline");
         }
     }
-
 
 }
