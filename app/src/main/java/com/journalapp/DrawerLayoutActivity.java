@@ -134,7 +134,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         } else if (menuItem.getItemId() == R.id.nav_calculate) {
             if (getSupportFragmentManager().findFragmentByTag("calculate") == null) {
                 fragment = new CalculateFragment();
-                fragment.setRetainInstance(true);
+                fragment.setRetainInstance(false);
                 getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "calculate").commit();
                 last_fragment = fragment;
             } else {

@@ -23,11 +23,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.firestore.FieldValue;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.MailBean;
@@ -183,16 +187,33 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                         MailBean mailBean = new MailBean();
                         String name = accEntrybox.getName();
                         mailBean.setPersonName(name);
-                        mailBean.setEmail(null);
+                        mailBean.setEmail("");//TODO Fixed
                         mailBean.setEmailEntered(false);
-                        mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        mailEntriesRef.document(USER).collection("entries").document(name).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if(task.isSuccessful())
-                                {
-                                    Log.i("Status:", "db mail list entry is successful");
-                                }else{
-                                    Log.i("Status:", "db mail list entry is not successful");
+                            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.i("ERROR:", "listen:error", e);
+                                    return;
+                                }
+                                if (documentSnapshot != null) {
+                                    if (documentSnapshot.exists()) {
+
+                                        Log.i("MAIL::STATUS", "User already exists(add) " + name);
+                                        mailEntriesRef.document(USER).collection("entries").document(name).update("count", FieldValue.increment(1));
+                                    } else {
+                                        Log.i("MAIL::STATUS", "User does not exist(add)");
+                                        mailBean.setCount(1);
+                                        mailEntriesRef.document(USER).collection("entries").document(name).set(mailBean).addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                Log.i("Status:", "db mail list entry is successful");
+                                            } else {
+                                                Log.i("Status:", "db mail list entry is not successful");
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.i("MAIL::STATUS", "User does not exist || DocSnap is nulll");
                                 }
                             }
                         });

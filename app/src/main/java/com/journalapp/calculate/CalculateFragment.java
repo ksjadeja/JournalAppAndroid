@@ -598,25 +598,24 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                             if (task.isSuccessful()) {
                                                 if (task.getResult().getDocuments().size() > 0) {
                                                     MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                    if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
+                                                    if (mailBean.getEmail() != null && !mailBean.getEmail().equals("")) {
                                                         account_email_box.setText(mailBean.getEmail());
                                                         account_email_box.setEnabled(false);
+                                                        if(account_list.size()>0){
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
                                                     }
                                                 } else {
                                                     Log.i("LOG:", "no email found for: " + selected_name, task.getException());
                                                 }
-                                            } else {
-                                                Log.i("LOG:", "no email found for: " + selected_name, task.getException());
+                                            }else {
+                                                Log.i("EXCEPTION:", "email finding query failed", task.getException());
                                             }
-
-                                        } else {
-                                            Log.i("EXCEPTION:", "email finding query failed", task.getException());
                                         }
+
                                     });
 
-                            if(account_list.size()>0){
-                                account_mail_bar.setVisibility(View.VISIBLE);
-                            }
+
                         }
                     }else{
                         total_account_message.setVisibility(View.VISIBLE);
@@ -689,6 +688,11 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         getActivity().setTitle("Calculate");
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+//TODO Reset on Hide change
     @Override
     public void onStart() {
         super.onStart();

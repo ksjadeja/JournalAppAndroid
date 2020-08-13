@@ -2,6 +2,7 @@ package com.journalapp.home;
 
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -28,10 +32,12 @@ import com.journalapp.AccEntriesMap;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
+import com.journalapp.models.MailBean;
 import com.journalapp.utils.AccountRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.journalapp.AccEntriesMap.AccEntriesIndex;
 
 
@@ -41,6 +47,7 @@ public class AccEntriesTab extends Fragment {
     ArrayList<AccountBox> accountEntryList;
     String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();       // "Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+    CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountRecyclerViewAdapter adapter;
     ListenerRegistration liveAccountEntries;
 
@@ -93,7 +100,41 @@ public class AccEntriesTab extends Fragment {
                         key = dc.getDocument().getId();
                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                         int index = AccEntriesIndex.get(key);
+                        AccountBox oldAccBox = accountEntryList.get(index);
                         accountEntryList.set(index, new AccountBox(accountBoxDao, key));
+
+                        MailBean mailBean = new MailBean();
+                        String name = accountBoxDao.getName();
+                        mailBean.setPersonName(name);
+                        mailBean.setEmail("");//TODO Fixed
+                        mailBean.setEmailEntered(false);
+
+                        mailEntriesRef.document(USER).collection("entries").document(name).addSnapshotListener((documentSnapshot, e1) -> {
+                            if(e1!=null){
+                                Log.i("ERROR:", "listen:error", e1);
+                                return;
+                            }
+                            if(documentSnapshot!=null) {
+                                if (documentSnapshot.exists()) {
+                                    Log.i("MAIL::STATUS", "User already exists(modify)");
+                                    mailEntriesRef.document(USER).collection("entries").document(name).update("count",FieldValue.increment(1));
+                                    mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1));
+                                }else{
+                                    Log.i("MAIL::STATUS", "User does not exist(modify)");
+                                    mailBean.setCount(1);
+                                    mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(task1 -> {
+                                        if(task1.isSuccessful())
+                                        {
+                                            Log.i("Status:", "db mail list entry is successful");
+                                        }else{
+                                            Log.i("Status:", "db mail list entry is not successful");
+                                        }
+                                    });
+                                }
+                            }else{
+                                Log.i("MAIL::STATUS", "User does not exist || DocSnap is nulll");
+                            }
+                        });
                         break;
 
                     case REMOVED:
@@ -101,7 +142,21 @@ public class AccEntriesTab extends Fragment {
                             if (ac.getId().equals(dc.getDocument().getId())) {
                                 AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
                                 accountEntryList.remove(ac);
-                                break;
+                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("count",FieldValue.increment(-1)).addOnSuccessListener(aVoid -> {
+                                    Long cnt = mailEntriesRef.document(USER).collection("entries").document(ac.getName()).get().getResult().getLong("count");
+                                    if (cnt != null) {
+                                        if(cnt<=0) {
+                                            mailEntriesRef.document(USER).collection("entries").document(ac.getName()).delete()
+                                                    .addOnSuccessListener(aVoid1 -> Log.d("MAIL::STATUS", "DocumentSnapshot successfully deleted!"))
+                                                    .addOnFailureListener(e12 -> Log.w("MAIL::STATUS", "Error deleting document", e12));
+                                        }
+                                    }
+                                });
+
+
+//                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("emailEntered",false);
+
+//                                break;
                             }
                         }
                         break;
