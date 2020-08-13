@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.os.SystemClock;
 import android.util.Log;
@@ -214,7 +215,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_item, names_list);
 
         account_names.setAdapter(arrayAdapter);
-
         total_account_recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         account_adapter = new CalculateRecyclerViewAdapter<AccountBox>(getContext(), account_list);
         total_account_recycler_view.setAdapter(account_adapter);
@@ -228,20 +228,27 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
             case R.id.account_send_mail_btn:
                 Log.i("MAILSTATUS:","send button clicked");
-                String email = account_email_box.getText().toString();
-                if(email.trim().length() == 0){
-                    Toast.makeText(getContext(), "Please enter email address in the mail fragment to send the mail......", Toast.LENGTH_LONG).show();
-                    Log.i("MAILSTATUS:","email not entered but clicked on send");
-                }else{
-                    if(total_account_total.getCurrentTextColor()==Color.RED){
-                        Toast.makeText(getContext(), "Your account entries show you need to pay the person rather than take. So can't send email", Toast.LENGTH_LONG).show();
-                        Log.i("MAILSTATUS:","email entered and clicked on send but has to give rather than send");
-                    }else {
+                total_account_submit.performClick();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String email = account_email_box.getText().toString();
+                        if(email.trim().length() == 0){
+                            Toast.makeText(getContext(), "Please enter email address in the mail fragment to send the mail......", Toast.LENGTH_LONG).show();
+                            Log.i("MAILSTATUS:","email not entered but clicked on send");
+                        }else{
+                            if(total_account_total.getCurrentTextColor()==Color.RED){
+                                Toast.makeText(getContext(), "Your account entries show you need to pay the person rather than take. So can't send email", Toast.LENGTH_LONG).show();
+                                Log.i("MAILSTATUS:","email entered and clicked on send but has to give rather than send");
+                            }else {
 //                        Toast.makeText(getContext(), " can  send email", Toast.LENGTH_SHORT).show();
-                        Log.i("MAILSTATUS:","email entered and clicked on send, eligible to send");
-                        sendEmail(email,Double.parseDouble(total_account_total.getText().toString()),selected_name);
+                                Log.i("MAILSTATUS:","email entered and clicked on send, eligible to send");
+                                sendEmail(email,Double.parseDouble(total_account_total.getText().toString()),selected_name);
+                            }
+                        }
                     }
-                }
+                },3000);
                 break;
             case R.id.avg_expense_start:
                 if (SystemClock.elapsedRealtime() - e1 < 1000) {

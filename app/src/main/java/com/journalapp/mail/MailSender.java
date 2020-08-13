@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.sun.mail.smtp.SMTPAddressFailedException;
+
 import java.security.Security;
 import java.util.Properties;
 
@@ -85,7 +87,11 @@ public class MailSender extends AsyncTask<Void,Void,Void> {
 
             Transport.send(mimeMessage);
             Log.i("MAILSTATUS:","success in Gmail Sender");
-        }catch(Exception e){
+        } catch(Exception e){
+            if(e.getClass().equals(SMTPAddressFailedException.class)){
+                Log.i("MAIL::STATUS","ERROR, Invalid email");
+                Toast.makeText(context, "Invalid email address format ", Toast.LENGTH_SHORT).show();
+            }
             e.printStackTrace();
         }
         return null;

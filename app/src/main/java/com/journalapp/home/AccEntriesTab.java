@@ -138,7 +138,6 @@ public class AccEntriesTab extends Fragment {
                                 }
                         });
                         break;
-
                     case REMOVED:
                         for (AccountBox ac : accountEntryList) {
                             if (ac.getId().equals(dc.getDocument().getId())) {
