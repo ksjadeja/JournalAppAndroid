@@ -184,12 +184,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             }
                             break;
 
-                        /*case MODIFIED:
-                            key = dc.getDocument().getId();
+                        case MODIFIED:
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-
-                            arrayAdapter.notifyDataSetChanged();
-                            break;*/
+                            if (!names_map.containsKey(accountBoxDao.getName())) {
+                                names_map.put(accountBoxDao.getName(), accountBoxDao.getName());
+                                names_list.add(accountBoxDao.getName());
+//                                arrayAdapter.notifyDataSetChanged();
+                            }
+                            break;
 
                         case REMOVED:
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
