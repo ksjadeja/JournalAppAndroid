@@ -188,6 +188,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             break;*/
 
                         case REMOVED:
+                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             if (names_map.containsKey(accountBoxDao.getName())) {
                                 names_map.remove(accountBoxDao.getName());
                                 for (String str : names_list) {
