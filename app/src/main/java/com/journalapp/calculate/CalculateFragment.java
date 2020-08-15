@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.InputType;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.ExpEntriesMap;
 import com.journalapp.R;
+import com.journalapp.mail.MailSender;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.ExpenseBox;
@@ -49,13 +51,14 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private static long e1=0,e2=0,a1=0,a2=0;
+    private static long e1=0,e2=0,a1=0,a2=0,s1=0;
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
     private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
@@ -87,13 +90,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     private CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     private CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
 
-    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
-
-
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         expense_list = new ArrayList<>();
         account_list = new ArrayList<>();
 
@@ -148,6 +148,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         account_mail_bar = view.findViewById(R.id.account_mail_bar);
         account_mail_bar.setVisibility(View.GONE);
         account_email_box = view.findViewById(R.id.account_email_box);
+
         account_send_mail_btn = view.findViewById(R.id.account_send_mail_btn);
 
         total_account_recycler_view = view.findViewById(R.id.total_account_recycler_view);
@@ -159,6 +160,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         total_account_end.setOnClickListener(this);
         total_account_submit.setOnClickListener(this);
         account_names.setOnItemSelectedListener(this);
+        account_send_mail_btn.setOnClickListener(this);
 
         accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -182,14 +184,17 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             }
                             break;
 
-                        /*case MODIFIED:
-                            key = dc.getDocument().getId();
+                        case MODIFIED:
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-
-                            arrayAdapter.notifyDataSetChanged();
-                            break;*/
+                            if (!names_map.containsKey(accountBoxDao.getName())) {
+                                names_map.put(accountBoxDao.getName(), accountBoxDao.getName());
+                                names_list.add(accountBoxDao.getName());
+//                                arrayAdapter.notifyDataSetChanged();
+                            }
+                            break;
 
                         case REMOVED:
+                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             if (names_map.containsKey(accountBoxDao.getName())) {
                                 names_map.remove(accountBoxDao.getName());
                                 for (String str : names_list) {
@@ -212,51 +217,66 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
         arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_item, names_list);
         account_names.setAdapter(arrayAdapter);
-
         total_account_recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         account_adapter = new CalculateRecyclerViewAdapter<AccountBox>(getContext(), account_list);
         total_account_recycler_view.setAdapter(account_adapter);
 
         return view;
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
+            case R.id.account_send_mail_btn:
+                if (SystemClock.elapsedRealtime() - s1 < 1000) {
+                    return;
+                }
+                s1 = SystemClock.elapsedRealtime();
+                Log.i("MAILSTATUS:","send button clicked");
+                total_account_submit.performClick();
+
+                account_send_mail_btn.setClickable(false);
+                String email = account_email_box.getText().toString();
+                if(email.trim().length() == 0){
+                    Toast.makeText(getContext(), "Please enter email address in the mail fragment to send the mail......", Toast.LENGTH_LONG).show();
+                    Log.i("MAILSTATUS:","email not entered but clicked on send");
+                }else{
+                    if(total_account_total.getCurrentTextColor()==Color.RED){
+                        Toast.makeText(getContext(), "Your account entries show you need to pay the person rather than take. So can't send email", Toast.LENGTH_LONG).show();
+                        Log.i("MAILSTATUS:","email entered and clicked on send but has to give rather than send");
+                    }else {
+                        Log.i("MAILSTATUS:","email entered and clicked on send, eligible to send");
+                        sendEmail(email,Double.parseDouble(total_account_total.getText().toString()),selected_name);
+                    }
+                }
+                account_send_mail_btn.setClickable(true);
+                break;
             case R.id.avg_expense_start:
-                if (SystemClock.elapsedRealtime() - e1 < 1000){
+                if (SystemClock.elapsedRealtime() - e1 < 1000) {
                     return;
                 }
                 e1 = SystemClock.elapsedRealtime();
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, month, day, 0, 0, 0);
-                        startAvgExp = calendar;
-                        avg_expense_start.setText(new SimpleDateFormat("dd/MM/yyyy").format(startAvgExp.getTime()));
-                    }
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day, 0, 0, 0);
+                    startAvgExp = calendar;
+                    avg_expense_start.setText(new SimpleDateFormat("dd/MM/yyyy").format(startAvgExp.getTime()));
                 }, yearr, monthh, dayy);
                 datePickerDialog.show();
                 break;
             case R.id.avg_expense_end:
-                if (SystemClock.elapsedRealtime() - e2 < 1000){
+                if (SystemClock.elapsedRealtime() - e2 < 1000) {
                     return;
                 }
                 e2 = SystemClock.elapsedRealtime();
-                DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @SuppressLint("SimpleDateFormat")
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, month, day, 23, 59, 59);
-                        endAvgExp = calendar;
-                        avg_expense_end.setText(new SimpleDateFormat("dd/MM/yyyy").format(endAvgExp.getTime()));
-                    }
+                DatePickerDialog datePickerDialog2 = new DatePickerDialog(getContext(), (datePicker, year, month, day) -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day, 23, 59, 59);
+                    endAvgExp = calendar;
+                    avg_expense_end.setText(new SimpleDateFormat("dd/MM/yyyy").format(endAvgExp.getTime()));
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
                 break;
-
 
             case R.id.avg_expense_submit:
                 if (startAvgExp != null && endAvgExp != null) {
@@ -264,82 +284,78 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                     total = 0;
                     average = 0;
                     n = daysBetween(startAvgExp, endAvgExp);
-                    if(startAvgExp.compareTo(endAvgExp) <= 0){
-                        expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                if (e != null) {
-                                    Log.i("ERROR:", "listen:error", e);
-                                    return;
-                                }
-                                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                                    String key = null;
-                                    ExpenseBoxDao expenseBoxDao = null;
-                                    switch (dc.getType()) {
-                                        case ADDED:
+                    if (startAvgExp.compareTo(endAvgExp) <= 0) {
+                        expenseEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startAvgExp.getTime()).whereLessThan("timestamp", endAvgExp.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener((queryDocumentSnapshots, e) -> {
+                            if (e != null) {
+                                Log.i("ERROR:", "listen:error", e);
+                                return;
+                            }
+                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                String key = null;
+                                ExpenseBoxDao expenseBoxDao = null;
+                                switch (dc.getType()) {
+                                    case ADDED:
 
-                                            key = dc.getDocument().getId();
-                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-                                            expense_list.add(0, new ExpenseBox(expenseBoxDao, key));
-                                            adapter.notifyDataSetChanged();
-                                            total += expenseBoxDao.getAmount();
+                                        key = dc.getDocument().getId();
+                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                        expense_list.add(0, new ExpenseBox(expenseBoxDao, key));
+                                        adapter.notifyDataSetChanged();
+                                        total += expenseBoxDao.getAmount();
+                                        average = total / n;
+
+                                        avg_expense_total.setText(String.valueOf(total));
+                                        avg_expense_average.setText(String.valueOf(average));
+                                        break;
+
+                                    case MODIFIED:
+                                        key = dc.getDocument().getId();
+                                        expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
+                                        for (ExpenseBox ex : expense_list) {
+                                            if (ex.getId().equals(key)) {
+                                                expense_list.set(expense_list.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
+                                                adapter.notifyDataSetChanged();
+                                                break;
+                                            }
+
+                                        }
+                                        total = 0;
+                                        for (ExpenseBox exp : expense_list) {
+                                            total += exp.getAmount();
+                                        }
+                                        average = total / n;
+                                        avg_expense_total.setText(String.valueOf(total));
+                                        avg_expense_average.setText(String.valueOf(average));
+                                        break;
+
+                                    case REMOVED:
+                                        for (ExpenseBox ex : expense_list) {
+                                            if (ex.getId().equals(dc.getDocument().getId())) {
+                                                ExpEntriesMap.delete(ex.getId(), expense_list.indexOf(ex));
+                                                expense_list.remove(ex);
+                                                adapter.notifyDataSetChanged();
+                                                break;
+                                            }
+                                            total -= expenseBoxDao.getAmount();
                                             average = total / n;
-
                                             avg_expense_total.setText(String.valueOf(total));
                                             avg_expense_average.setText(String.valueOf(average));
-                                            break;
-
-                                        case MODIFIED:
-                                            key = dc.getDocument().getId();
-                                            expenseBoxDao = dc.getDocument().toObject(ExpenseBoxDao.class);
-                                            for (ExpenseBox ex : expense_list) {
-                                                if (ex.getId().equals(key)) {
-                                                    expense_list.set(expense_list.indexOf(ex), new ExpenseBox(expenseBoxDao, key));
-                                                    adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-
-                                            }
-                                            total = 0;
-                                            for (ExpenseBox exp : expense_list) {
-                                                total += exp.getAmount();
-                                            }
-                                            average = total / n;
-                                            avg_expense_total.setText(String.valueOf(total));
-                                            avg_expense_average.setText(String.valueOf(average));
-                                            break;
-
-                                        case REMOVED:
-                                            for (ExpenseBox ex : expense_list) {
-                                                if (ex.getId().equals(dc.getDocument().getId())) {
-                                                    ExpEntriesMap.delete(ex.getId(), expense_list.indexOf(ex));
-                                                    expense_list.remove(ex);
-                                                    adapter.notifyDataSetChanged();
-                                                    break;
-                                                }
-                                                total -= expenseBoxDao.getAmount();
-                                                average = total / n;
-
-                                                avg_expense_total.setText(String.valueOf(total));
-                                                avg_expense_average.setText(String.valueOf(average));
-                                            }
-                                            break;
-                                    }
-                                }
-                                if(expense_list.size()>0){
-                                    showExpenseTotalBar();
-                                }else{
-                                    hideExpenseTotalBar();
+                                        }
+                                        break;
                                 }
                             }
+                            if (expense_list.size() > 0) {
+                                showExpenseTotalBar();
+                            } else {
+                                hideExpenseTotalBar();
+                            }
                         });
-                    }else{
+                    } else {
                         avg_exp_message.setVisibility(View.VISIBLE);
                         average_n_total_bar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                     }
 
-                } else{
+                } else {
                     avg_exp_message.setVisibility(View.VISIBLE);
                     average_n_total_bar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
@@ -348,7 +364,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
 
 
             case R.id.total_account_start:
-                if (SystemClock.elapsedRealtime() - a1 < 1000){
+                if (SystemClock.elapsedRealtime() - a1 < 1000) {
                     return;
                 }
                 a1 = SystemClock.elapsedRealtime();
@@ -364,7 +380,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 datePickerDialog3.show();
                 break;
             case R.id.total_account_end:
-                if (SystemClock.elapsedRealtime() - a2 < 1000){
+                if (SystemClock.elapsedRealtime() - a2 < 1000) {
                     return;
                 }
                 a2 = SystemClock.elapsedRealtime();
@@ -387,10 +403,12 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 if (startTotalAcc != null && endTotalAcc != null) {
                     account_mail_bar.setVisibility(View.GONE);
                     account_email_box.setText("");
-                    account_email_box.setEnabled(true);
+                    account_email_box.setInputType(InputType.TYPE_NULL);
+                    account_email_box.setEnabled(false);
+
                     account_list.clear();
                     account_total = 0;
-                    if(startTotalAcc.compareTo(endTotalAcc) <= 0){
+                    if (startTotalAcc.compareTo(endTotalAcc) <= 0) {
                         if (selected_name.equals("All")) {
                             accountEntriesRef.document(USER).collection("entries").whereGreaterThanOrEqualTo("timestamp", startTotalAcc.getTime()).whereLessThan("timestamp", endTotalAcc.getTime()).orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -473,9 +491,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
-                                    if(account_list.size()>0){
+                                    if (account_list.size() > 0) {
                                         showAccountTotalBar();
-                                    }else {
+                                    } else {
                                         hideAccountTotalBar();
                                     }
                                 }
@@ -570,38 +588,52 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                 }
                             });
 
-                            mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                if (task.getResult().getDocuments().size() > 0) {
-                                                    MailBean mailBean = task.getResult().getDocuments().get(0).toObject(MailBean.class);
-                                                    if (mailBean.getEmail()!=null && !mailBean.getEmail().equals("")) {
+                            mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).
+                                    addSnapshotListener((queryDocumentSnapshots, e) -> {
+                                        if (e != null) {
+                                            Log.i("ERROR:", "listen:error", e);
+                                            return;
+                                        }
+                                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+
+                                            switch (dc.getType()) {
+                                                case ADDED:
+                                                    MailBean mailBean = dc.getDocument().toObject(MailBean.class);
+                                                    if (mailBean.getEmail() != null && !mailBean.getEmail().equals("") && mailBean.getEmailEntered()) {
                                                         account_email_box.setText(mailBean.getEmail());
                                                         account_email_box.setEnabled(false);
+                                                        if (account_list.size() > 0) {
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
                                                     }
-                                                } else {
-                                                    Log.i("LOG:", "no email found for: " + selected_name, task.getException());
-                                                }
-
-                                            } else {
-                                                Log.i("EXCEPTION:", "email finding query failed", task.getException());
+                                                    break;
+                                                case MODIFIED:
+                                                    MailBean mailBean2 = dc.getDocument().toObject(MailBean.class);
+                                                        account_email_box.setText(mailBean2.getEmail());
+                                                        account_email_box.setEnabled(false);
+                                                        if (account_list.size() > 0) {
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
+                                                    break;
+                                                case REMOVED:
+                                                    account_email_box.setText("");
+                                                    account_email_box.setEnabled(false);
+                                                    account_mail_bar.setVisibility(View.INVISIBLE);
+                                                    break;
                                             }
                                         }
                                     });
 
-                            if(account_list.size()>0){
-                                account_mail_bar.setVisibility(View.VISIBLE);
-                            }
+
+
                         }
-                    }else{
+                    } else {
                         total_account_message.setVisibility(View.VISIBLE);
                         total_account_bar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
                     }
 
-                }else{
+                } else {
                     total_account_message.setVisibility(View.VISIBLE);
                     total_account_bar.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Select appropriate start and end date", Toast.LENGTH_LONG).show();
@@ -609,7 +641,20 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 break;
         }
     }
+    private void sendEmail(String email,double amount,String selectedName) {
+        try {
+            String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            if(userName==null)
+                userName=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Log.i("MAILSTATUS:","send mail to "+email+" name "+selectedName+" amt "+amount);
+            String message="<table style=\"font-family:'calibri'; \" align=\"center\" width=\"720\" border=\"0\"><tbody><tr><td><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td align=\"left\" style=\"padding-bottom: 20px;\"> Payment Reminder</td></tr></tbody></table></td></tr><tr><td style=\"padding-top:10px;\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td align=\"left\" style=\"padding:7px;vertical-align: top; \"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\"><tbody><tr><td style=\"padding-top:0px; padding-bottom: 7px;\"><p>Hello <strong>"+selectedName+"</strong>,&nbsp;<br><br> Our user <strong>"+userName+"</strong> has reported in his daily account entries on our app that you have to pay him a net amount of <strong><i>"+amount+"</i></strong>&nbsp;<br><br> This is a gentle reminder for payment. We kindly request you to pay owed money on time.<br>&nbsp;</p><br><br><p>You can also join us on our android application <strong>My Journal</strong> which will help you keep a track of your daily account with friends, family and also your daily expenses as well as your daily activities.&nbsp;<br> Check out the app <a href=\"\"><i>My Journal</i></a></p>&nbsp;<p>Thanks,&nbsp;<br><strong>"+userName+"</strong><br><strong>A proud <i>My Journal</i> User</strong></p></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td style=\"padding-top:20px; font-size:13px;text-align:center;border-top:1px solid #000000;\"><p>©" + Calendar.getInstance().get(Calendar.YEAR)+"My Journal. All rights reserved.</p></td></tr></tbody></table>";
+            MailSender mailSender  = new MailSender(getContext(),email,"Return the money",message);
+            mailSender.execute();
 
+        } catch (Exception e) {
+            Log.e("SendMail", e.getMessage(), e);
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
@@ -619,17 +664,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         }
     }
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-//    @Override
-//    public void onAttachFragment(Fragment fragment) {
-//        if (fragment.isAdded())
-//            return;
-//        super.onAttachFragment(fragment);
-//    }
-
+    public void onNothingSelected(AdapterView<?> parent) {}
     public static int daysBetween(Calendar day1, Calendar day2) {
         Calendar dayOne = (Calendar) day1.clone(),
                 dayTwo = (Calendar) day2.clone();
@@ -652,6 +687,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays;
         }
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -664,22 +700,22 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         getActivity().setTitle("Calculate");
     }
 
-    private void showExpenseTotalBar(){
+    private void showExpenseTotalBar() {
         avg_exp_message.setVisibility(View.GONE);
         average_n_total_bar.setVisibility(View.VISIBLE);
     }
 
-    private void hideExpenseTotalBar(){
+    private void hideExpenseTotalBar() {
         avg_exp_message.setVisibility(View.VISIBLE);
         average_n_total_bar.setVisibility(View.GONE);
     }
 
-    private void showAccountTotalBar(){
+    private void showAccountTotalBar() {
         total_account_message.setVisibility(View.GONE);
         total_account_bar.setVisibility(View.VISIBLE);
     }
 
-    private void hideAccountTotalBar(){
+    private void hideAccountTotalBar() {
         total_account_message.setVisibility(View.VISIBLE);
         total_account_bar.setVisibility(View.GONE);
     }

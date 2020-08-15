@@ -89,7 +89,7 @@ public class ExpEntriesTab extends Fragment {
                         break;
 
                     case REMOVED:
-                        for (ExpenseBox ex : expenseEntryList) {            //TODO optimize it futher
+                        for (ExpenseBox ex : expenseEntryList) {
                             if (ex.getId().equals(dc.getDocument().getId())) {
                                 ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
                                 expenseEntryList.remove(ex);
@@ -157,7 +157,7 @@ public class ExpEntriesTab extends Fragment {
                                     break;
 
                                 case REMOVED:
-                                    for (ExpenseBox ex : expenseEntryList) {            //TODO optimize it futher
+                                    for (ExpenseBox ex : expenseEntryList) {
                                         if (ex.getId().equals(dc.getDocument().getId())) {
                                             ExpEntriesMap.delete(ex.getId(), expenseEntryList.indexOf(ex));
                                             expenseEntryList.remove(ex);

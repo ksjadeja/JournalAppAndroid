@@ -59,10 +59,8 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         if(x==0)
         {
             holder.type.setText("GIVE");
-//            holder.cv.setCardBackgroundColor(Color.rgb(255,100,100));
         }else{
             holder.type.setText("TAKE");
-//            holder.cv.setCardBackgroundColor(Color.rgb(119,221,119));
         }
         holder.itemView.setOnLongClickListener(view -> {
             Intent intent = new Intent(context, AccountEntryEditActivity.class);
@@ -91,7 +89,6 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         TextView amount;
         TextView description;
         TextView type;
-//        String id;
 
         public EntryHolder(final View itemView) {
             super(itemView);

@@ -4,12 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
@@ -32,9 +29,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.MailBean;
@@ -43,6 +39,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.google.firebase.firestore.Query.*;
@@ -69,6 +69,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
     CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountBox accountBox;
 
+    private Set<String> names_set;
+
     boolean update = false;
     private int t_type=-1;
 
@@ -88,6 +90,8 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         discard_btn = findViewById(R.id.discard_button_account_entry_dialog);
         save_btn = findViewById(R.id.save_button_account_entry_dialog);
         delete_btn = findViewById(R.id.deleteEntryButton);
+
+        names_set = new HashSet<>();
 
         Intent intent = getIntent();
         if(intent.hasExtra("accountbox")){
@@ -130,18 +134,14 @@ public class AccountEntryEditActivity extends AppCompatActivity{
 
         discard_btn.setOnClickListener(v -> finish());
         delete_btn.setOnClickListener(v -> deleteEntry());
-
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.select_dialog_item,accountNameList);
-        fillUserSeggestions();
+        fillUserSuggestions();
         nameText.setAdapter(adapter);
         adapter.setNotifyOnChange(true);
         nameText.setOnItemClickListener((adapterView, view, i, l) -> {
             String item = adapterView.getItemAtPosition(i).toString();
-//            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
-
     }
-
     public void onRadioButtonClicked(View view) {
         boolean checked = ((MaterialRadioButton) view).isChecked();
 
@@ -190,19 +190,28 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                         MailBean mailBean = new MailBean();
                         String name = accEntrybox.getName();
                         mailBean.setPersonName(name);
-                        mailBean.setEmail(null);
+                        mailBean.setEmail("");//TODO Fixed
                         mailBean.setEmailEntered(false);
-                        mailEntriesRef.document(USER).collection("entries").add(mailBean).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if(task.isSuccessful())
-                                {
-                                    Log.i("Status:", "db mail list entry is successful");
-                                }else{
-                                    Log.i("Status:", "db mail list entry is not successful");
+
+                        mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {
+                                if(task12.isSuccessful()){
+                                    DocumentSnapshot documentSnapshot = task12.getResult();
+                                    if(documentSnapshot.exists()) {
+                                        Log.i("MAIL::STATUS", "User already exists(add) " + name);
+                                        mailEntriesRef.document(USER).collection("entries").document(name).update("count", FieldValue.increment(1));
+                                    }else{
+                                        Log.i("MAIL::STATUS", "User does not exist(add)");
+                                        mailBean.setCount(1);
+                                        mailEntriesRef.document(USER).collection("entries").document(name).set(mailBean).addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                Log.i("Status:", "db mail list entry is successful");
+                                            } else {
+                                                Log.i("Status:", "db mail list entry is not successful");
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                    });
                     } else {
                         Log.i("Status:", "db acc entry is not successful");
                     }
@@ -263,7 +272,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
             return;
         });
         saveAlert.show();
-
     }
 
     private boolean isChanged(){
@@ -276,7 +284,7 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         return true;
     }
 
-    private void fillUserSeggestions() {
+    private void fillUserSuggestions() {
         AccEntriesMap.clearMap();
         liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -296,7 +304,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             accountNameList.add(accountBoxDao.getName());
                             AccEntriesMap.addFirst(key);
-                            adapter.notifyDataSetChanged();
                             break;
 
                         case MODIFIED:
@@ -304,23 +311,23 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             accountBoxDao= dc.getDocument().toObject(AccountBoxDao.class);
                             int index = AccEntriesIndex.get(key);
                             accountNameList.set(index,accountBoxDao.getName());
-                            adapter.notifyDataSetChanged();
                             break;
-
                         case REMOVED:
                             for(String ac:accountNameList){
                                 if(AccEntriesMap.isKeyPresent(dc.getDocument().getId())){
                                     AccEntriesMap.delete(dc.getDocument().getId(),accountNameList.indexOf(ac));
                                     accountNameList.remove(ac);
-                                    adapter.notifyDataSetChanged();
                                     break;
                                 }
                             }
                             break;
                     }
                 }
+                names_set.addAll(accountNameList);
+                accountNameList.clear();
+                accountNameList.addAll(names_set);
+                adapter.notifyDataSetChanged();
             }
         });
     }
-
 }

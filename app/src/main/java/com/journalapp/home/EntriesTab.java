@@ -105,7 +105,7 @@ public class EntriesTab extends Fragment {
                         break;
 
                     case REMOVED:
-                        for (Feedbox fb : feedboxesList) {            //TODO optimize it futher
+                        for (Feedbox fb : feedboxesList) {
                             if (fb.getId().equals(dc.getDocument().getId())) {
                                 EntriesMap.delete(fb.getId(), feedboxesList.indexOf(fb));
                                 feedboxesList.remove(fb);

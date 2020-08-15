@@ -1,6 +1,5 @@
 package com.journalapp.charts;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,9 +31,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
@@ -60,7 +55,6 @@ import com.journalapp.models.ExpenseBoxDao;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -501,23 +495,14 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         ll1.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         ll1.setTextSize(10f);
 
-
-//        LimitLine ll2 = new LimitLine(70f, "Minimum Limit");
-//        ll2.setLineWidth(4f);
-//        ll2.enableDashedLine(10f, 10f, 0f);
-//        ll2.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-//        ll2.setTextSize(10f);
-
         YAxis leftAxis = expenseChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
         leftAxis.addLimitLine(ll1);
-//        leftAxis.addLimitLine(ll2);
 
 
         leftAxis.setAxisMinimum(0f);
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawZeroLine(true);
-//        leftAxis.setGranularityEnabled(true);
         leftAxis.setDrawLimitLinesBehindData(false);
         expenseChart.getAxisRight().setEnabled(false);
 
@@ -579,20 +564,12 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             xAxis.setEnabled(true);
             xAxis.setLabelCount(map.keySet().size());
             Object[] keys = map.keySet().toArray();
-//            expenseChart.setVisibleXRangeMaximum(4);
-//            expenseChart.moveViewToX(data.getEntryCount());
-//            expenseChart.getXAxis().setGranularity(1f);
+
             xAxis.setDrawLabels(true);
             xAxis.setCenterAxisLabels(true);
             expenseChart.setDoubleTapToZoomEnabled(false);
             expenseChart.setPinchZoom(false);
-//            expenseChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
-//                @Override
-//                public String getFormattedValue(float value, AxisBase axis) {
-//                    Log.i("Labeliiiii","label "+keys[(int)value].toString());
-//                    return keys[(int)value].toString();
-//                }
-//            });
+            
             ValueFormatter valueFormatter = new ValueFormatter(){
                 @Override
                 public String getAxisLabel(float value, AxisBase axis) {
@@ -602,24 +579,12 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
                         return keys[(int)value].toString();
                 }
             };
-//            xAxis.setValueFormatter(new IndexAxisValueFormatter(map.keySet()){
-//                @Override
-//                public String getFormattedValue(float value, AxisBase axis) {
-//                    return super.getFormattedValue(value, axis);
-//                }
-//            });
+
             xAxis.setValueFormatter(valueFormatter);
-//            expenseChart.setDragEnabled(true);
             expenseChart.setHorizontalScrollBarEnabled(true);
-//            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setLabelRotationAngle(60f);
-            Toast.makeText(getContext(), "keys "+map.keySet(), Toast.LENGTH_SHORT).show();
             xAxis.setAvoidFirstLastClipping(false);
 
-//            expenseChart.fitScreen();
-//            expenseChart.getXAxis().setCenterAxisLabels(true);
-//            expenseChart.setDoubleTapToZoomEnabled(false);
-//            expenseChart.setPinchZoom(false);
             xAxis.setAxisMinimum(0.8f);
             xAxis.setXOffset(-1f);
             expenseChart.setExtraTopOffset(70f);
@@ -852,14 +817,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
         datewiseExpChart.invalidate();
     }
 
-//    private static class MyXAxisValueFormatter extends ValueFormatter {
-//        @Override
-//        public String getFormattedValue(float value, AxisBase axis) {
-//            Log.i("Labeliiiii","label "+keys[(int)value].toString());
-//            System.out.println("label "+keys[(int)value].toString());
-//            return keys[(int)value].toString();
-//        }
-//    }
+
 }
 
 class ValueAndLabel<V, L> {

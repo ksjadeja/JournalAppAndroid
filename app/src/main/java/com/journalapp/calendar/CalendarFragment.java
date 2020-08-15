@@ -109,10 +109,10 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
 
         calendarViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(calendarTabs));
 
-        /*datePicker = root.findViewById(R.id.datePicker);
-        Calendar c = Calendar.getInstance();
-        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), (view, newYear, newMonth, newDay) -> {
-            date = (newDay < 10 ? "0" + newDay : newDay) + "-" + (newMonth < 9 ? "0" + (newMonth + 1) : (newMonth + 1)) + "-" + newYear;
+        calendarView = root.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            date = (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth) + "-" + (month < 9 ? "0" + (month + 1) : (month + 1)) + "-" + year;
+
 
             if (jdatePickerSelectionListener != null) {
                 jdatePickerSelectionListener.onDatePickerSelection(date);
@@ -131,34 +131,6 @@ public class CalendarFragment extends Fragment implements TabLayout.OnTabSelecte
                 Log.i("Event    :::", date + "  exp");
             } else {
                 Log.i("Event    :::", "exp datelistener is null");
-            }
-        });*/
-
-        calendarView = root.findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                date = (dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth) + "-" + (month < 9 ? "0" + (month + 1) : (month + 1)) + "-" + year;
-
-
-                if (jdatePickerSelectionListener != null) {
-                    jdatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  jour");
-                } else {
-                    Log.i("Event    :::", "jour datelistener is null");
-                }
-                if (adatePickerSelectionListener != null) {
-                    adatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  acc");
-                } else {
-                    Log.i("Event    :::", "acc datelistener is null");
-                }
-                if (edatePickerSelectionListener != null) {
-                    edatePickerSelectionListener.onDatePickerSelection(date);
-                    Log.i("Event    :::", date + "  exp");
-                } else {
-                    Log.i("Event    :::", "exp datelistener is null");
-                }
             }
         });
 

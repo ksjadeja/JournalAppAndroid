@@ -1,6 +1,5 @@
 package com.journalapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -47,7 +46,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     TextView user_display_name, user_email;
 
     public static CalendarFragment calendarFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +93,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         fragmentTransaction.add(R.id.nav_host_fragment, homeFragment, "home");
         fragmentTransaction.commit();
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment fragment = null;
@@ -135,7 +134,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         } else if (menuItem.getItemId() == R.id.nav_calculate) {
             if (getSupportFragmentManager().findFragmentByTag("calculate") == null) {
                 fragment = new CalculateFragment();
-                fragment.setRetainInstance(true);
+                fragment.setRetainInstance(false);
                 getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "calculate").commit();
                 last_fragment = fragment;
             } else {
@@ -180,17 +179,10 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             });
             saveAlert.show();
         }
-
-//        if (fragment != null) {
-//            fragment.setRetainInstance(true);
-//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -214,13 +206,5 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         }
         finish();
     }
-//        fragment = new ContentMainActivity();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.containerView, fragment).addToBackStack(null).commit();
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
+
 }

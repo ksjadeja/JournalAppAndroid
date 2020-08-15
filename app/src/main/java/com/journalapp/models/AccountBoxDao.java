@@ -11,8 +11,7 @@ public class AccountBoxDao {
     private int amount;
     private String desc;
     private String t_type;
-//    private static final int GIVE=0;
-//    private static final int TAKE=1;
+
 
     public AccountBoxDao() {
     }
