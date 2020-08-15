@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,11 +92,13 @@ public class HomeFragment extends Fragment implements TabLayout.OnTabSelectedLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Timeline");
+        Toast.makeText(getActivity(), "On  View Created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
+        Toast.makeText(getActivity(), "Tab selected", Toast.LENGTH_SHORT).show();
     }
 
     @Override

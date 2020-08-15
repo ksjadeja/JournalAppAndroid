@@ -2,6 +2,7 @@ package com.journalapp.home;
 
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -28,10 +34,12 @@ import com.journalapp.AccEntriesMap;
 import com.journalapp.R;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
+import com.journalapp.models.MailBean;
 import com.journalapp.utils.AccountRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.journalapp.AccEntriesMap.AccEntriesIndex;
 
 
@@ -41,6 +49,7 @@ public class AccEntriesTab extends Fragment {
     ArrayList<AccountBox> accountEntryList;
     String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();       // "Kiran1901";
     CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
+    CollectionReference mailEntriesRef = FirebaseFirestore.getInstance().collection("mailing_list");
     AccountRecyclerViewAdapter adapter;
     ListenerRegistration liveAccountEntries;
 
@@ -63,7 +72,6 @@ public class AccEntriesTab extends Fragment {
         recyclerView = rootView.findViewById(R.id.acc_recycler_view);
         accountEntryList = new ArrayList<>();
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new AccountRecyclerViewAdapter(getContext(), accountEntryList);
         liveAccountEntries = accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
@@ -72,6 +80,7 @@ public class AccEntriesTab extends Fragment {
                 return;
             }
             int i = 0;
+            if (snapshots == null) throw new AssertionError();
             for (DocumentChange dc : snapshots.getDocumentChanges()) {
                 String key = null;
                 AccountBoxDao accountBoxDao = null;
@@ -79,6 +88,7 @@ public class AccEntriesTab extends Fragment {
                     case ADDED:
                         key = dc.getDocument().getId();
                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
+
                         if (accountEntryList.size() > 0 && accountEntryList.get(0).getTimestamp().compareTo(accountBoxDao.getTimestamp().toDate()) < 0) {
                             accountEntryList.add(0, new AccountBox(accountBoxDao, key));
                             AccEntriesMap.addFirst(key);
@@ -92,14 +102,63 @@ public class AccEntriesTab extends Fragment {
                         key = dc.getDocument().getId();
                         accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                         int index = AccEntriesIndex.get(key);
+                        AccountBox oldAccBox = accountEntryList.get(index);
                         accountEntryList.set(index, new AccountBox(accountBoxDao, key));
-                        break;
 
+                        MailBean mailBean = new MailBean();
+                        String name = accountBoxDao.getName();
+                        mailBean.setPersonName(name);
+                        mailBean.setEmail("");//TODO Fixed
+                        mailBean.setEmailEntered(false);
+
+                            mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {
+                                if (task12.isSuccessful()) {
+                                    DocumentSnapshot documentSnapshot = task12.getResult();
+                                    if(documentSnapshot.exists()) {
+                                        Log.i("MAIL::STATUS", "User already exists(modify)");
+                                        mailEntriesRef.document(USER).collection("entries").document(name).update("count", FieldValue.increment(1));
+                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count", FieldValue.increment(-1));
+                                    }else{
+                                        Log.i("MAIL::STATUS", "User does not exist(modify)");
+                                        mailBean.setCount(1);
+                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                mailEntriesRef.document(USER).collection("entries").document(mailBean.getPersonName()).set(mailBean).addOnCompleteListener(task1 -> {
+                                                    if(task1.isSuccessful())
+                                                    {
+                                                        Log.i("Status:", "db mail list entry is successful");
+                                                    }else{
+                                                        Log.i("Status:", "db mail list entry is not successful");
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                }
+                        });
+                        break;
                     case REMOVED:
                         for (AccountBox ac : accountEntryList) {
                             if (ac.getId().equals(dc.getDocument().getId())) {
                                 AccEntriesMap.delete(ac.getId(), accountEntryList.indexOf(ac));
                                 accountEntryList.remove(ac);
+                                mailEntriesRef.document(USER).collection("entries").document(ac.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(task -> {
+                                    if(task.isComplete()) {
+                                        mailEntriesRef.document(USER).collection("entries").document(ac.getName()).get().addOnCompleteListener(task3->{
+                                            if(task3.isSuccessful()) {
+                                                Long cnt = task3.getResult().getLong("count");
+                                                if (cnt != null) {
+                                                    if (cnt <= 0) {
+                                                        mailEntriesRef.document(USER).collection("entries").document(ac.getName()).delete()
+                                                                .addOnSuccessListener(aVoid1 -> Log.d("MAIL::STATUS", "DocumentSnapshot successfully deleted!"))
+                                                                .addOnFailureListener(e12 -> Log.w("MAIL::STATUS", "Error deleting document", e12));
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
                                 break;
                             }
                         }

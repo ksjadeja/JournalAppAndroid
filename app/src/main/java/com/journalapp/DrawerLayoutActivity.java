@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -45,7 +46,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     TextView user_display_name, user_email;
 
     public static CalendarFragment calendarFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +134,7 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         } else if (menuItem.getItemId() == R.id.nav_calculate) {
             if (getSupportFragmentManager().findFragmentByTag("calculate") == null) {
                 fragment = new CalculateFragment();
-                fragment.setRetainInstance(true);
+                fragment.setRetainInstance(false);
                 getSupportFragmentManager().beginTransaction().hide(last_fragment).add(R.id.nav_host_fragment, fragment, "calculate").commit();
                 last_fragment = fragment;
             } else {
@@ -206,10 +206,10 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
     public void onBackPressed() {
         if (getSupportFragmentManager().findFragmentByTag("home") != null) {
             Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("home");
-            if (homeFragment.isHidden()) {
-                getSupportFragmentManager().beginTransaction().hide(last_fragment).show(homeFragment).commit();
-                last_fragment = homeFragment;
-                return;
+            if(homeFragment.isHidden()){
+               getSupportFragmentManager().beginTransaction().hide(last_fragment).show(homeFragment).commit();
+               last_fragment = homeFragment;
+               return;
             }
         }
         finish();

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.InputType;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +38,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.journalapp.ExpEntriesMap;
 import com.journalapp.R;
+import com.journalapp.mail.GMailSender;
+import com.journalapp.mail.MailSender;
 import com.journalapp.models.AccountBox;
 import com.journalapp.models.AccountBoxDao;
 import com.journalapp.models.ExpenseBox;
@@ -43,6 +47,7 @@ import com.journalapp.models.ExpenseBoxDao;
 import com.journalapp.models.MailBean;
 import com.journalapp.utils.CalculateRecyclerViewAdapter;
 import com.journalapp.utils.CustomSearchableSpinner;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +58,7 @@ import java.util.Set;
 
 public class CalculateFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private static long e1 = 0, e2 = 0, a1 = 0, a2 = 0;
+    private static long e1=0,e2=0,a1=0,a2=0;
 
     private TextInputEditText avg_expense_start, avg_expense_end, total_account_start, total_account_end, account_email_box;
     private MaterialTextView avg_expense_total, avg_expense_average, total_account_total, avg_exp_message, total_account_message;
@@ -85,13 +90,10 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     private CollectionReference accountEntriesRef = FirebaseFirestore.getInstance().collection("account_entries");
     private CollectionReference mailRef = FirebaseFirestore.getInstance().collection("mailing_list");
 
-    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();           //"Kiran1901";
-
-
+    String USER = FirebaseAuth.getInstance().getCurrentUser().getUid();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         expense_list = new ArrayList<>();
         account_list = new ArrayList<>();
 
@@ -146,6 +148,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         account_mail_bar = view.findViewById(R.id.account_mail_bar);
         account_mail_bar.setVisibility(View.GONE);
         account_email_box = view.findViewById(R.id.account_email_box);
+
         account_send_mail_btn = view.findViewById(R.id.account_send_mail_btn);
 
         total_account_recycler_view = view.findViewById(R.id.total_account_recycler_view);
@@ -157,6 +160,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         total_account_end.setOnClickListener(this);
         total_account_submit.setOnClickListener(this);
         account_names.setOnItemSelectedListener(this);
+        account_send_mail_btn.setOnClickListener(this);
 
         accountEntriesRef.document(USER).collection("entries").orderBy("timestamp", Query.Direction.ASCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -210,8 +214,8 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
         });
 
         arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_item, names_list);
-        account_names.setAdapter(arrayAdapter);
 
+        account_names.setAdapter(arrayAdapter);
         total_account_recycler_view.setLayoutManager(new LinearLayoutManager(getContext()));
         account_adapter = new CalculateRecyclerViewAdapter<AccountBox>(getContext(), account_list);
         total_account_recycler_view.setAdapter(account_adapter);
@@ -222,6 +226,31 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+
+            case R.id.account_send_mail_btn:
+                Log.i("MAILSTATUS:","send button clicked");
+                total_account_submit.performClick();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String email = account_email_box.getText().toString();
+                        if(email.trim().length() == 0){
+                            Toast.makeText(getContext(), "Please enter email address in the mail fragment to send the mail......", Toast.LENGTH_LONG).show();
+                            Log.i("MAILSTATUS:","email not entered but clicked on send");
+                        }else{
+                            if(total_account_total.getCurrentTextColor()==Color.RED){
+                                Toast.makeText(getContext(), "Your account entries show you need to pay the person rather than take. So can't send email", Toast.LENGTH_LONG).show();
+                                Log.i("MAILSTATUS:","email entered and clicked on send but has to give rather than send");
+                            }else {
+//                        Toast.makeText(getContext(), " can  send email", Toast.LENGTH_SHORT).show();
+                                Log.i("MAILSTATUS:","email entered and clicked on send, eligible to send");
+                                sendEmail(email,Double.parseDouble(total_account_total.getText().toString()),selected_name);
+                            }
+                        }
+                    }
+                },3000);
+                break;
             case R.id.avg_expense_start:
                 if (SystemClock.elapsedRealtime() - e1 < 1000) {
                     return;
@@ -255,7 +284,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 }, yearr, monthh, dayy);
                 datePickerDialog2.show();
                 break;
-
 
             case R.id.avg_expense_submit:
                 if (startAvgExp != null && endAvgExp != null) {
@@ -318,7 +346,6 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 }
                                                 total -= expenseBoxDao.getAmount();
                                                 average = total / n;
-
                                                 avg_expense_total.setText(String.valueOf(total));
                                                 avg_expense_average.setText(String.valueOf(average));
                                             }
@@ -386,7 +413,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 if (startTotalAcc != null && endTotalAcc != null) {
                     account_mail_bar.setVisibility(View.GONE);
                     account_email_box.setText("");
-                    account_email_box.setEnabled(true);
+                    account_email_box.setInputType(InputType.TYPE_NULL);
+                    account_email_box.setEnabled(false);
+
                     account_list.clear();
                     account_total = 0;
                     if (startTotalAcc.compareTo(endTotalAcc) <= 0) {
@@ -561,9 +590,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 break;
                                         }
                                     }
-                                    if (account_list.size() > 0) {
+                                    if(account_list.size()>0){
                                         showAccountTotalBar();
-                                    } else {
+                                    }else {
                                         hideAccountTotalBar();
                                     }
                                 }
@@ -586,12 +615,14 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                                                 } else {
                                                     Log.i("LOG:", "no email found for: " + selected_name, task.getException());
                                                 }
-
-                                            } else {
+                                            }else {
                                                 Log.i("EXCEPTION:", "email finding query failed", task.getException());
                                             }
                                         }
+
                                     });
+
+
                         }
                     } else {
                         total_account_message.setVisibility(View.VISIBLE);
@@ -607,7 +638,25 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                 break;
         }
     }
+    private void sendEmail(String email,double amount,String selectedName) {
+        try {
+            String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            if(userName==null)
+                userName=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            Log.i("MAILSTATUS:","send mail to "+email+" name "+selectedName+" amt "+amount);
 
+            MailSender mailSender  = new MailSender(getContext(),email,"Return the money","Hello Mr."+selectedName+", \n  Our user "+userName+" has reported" +
+                    " in his daily account entries on our app that you have to pay him" +
+                    " a net amount of Rs."+amount+". Kindly pay it on time.\n You can also join us on JournalApp which will help you keep" +
+                    "track of your daily account with friends and family and also your daily expenses and your daily activities" +
+                    ". Click Here to download " +
+                    "our App <Link HERE>\n Regards, \n Team JournalApp");
+            mailSender.execute();
+
+        } catch (Exception e) {
+            Log.e("SendMail", e.getMessage(), e);
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
@@ -618,17 +667,7 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-//    @Override
-//    public void onAttachFragment(Fragment fragment) {
-//        if (fragment.isAdded())
-//            return;
-//        super.onAttachFragment(fragment);
-//    }
-
+    public void onNothingSelected(AdapterView<?> parent) {}
     public static int daysBetween(Calendar day1, Calendar day2) {
         Calendar dayOne = (Calendar) day1.clone(),
                 dayTwo = (Calendar) day2.clone();

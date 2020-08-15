@@ -1,5 +1,7 @@
 package com.journalapp.mail;
 
+import android.util.Log;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,9 +60,11 @@ public class GMailSender extends javax.mail.Authenticator {
                 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
             else
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));
-            Transport.send(message);
-        }catch(Exception e){
 
+            Transport.send(message);
+            Log.i("MAILSTATUS:","success in Gmail Sender");
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 

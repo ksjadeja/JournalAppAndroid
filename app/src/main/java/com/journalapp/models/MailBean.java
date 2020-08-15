@@ -6,12 +6,10 @@ public class MailBean {
 
 //    @Exclude
     private String key;
-
     private String personName;
     private String email;
     private boolean emailEntered;
-
-
+    private int count;
     @Exclude
     public String getKey() {
         return key;
@@ -42,5 +40,11 @@ public class MailBean {
 
     public void setEmail(String email) {
         this.email = email.trim();
+    }
+    public int getCount() {
+        return count;
+    }
+    public void setCount(int count) {
+        this.count = count;
     }
 }

@@ -32,7 +32,6 @@ public class MailListAdapter extends BaseAdapter {
         this.context=context;
         this.mailList=mailList;
     }
-
     @Override
     public int getCount() {
         return mailList.size();
@@ -91,23 +90,25 @@ public class MailListAdapter extends BaseAdapter {
 
             mailRef.document(USER).collection("entries").document(mailList.get(i).getKey()).set(mailList.get(i));
         });
-        if(mailList.get(i).getEmailEntered())
-        {
-            email.setEnabled(false);
-            email.setInputType(InputType.TYPE_NULL);
+        if(mailList.get(i).getCount()>=1){
+            if(mailList.get(i).getEmailEntered())
+            {
+                email.setEnabled(false);
+                email.setInputType(InputType.TYPE_NULL);
 
-            saveButton.setVisibility(View.GONE);
-            saveCard.setVisibility(View.GONE);
-            editCard.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
-        }else{
-            email.setEnabled(true);
-            email.setInputType(InputType.TYPE_CLASS_TEXT);
+                saveButton.setVisibility(View.GONE);
+                saveCard.setVisibility(View.GONE);
+                editCard.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.VISIBLE);
+            }else{
+                email.setEnabled(true);
+                email.setInputType(InputType.TYPE_CLASS_TEXT);
 
-            saveCard.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.GONE);
-            editCard.setVisibility(View.GONE);
+                saveCard.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.VISIBLE);
+                editButton.setVisibility(View.GONE);
+                editCard.setVisibility(View.GONE);
+            }
         }
         return view;
     }

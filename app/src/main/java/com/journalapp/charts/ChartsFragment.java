@@ -586,13 +586,7 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             xAxis.setCenterAxisLabels(true);
             expenseChart.setDoubleTapToZoomEnabled(false);
             expenseChart.setPinchZoom(false);
-//            expenseChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(map.keySet()) {
-//                @Override
-//                public String getFormattedValue(float value, AxisBase axis) {
-//                    Log.i("Labeliiiii","label "+keys[(int)value].toString());
-//                    return keys[(int)value].toString();
-//                }
-//            });
+            
             ValueFormatter valueFormatter = new ValueFormatter(){
                 @Override
                 public String getAxisLabel(float value, AxisBase axis) {
