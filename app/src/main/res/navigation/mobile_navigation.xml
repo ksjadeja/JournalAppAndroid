@@ -7,71 +7,71 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.journalapp.home.HomeFragment"
+        android:name="com.myjournal.journalapp.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_calendar"
-        android:name="com.journalapp.calendar.CalendarFragment"
+        android:name="com.myjournal.journalapp.calendar.CalendarFragment"
         android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
         android:id="@+id/nav_charts"
-        android:name="com.journalapp.charts.ChartsFragment"
+        android:name="com.myjournal.journalapp.charts.ChartsFragment"
         android:label="Charts"
         tools:layout="@layout/fragment_charts" />
 
     <fragment
         android:id="@+id/nav_calculate"
-        android:name="com.journalapp.calculate.CalculateFragment"
+        android:name="com.myjournal.journalapp.calculate.CalculateFragment"
         android:label="Calculate"
         tools:layout="@layout/fragment_calculate" />
 
     <fragment
         android:id="@+id/nav_email"
-        android:name="com.journalapp.mail.MailFragment"
+        android:name="com.myjournal.journalapp.mail.MailFragment"
         android:label="Mail"
         tools:layout="@layout/fragment_mail" />
 
     <fragment
         android:id="@+id/nav_contact_us"
-        android:name="com.journalapp.contact_us.ContactUsFragment"
+        android:name="com.myjournal.journalapp.contact_us.ContactUsFragment"
         android:label="Contact Us"
         tools:layout="@layout/fragment_contact_us" />
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.journalapp.MainActivity"
+        android:name="com.myjournal.journalapp.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <activity
         android:id="@+id/entriesViewPad"
-        android:name="com.journalapp.EntriesViewPad"
+        android:name="com.myjournal.journalapp.EntriesViewPad"
         android:label="activity_timeline_view_pad"
         tools:layout="@layout/activity_timeline_view_pad" />
     <activity
         android:id="@+id/entriesEditPad"
-        android:name="com.journalapp.EntriesEditPad"
+        android:name="com.myjournal.journalapp.EntriesEditPad"
         android:label="EntriesEditPad" />
     <activity
         android:id="@+id/drawerLayoutActivity"
-        android:name="com.journalapp.DrawerLayoutActivity"
+        android:name="com.myjournal.journalapp.DrawerLayoutActivity"
         android:label="activity_drawer_layout"
         tools:layout="@layout/activity_drawer_layout" />
     <activity
         android:id="@+id/accountEntryEditActivity"
-        android:name="com.journalapp.AccountEntryEditActivity"
+        android:name="com.myjournal.journalapp.AccountEntryEditActivity"
         android:label="activity_account_edit_pad"
         tools:layout="@layout/activity_account_edit_pad" />
     <activity
         android:id="@+id/expenseEntryNewActivity"
-        android:name="com.journalapp.ExpenseEntryNewActivity"
+        android:name="com.myjournal.journalapp.ExpenseEntryNewActivity"
         android:label="activity_expense_entry"
         tools:layout="@layout/activity_expense_entry" />
     <activity
         android:id="@+id/expenseEntryEditActivity"
-        android:name="com.journalapp.ExpenseEntryEditActivity"
+        android:name="com.myjournal.journalapp.ExpenseEntryEditActivity"
         android:label="activity_expense_entry_edit"
         tools:layout="@layout/activity_expense_entry_edit" />
 

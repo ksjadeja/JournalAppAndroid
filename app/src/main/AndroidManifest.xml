@@ -16,31 +16,31 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ExpenseEntryEditActivity"
+            android:name="com.myjournal.journalapp.ExpenseEntryEditActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ExpenseEntryNewActivity"
+            android:name="com.myjournal.journalapp.ExpenseEntryNewActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".AccountEntryEditActivity"
+            android:name="com.myjournal.journalapp.AccountEntryEditActivity"
             android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".EntriesViewPad"
+        <activity android:name="com.myjournal.journalapp.EntriesViewPad"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".EntriesEditPad"
+            android:name="com.myjournal.journalapp.EntriesEditPad"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".DrawerLayoutActivity"
+            android:name="com.myjournal.journalapp.DrawerLayoutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
         <activity
-            android:name=".MainActivity"
+            android:name="com.myjournal.journalapp.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action
