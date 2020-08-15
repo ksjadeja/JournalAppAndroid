@@ -607,7 +607,6 @@ public class ChartsFragment extends Fragment implements View.OnClickListener {
             expenseChart.setHorizontalScrollBarEnabled(true);
 //            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setLabelRotationAngle(60f);
-            Toast.makeText(getContext(), "keys "+map.keySet(), Toast.LENGTH_SHORT).show();
             xAxis.setAvoidFirstLastClipping(false);
 
 //            expenseChart.fitScreen();

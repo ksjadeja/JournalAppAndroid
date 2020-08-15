@@ -1,6 +1,6 @@
 package com.journalapp.mail;
 
 class Config {
-    static final String EMAIL = "chhotadon459@gmail.com";
-    static final String PASSWORD= "wvxypmyuorogjyew";
+    static final String EMAIL = "help.myjournal@gmail.com";
+    static final String PASSWORD= "empnyesitdsmatcb";
 }

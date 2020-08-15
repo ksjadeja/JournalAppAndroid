@@ -75,7 +75,7 @@ public class EntriesEditPad extends AppCompatActivity {
 
         saveFab.setOnClickListener(v -> {
             if (TextUtils.isEmpty(dataText.getText())){
-                Toast.makeText(EntriesEditPad.this,"Enter something",Toast.LENGTH_LONG).show();
+                Toast.makeText(EntriesEditPad.this,"Enter some data to save",Toast.LENGTH_LONG).show();
             }else{
                 feedbox.setData(dataText.getText().toString().trim());
                 if(update){
@@ -110,7 +110,7 @@ public class EntriesEditPad extends AppCompatActivity {
         journalEntriesRef.document(USER).collection("entries").add(feedboxDao).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 Log.i("Status:","Entry added successfully");
-                Toast.makeText(EntriesEditPad.this,"Entry Saved",Toast.LENGTH_SHORT).show();
+                Toast.makeText(EntriesEditPad.this,"Entry Saved..!!",Toast.LENGTH_SHORT).show();
             }else {
                 Log.i("Status:","db entry is not successful");
             }

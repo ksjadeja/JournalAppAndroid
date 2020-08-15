@@ -141,8 +141,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
         adapter.setNotifyOnChange(true);
         nameText.setOnItemClickListener((adapterView, view, i, l) -> {
             String item = adapterView.getItemAtPosition(i).toString();
-            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
-//            Toast.makeText(AccountEntryEditActivity.this, "Selected Item is: \t" + item, Toast.LENGTH_LONG).show();
         });
     }
     public void onRadioButtonClicked(View view) {
@@ -195,7 +193,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                         mailBean.setPersonName(name);
                         mailBean.setEmail("");//TODO Fixed
                         mailBean.setEmailEntered(false);
-
 
                         mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {
                                 if(task12.isSuccessful()){
@@ -316,7 +313,6 @@ public class AccountEntryEditActivity extends AppCompatActivity{
                             int index = AccEntriesIndex.get(key);
                             accountNameList.set(index,accountBoxDao.getName());
                             break;
-
                         case REMOVED:
                             for(String ac:accountNameList){
                                 if(AccEntriesMap.isKeyPresent(dc.getDocument().getId())){

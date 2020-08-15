@@ -121,14 +121,23 @@ public class AccEntriesTab extends Fragment {
                                     }else{
                                         Log.i("MAIL::STATUS", "User does not exist(modify)");
                                         mailBean.setCount(1);
-                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
+                                        mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).update("count",FieldValue.increment(-1)).addOnCompleteListener(task -> {
+                                            if(task.isSuccessful()) {
+                                                mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).get().addOnCompleteListener(task33->{
+                                                   if(task33.isSuccessful()){
+                                                       if(task33.getResult().getLong("count")!=null) {
+                                                           if (task33.getResult().getLong("count") <= 0) {
+                                                               mailEntriesRef.document(USER).collection("entries").document(oldAccBox.getName()).delete()
+                                                                       .addOnSuccessListener(aVoid1 -> Log.d("MAIL::STATUS", "DocumentSnapshot successfully deleted!"))
+                                                                       .addOnFailureListener(e12 -> Log.w("MAIL::STATUS", "Error deleting document", e12));
+                                                           }
+                                                       }
+                                                   }
+                                                });
                                                 mailEntriesRef.document(USER).collection("entries").document(mailBean.getPersonName()).set(mailBean).addOnCompleteListener(task1 -> {
-                                                    if(task1.isSuccessful())
-                                                    {
+                                                    if (task1.isSuccessful()) {
                                                         Log.i("Status:", "db mail list entry is successful");
-                                                    }else{
+                                                    } else {
                                                         Log.i("Status:", "db mail list entry is not successful");
                                                     }
                                                 });

@@ -78,8 +78,8 @@ public class MailSender extends AsyncTask<Void,Void,Void> {
         });
         try{
             MimeMessage mimeMessage = new MimeMessage(session);
-            DataHandler handler = new DataHandler(new ByteArrayDataSource(message.getBytes(), "text/plain"));
-            mimeMessage.setSender(new InternetAddress("ksjadeja2812.2017@gmail.com"));
+            DataHandler handler = new DataHandler(new ByteArrayDataSource(message.getBytes(), "text/html"));
+            mimeMessage.setSender(new InternetAddress("help.myjournal@gmail.com"));
             mimeMessage.setSubject(subject);
             mimeMessage.setDataHandler(handler);
 

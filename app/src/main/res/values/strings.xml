@@ -22,6 +22,6 @@
     <string name="menu_contact_us">Contact Us</string>
     <string name="menu_sign_out">Sign Out</string>
     <string name="temp_email"><a href="google.com" target="_top">Journal App Support </a></string>
-    <string name="app_support_email">&lt;a href="mailto:chhotadon459@gmail.com" target="_top">Journal App Support&lt;/a></string>
+    <string name="app_support_email">&lt;a href="mailto:help.myjournal@gmail.com" target="_top">Journal App Support&lt;/a></string>
 
 </resources>
