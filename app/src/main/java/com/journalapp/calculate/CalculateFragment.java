@@ -184,12 +184,9 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             }
                             break;
 
-                        /*case MODIFIED:
-                            key = dc.getDocument().getId();
-                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
-                            arrayAdapter.notifyDataSetChanged();
-                            break;*/
+
                         case REMOVED:
+                            accountBoxDao = dc.getDocument().toObject(AccountBoxDao.class);
                             if (names_map.containsKey(accountBoxDao.getName())) {
                                 names_map.remove(accountBoxDao.getName());
                                 for (String str : names_list) {
@@ -584,40 +581,37 @@ public class CalculateFragment extends Fragment implements View.OnClickListener,
                             });
 
                             mailRef.document(USER).collection("entries").whereEqualTo("personName", selected_name).
-                                    addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                                            if (e != null) {
-                                                Log.i("ERROR:", "listen:error", e);
-                                                return;
-                                            }
-                                            for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                                    addSnapshotListener((queryDocumentSnapshots, e) -> {
+                                        if (e != null) {
+                                            Log.i("ERROR:", "listen:error", e);
+                                            return;
+                                        }
+                                        for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
 
-                                                switch (dc.getType()) {
-                                                    case ADDED:
-                                                        MailBean mailBean = dc.getDocument().toObject(MailBean.class);
-                                                        if (mailBean.getEmail() != null && !mailBean.getEmail().equals("") && mailBean.getEmailEntered()) {
-                                                            account_email_box.setText(mailBean.getEmail());
-                                                            account_email_box.setEnabled(false);
-                                                            if (account_list.size() > 0) {
-                                                                account_mail_bar.setVisibility(View.VISIBLE);
-                                                            }
-                                                        }
-                                                        break;
-                                                    case MODIFIED:
-                                                        MailBean mailBean2 = dc.getDocument().toObject(MailBean.class);
-                                                            account_email_box.setText(mailBean2.getEmail());
-                                                            account_email_box.setEnabled(false);
-                                                            if (account_list.size() > 0) {
-                                                                account_mail_bar.setVisibility(View.VISIBLE);
-                                                            }
-                                                        break;
-                                                    case REMOVED:
-                                                        account_email_box.setText("");
+                                            switch (dc.getType()) {
+                                                case ADDED:
+                                                    MailBean mailBean = dc.getDocument().toObject(MailBean.class);
+                                                    if (mailBean.getEmail() != null && !mailBean.getEmail().equals("") && mailBean.getEmailEntered()) {
+                                                        account_email_box.setText(mailBean.getEmail());
                                                         account_email_box.setEnabled(false);
-                                                        account_mail_bar.setVisibility(View.INVISIBLE);
-                                                        break;
-                                                }
+                                                        if (account_list.size() > 0) {
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
+                                                    }
+                                                    break;
+                                                case MODIFIED:
+                                                    MailBean mailBean2 = dc.getDocument().toObject(MailBean.class);
+                                                        account_email_box.setText(mailBean2.getEmail());
+                                                        account_email_box.setEnabled(false);
+                                                        if (account_list.size() > 0) {
+                                                            account_mail_bar.setVisibility(View.VISIBLE);
+                                                        }
+                                                    break;
+                                                case REMOVED:
+                                                    account_email_box.setText("");
+                                                    account_email_box.setEnabled(false);
+                                                    account_mail_bar.setVisibility(View.INVISIBLE);
+                                                    break;
                                             }
                                         }
                                     });
