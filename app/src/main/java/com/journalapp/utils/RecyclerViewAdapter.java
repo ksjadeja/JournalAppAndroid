@@ -93,7 +93,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             dateField = itemView.findViewById(R.id.dateField);
             timeField = itemView.findViewById(R.id.timeField);
             dataField = itemView.findViewById(R.id.dataField);
-//            cv.setCardBackgroundColor(Color.rgb(100,100,200));
         }
         public TextView getDateField() {
             return dateField;

@@ -179,14 +179,6 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
             });
             saveAlert.show();
         }
-
-//        if (fragment != null) {
-//            fragment.setRetainInstance(true);
-//            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -214,13 +206,5 @@ public class DrawerLayoutActivity extends AppCompatActivity implements Navigatio
         }
         finish();
     }
-//        fragment = new ContentMainActivity();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.containerView, fragment).addToBackStack(null).commit();
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
+
 }

@@ -108,7 +108,7 @@ public class AccEntriesTab extends Fragment {
                         MailBean mailBean = new MailBean();
                         String name = accountBoxDao.getName();
                         mailBean.setPersonName(name);
-                        mailBean.setEmail("");//TODO Fixed
+                        mailBean.setEmail("");
                         mailBean.setEmailEntered(false);
 
                             mailEntriesRef.document(USER).collection("entries").document(name).get().addOnCompleteListener(task12 -> {

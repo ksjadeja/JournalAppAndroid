@@ -74,7 +74,7 @@ public class MailFragment extends Fragment {
                         break;
 
                     case REMOVED:
-                        for (MailBean mb : mailBeanArrayList) {            //TODO optimize it futher
+                        for (MailBean mb : mailBeanArrayList) {
                             if (mb.getKey().equals(dc.getDocument().getId())) {
                                 mailBeanArrayList.remove(mb);
                                 mailListAdapter.notifyDataSetChanged();
